@@ -1,14 +1,14 @@
-# АСД 1 
-# Раздел: 1. Связанный (связный) список
-# Задача 1.8
-# Сложить значения двух связанных списков в соответсвующие значения итогового связанного списка
-# Сложность решения O(n)
+# DSA 1
+# Section: 1. Linked List
+# Problem 1.8
+# Add the values of two linked lists into corresponding positions of a resulting linked list
+# Solution complexity: O(n)
 
-# Решение:
-# Проверю длины. Если длинны не равны верну None. 
-# Действие по сравнению длинн сложность решения так и оставит O(n)
-# Далее в одном цикле, сделаю одновременный обход по двум спискам и добавление в итоговый связный список в хвост
-# все эти операции имет сложность алгоритма O(n), значит и итоговый алгоритм имеет сложность O(n)
+# Solution:
+# I will check the lengths. If the lengths are not equal, return None.
+# Comparing lengths does not affect the overall O(n) complexity.
+# Then, in a single loop, I will simultaneously traverse both lists and append the sum to the tail of the resulting linked list.
+# All these operations have O(n) complexity, so the final algorithm remains O(n).
 
 from task1 import Node, LinkedList
 
