@@ -44,14 +44,17 @@ class LinkedList:
 
     def delete(self, val, all=False):
         node = self.head
-        befor = None
+        prev = None
         while node is not None:
             if node.value == val:
-                if befor is not None:
-                    befor.next = node.next
+                if node == self.tail:
+                    self.tail = prev
+                
+                if prev is not None:
+                    prev.next = node.next
                 else:
                     self.head = node.next
-
+ 
                 if not all:
                     return
                 else:
@@ -59,7 +62,7 @@ class LinkedList:
                     continue
 
                 
-            befor = node    
+            prev = node    
             node = node.next
 
     def clean(self):
@@ -90,12 +93,16 @@ class LinkedList:
         if afterNode is None:
             old_head = self.head
             self.head = newNode
+            if self.tail is None:
+                self.tail = newNode
             self.head.next = old_head
         else:
             node = self.head
             while node is not None:
                 if node == afterNode:
                     old_next = node.next
+                    if node == self.tail:
+                        self.tail = newNode
                     node.next = newNode
                     newNode.next = old_next
                     return
