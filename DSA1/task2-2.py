@@ -1,55 +1,60 @@
 # DSA 1
-# Section: 2. Двунаправленный связный (связанный) список
+# Section: 2. Doubly Linked List
 
-# Problem 2.10 
-# Метод который перворачивает пордок элементов в связном списке
-# Имя метода: self.reverse()
-# Solution complexity: O(n). Проход цикла.
+# Problem 2.10
+# Method that reverses the order of elements in the linked list
+# Method name: self.reverse()
+# Solution complexity: O(n), single loop pass
 # Solution:
-# Зеркально меняю prev и next у всех узлов. Результирующий спсисок так и должен выглядеть
+# I swap `prev` and `next` pointers for all nodes symmetrically.
+# The resulting list should be fully reversed.
 
-# Problem 2.11 
-# Метод который определяет есть ли замкнутые списки
-# Имя метода: bool self.is_loop()
-# Solution complexity: O(n). Два прохода цикла.
+# Problem 2.11
+# Method that detects whether the list contains a cycle
+# Method name: bool self.is_loop()
+# Solution complexity: O(n), two loop passes
 # Solution:
-# Использую объект set() для запоминания пройденных узлов.
-# Если при движении в выбранном направлении повторно встречаю узел, значит список замкнут.
-# Проверяю на циклы как при движении от головы к хвосту, так и от хвоста к голове.
+# I use a `set()` to keep track of visited nodes.
+# If I encounter the same node again while traversing in a given direction, the list is cyclic.
+# I check for cycles in both directions: from head to tail and from tail to head.
 
-# Problem 2.12 
-# Метод который сортирует элементы в связном списке
-# Имя метода: self.sort()
-# Solution complexity: O(n^2). Использую пузырьковую сортировку. Циклы вложены друг в друга.
+# Problem 2.12
+# Method that sorts the elements in the linked list
+# Method name: self.sort()
+# Solution complexity: O(n²), bubble sort via nested loops
 # Solution:
-# Если при движении от головы к хвосту обнаруюиваю элемент меньше предыдущего, то начинаю его двигать к голове, пока он не уткнется в меньший или равный
+# While traversing from head to tail, if I find an element smaller than its previous one,
+# I start moving it towards the head until it meets a smaller or equal element.
 
-# Problem 2.13 
-# Метод который объединит два произвольных связных списка в итоговый третий отсортированный. Использовать предварительно отсортированные списки. Итоговый список не сортировать после слияния.
-# Имя метода: LinkedList2.merge_into_new_sorted(s_list1 : 'LinkedList2', s_list2 : 'LinkedList2')
-# Solution complexity: O(n^2). Сортировка  O(n1^2) + O(n2^2) для списков 1 и 2. Слияние O(n),так как сделано за один проход цикла
+# Problem 2.13
+# Method that merges two arbitrary linked lists into a third sorted result list.
+# Requires input lists to be sorted beforehand.
+# The resulting list must not be sorted after merging.
+# Method name: LinkedList2.merge_into_new_sorted(s_list1: 'LinkedList2', s_list2: 'LinkedList2')
+# Solution complexity: O(n²) — sorting is O(n1²) + O(n2²) for the two inputs; merging is O(n) via a single pass
 #
 # Solution:
-# Делаю копии списков для последующей сортировки, что бы не менять входящие объекты. 
-# При добавлении значений в итоговый список создаю новые экземпляры узлов.
-# Двигаюсь одновременно под двум спискам, добавляя вначале меньший в хвост итогового списка.
-# После для списка откуда было добавлено значение двигаюсь на следующий элемент.
-# Двигаюсь пока оба списка не дойдут до хвоста.
-# Если один из списков дошел до хвоста раньше, добавляю значения из оставшегося.
-# Слияние сделано за один проход цикла.
+# I create copies of both input lists for sorting, so the originals remain unchanged.
+# When adding nodes to the resulting list, I create new node instances.
+# I traverse both lists simultaneously and always add the smaller current node to the result.
+# Then I move forward in the list from which the node was taken.
+# This continues until both lists are fully traversed.
+# If one list reaches the end first, I add the remaining nodes from the other list.
+# The merging process is completed in a single loop pass.
 
 
 # Problem 2.14
-# Использовать в двунаправленном связном списоке dummy узел
-# Имя метода: все методы в LinkedList2
-# Solution complexity: не поменялась
+# Use of a dummy node in a doubly linked list
+# Method name: applies to all methods in LinkedList2
+# Solution complexity: unchanged
 #
 # Solution:
-# В Node добавлен признак is_dummy, по этому признаку определяю в зависимости от нпаравления голову или хвост
-# Добавил один dummy узел в LinkedList2
-# Операциия дла узла в середине или скарю списка стали одинаковыми
-# Стало меньше условий "if" 
-# Использую  @property head и @property tail для повторного использования тестов
+# A flag `is_dummy` was added to the Node class to distinguish dummy nodes.
+# Based on this flag and direction, I determine whether a node is the head or tail.
+# A single dummy node is added to LinkedList2.
+# Operations on the list became uniform regardless of whether they are at the head, tail, or middle.
+# Reduced the number of conditionals like `if`.
+# The @property decorators for head and tail are used to enable test code reuse.
 
 
 class Node:
