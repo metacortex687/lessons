@@ -227,10 +227,17 @@ class TestLinkedList2(unittest.TestCase):
         s_list.insert(None, self.Node(3))
 
         self.assertEqual(s_list.len(), 2)
-        self.assertEqual(s_list.to_list_values(), [3, 34])
-        self.assertEqual(s_list.head.value, 3)
-        self.assertEqual(s_list.tail.value, 34)
-        self.is_good_linked_list(s_list)    
+        self.assertEqual(s_list.to_list_values(), [34, 3])
+        self.assertEqual(s_list.head.value, 34)
+        self.assertEqual(s_list.tail.value, 3)
+        self.is_good_linked_list(s_list)   
+        
+        s_list.insert(None, self.Node(7))
+        self.assertEqual(s_list.len(), 3)
+        self.assertEqual(s_list.to_list_values(), [34, 3, 7])
+        self.assertEqual(s_list.head.value, 34)
+        self.assertEqual(s_list.tail.value, 7)
+        self.is_good_linked_list(s_list)  
     
     def test_insert(self):
         s_list  = self.LinkedList2()  

@@ -147,6 +147,7 @@ class LinkedList2:
         while not node.is_dummy:     
             if node in s:
                  right.append("loop")
+                 break
             else:
                 right.append(str(node)) 
             node = node.next   
@@ -159,6 +160,7 @@ class LinkedList2:
         while not node.is_dummy:     
             if node in s:
                  left.insert(0,"loop")
+                 break
             else:
                 left.insert(0,str(node)) 
             node = node.prev  
@@ -279,7 +281,7 @@ class LinkedList2:
 
     def insert(self, afterNode : Node, newNode : Node):
         if afterNode is None:
-            afterNode = self._dummy
+            afterNode = self._dummy.prev
         
         afterNode.next.prev = newNode
         newNode.next = afterNode.next
@@ -289,6 +291,6 @@ class LinkedList2:
   
 
     def add_in_head(self, newNode):
-        self.insert(None,newNode)
+        self.insert(self._dummy,newNode)
  
  
