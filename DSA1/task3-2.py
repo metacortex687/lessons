@@ -1,33 +1,45 @@
 # DSA 1
-# Section: 2. Динамические массивы
+# Section: 2. Dynamic Arrays
 
 # Problem 6
-# Реализовать динамический массив с доступом до элемментов в виде "myArr[1,2,3]". И возможностью меняь размер измерений. 
+# Implement a dynamic multi-dimensional array with access via syntax like "myArr[1, 2, 3]",
+# and the ability to resize dimensions.
+
 # Solution:
 # Class name: MultiArray
-# Method name: __init__ 
-# Инициализирует массив. При устанвое указывается размер измерений и значение по умолчанию. 
-# Колиество измерений определяется числом занчений размера измерения.
-# Алгоритмическая сложность O(n) где n число элементов в многомерном масссиве
+# Method name: __init__
+# Initializes the array. At initialization, the dimension sizes and default value are specified.
+# The number of dimensions is determined by the number of size arguments.
+# Time complexity: O(n), where n is the number of elements in the multi-dimensional array.
+
 # Method name: __getitem__
-# Получает элемент по иднексу вида "myArr[1,2,3]". Алгоритмическая сложность O(n) где n число элементов в многомерном масссиве
+# Retrieves an element using an index of the form "myArr[1, 2, 3]".
+# Time complexity: O(n), where n is the number of elements in the multi-dimensional array.
+
 # Method name: __setitem__
-# Устанавливает элемент по индексу вида "myArr[1,2,3]". Алгоритмическая сложность O(n) где n число элементов в многомерном масссиве
+# Sets an element using an index of the form "myArr[1, 2, 3]".
+# Time complexity: O(n), where n is the number of elements in the multi-dimensional array.
+
 # Method name: resize
-# Меняет размер массива сохраняя данные в нем. При попытке изменить число измерений выдает ошибку. Алгоритмическая сложность O(n)
-# 
+# Changes the array’s size while preserving the data.
+# Raises an error if an attempt is made to change the number of dimensions.
+# Time complexity: O(n)
+
 # Note:
-# При выборе споосба хранения данных внутри многомерного массива, рассматривал вариант создания одномерного массива 
-# и вычисления индекса в нем для хранения данных многомерного массива. 
-# И вариант когда массив содержит в себе ссылки на массив размерности меньше на иденицу. 
-# И вмассиве с размерностью 1, уже содержатся сохраняемые элементы.
-# Выбрал второй вариант, так показался проще с точки зрения реализации. Алгоритмическая сложность обоих решений,  O(n) где n число элементов в многомерном масссиве.
+# When choosing the internal storage strategy for the multi-dimensional array,
+# I considered two options:
+# 1) Using a one-dimensional array with index computation for accessing multidimensional data.
+# 2) Using nested arrays, where each level is a list containing sub-arrays of one lower dimension,
+# and the innermost dimension stores the actual elements.
+# I chose the second approach, as it seemed simpler to implement.
+# The time complexity of both approaches is O(n), where n is the number of elements in the array.
 
 # Problem 5
-# Реализовать динамический массив с использованием банковского метода.
+# Implement a dynamic array using the accounting (banker's) method.
 #
-# Идея кажется интересной. Не вполне понял как применить этот метод к динамическому массиву. В частности что такое дешевая операция, 
-# например операции вставки и удаления элементов не являются дешевыми.
+# The idea seems interesting, but I'm not entirely sure how to apply this method to a dynamic array.
+# Specifically, it's unclear what would count as a "cheap" operation,
+# since insertions and deletions are generally not cheap.
 
 
 import ctypes

@@ -1,5 +1,3 @@
-
-
 import unittest
 from task3 import DynArray
 
