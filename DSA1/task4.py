@@ -1,10 +1,11 @@
-# 1. Использую связный список
-# 2. Реализовал на основе упрощенного связного списка, в котором есть есть добавление в head, удаление элемента из head, и 
-# получение элеента из head
-# 3. Если четное значение  в стеке, то выведет все значения. Если не четное, то выведет все значения, и еще None
-# 4. Solution complexity операции push, равна  solution complexity добавленя в head, O(1)
-# 4. Solution complexity операции pop, равна  solution complexity чтения значения из головы связного спсика 
-# и у даления этого элемента из головы списка, то-есть O(1)
+# 1. I use a linked list
+# 2. Implemented based on a simplified linked list that supports adding to the head,
+# removing an element from the head, and retrieving an element from the head
+# 3. If the top value in the stack is even, it returns all values. If it’s odd, it returns all values plus None
+# 4. The solution complexity of the push operation is equal to the complexity of adding to the head of the linked list — O(1)
+# 4. The solution complexity of the pop operation is equal to the complexity of reading the value from the head of the linked list
+# and removing this element from the head — that is, O(1)
+
 
 class Stack:
     def __init__(self):
