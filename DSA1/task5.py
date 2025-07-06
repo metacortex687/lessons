@@ -5,7 +5,6 @@
 # because removing the tail requires traversal from the head to the penultimate node.
 
 
-
 class Queue:
     def __init__(self):
         self._size = 0
