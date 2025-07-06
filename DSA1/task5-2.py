@@ -95,9 +95,7 @@ class FixedArrayQueue:
 
     def size(self):
         return self._size
-        
-    
-
+ 
 
 class TwoStackQueue:
     def __init__(self):
@@ -120,6 +118,7 @@ class TwoStackQueue:
 
     def reverse(self):
         self._head, self._tail = self._tail , self._head
+
 
 class Stack:
     def __init__(self):
@@ -150,7 +149,6 @@ class Stack:
             return None
         else:
             return self.stack.head.value
-
     
     
 class Node:
@@ -176,3 +174,4 @@ class SimplyLinkedList:
 def rotate_queue(queue, n):
     for _ in range(n):
         queue.enqueue(queue.dequeue())    
+

@@ -29,8 +29,7 @@ class Queue:
 
     def size(self):
         return self._size
-    
-    
+     
     
 class Node:
     def __init__(self, v, is_dummy = False):
@@ -38,6 +37,7 @@ class Node:
         self.prev : Node = None
         self.next : Node = None
         self.is_dummy : bool = is_dummy
+
 
 class LinkedList2:  
     def __init__(self):
@@ -55,8 +55,6 @@ class LinkedList2:
         newNode.next = self._dummy.next 
         newNode.prev = self._dummy
         self._dummy.next = newNode
-
-
         
     def delete_tail(self): 
         self._dummy.prev.prev.next = self._dummy
