@@ -72,13 +72,10 @@ class FixedArrayQueue:
         self._queue[position] = item
         
         self._size += 1
-        
  
     def is_full(self):
         return self._size == self._capacity
-        
-
-
+ 
     def dequeue(self):
         if self._size == 0:
             return None
@@ -142,7 +139,6 @@ class Stack:
     def push(self, value):
         self.stack.add_in_head(Node(value)) 
         self._size += 1
-
 
     def peek(self):
         if self.stack.head is None:
