@@ -1,7 +1,10 @@
-#1. Реализовал используя двунаправленного связный список
-#2. Аллгоритмическа сложность "enqueue" O(1) равна сложности добавления в голову двунаправленного связного списока
-#2. Аллгоритмическа сложность "dequeue" O(1) равна сложности получения и удаления хвоста двунаправленного связного списока 
-# Если бы использовал однонаправленный связный список, то сложность была бы O(n), как у удаления хвоста.
+# 1. Implemented using a doubly linked list
+# 2. The algorithmic complexity of "enqueue" is O(1), which is the same as adding to the head of a doubly linked list
+# 3. The algorithmic complexity of "dequeue" is O(1), which matches the complexity of retrieving and removing the tail of a doubly linked list
+# If a singly linked list had been used instead, the complexity of "dequeue" would have been O(n),
+# because removing the tail requires traversal from the head to the penultimate node.
+
+
 
 class Queue:
     def __init__(self):

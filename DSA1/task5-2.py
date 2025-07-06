@@ -1,60 +1,54 @@
-# DSA 1
 # Section: 5. Queue
 
 # Problem 3
-# A function that вращает очередь по кругу
+# A function that rotates the queue in a circular manner
 # Method name: rotate_queue
-# Time complexity: определяется сложностью методов "dequeue" и "enqueue". 
-# Если у них обоих O(1), то и вращение не будет зависеть от числа элементов в очереди
-# Solution: беру значение из хвоста очереди методои "dequeue", и кладу в голову методом "enqueue"
+# Time complexity: Depends on the complexity of the "dequeue" and "enqueue" methods.
+# If both are O(1), then the rotation will not depend on the number of elements in the queue.
+# Solution: Take the value from the tail of the queue using "dequeue", and place it at the head using "enqueue".
 
 # Problem 4
-# Реализуйте очередь с помощью двух стэков
+# Implement a queue using two stacks
 # Class name: TwoStackQueue
-# Time complexity: метода "enqueue" O(1), а для метода "dequeue" o(1) и O(n)
-# Solution: Использую два стека, один для того что бы ложить новые элементы, другой что бы получать элементы из хвоста.
-# Если в стэке который для получения элементов, нет ничего, то перекладываю из стэка для входящих элеменов.
-# После перкладывания элементы лежат в нужном порядке для получения.
+# Time complexity: The "enqueue" method is O(1), and the "dequeue" method is O(1) and O(n)
+# Solution: Use two stacks — one to push new elements, and the other to retrieve elements from the tail.
+# If the stack used for retrieving elements is empty, transfer elements from the input stack.
+# After transferring, elements are in the correct order for retrieval.
 
 # Problem 5
-# Add a function что обращает эдементы в обратном порядке.
+# Add a function that reverses the elements.
 # Class name: TwoStackQueue
 # Method name: self.reverse()
 # Time complexity: O(1)
 # Solution:
-# Меняю местами стэк который был для входящих элементов и стэк что для получения элементов.
-
+# Swap the input stack and the output stack.
 
 # Problem 6
-# Сделать стэк на ститческом массиве.
+# Implement a queue using a static array.
 # Class name: FixedArrayQueue
 # Solution:
-# Храню в переменных класса положения хвоста и размер очереди.
-# Рассматривал и другой вариант, в котором храню положение гловы и хвоста а размер вычисляю, но там больше "if".
-
+# Store the position of the tail and the size of the queue as class variables.
+# Also considered another variant that stores both head and tail positions and computes the size,
+# but that requires more "if" checks.
 
 # Method name: self.enqueue(item)
 # Time complexity: O(1)
 # Solution:
-# Вызываю исключение "OverflowError" если уже заполнена очередь
-# Вычисляю положение головы, добавляя размер очереди к положению хвоста. 
-# Если выходит за границы массива, то считаю что голова преходит на начало массива.
-
+# Raise an "OverflowError" if the queue is full.
+# Compute the head position by adding the queue size to the tail position.
+# If it goes beyond the array bounds, wrap around to the start of the array.
 
 # Method name: self.dequeue()
 # Time complexity: O(1)
 # Solution:
-# Получаю значения по указателю хвоста, после чего вигаю вперед.
-# Если выходит за границы массива, то считаю что преходит на начало массива.
+# Retrieve the value at the tail pointer, then move it forward.
+# If it goes beyond the array bounds, wrap around to the start.
 
 
 # Method name: self.is_full()
 # Time complexity: O(1)
-# Solution: Сравниваю _capacity с _size. Это все переменные класса. Сapacity задается при инициализации. А _size
-# меняется на единицу в зависимости от "enqueue" или "dequeue"
-
-
-
+# Solution: Compare _capacity with _size. These are class variables.
+# _capacity is set during initialization, and _size changes by one after each "enqueue" or "dequeue".
 
 
 import ctypes
