@@ -7,6 +7,7 @@
 # If both are O(1), then the rotation will not depend on the number of elements in the queue.
 # Solution: Take the value from the tail of the queue using "dequeue", and place it at the head using "enqueue".
 
+
 # Problem 4
 # Implement a queue using two stacks
 # Class name: TwoStackQueue
@@ -15,6 +16,7 @@
 # If the stack used for retrieving elements is empty, transfer elements from the input stack.
 # After transferring, elements are in the correct order for retrieval.
 
+
 # Problem 5
 # Add a function that reverses the elements.
 # Class name: TwoStackQueue
@@ -22,6 +24,7 @@
 # Time complexity: O(1)
 # Solution:
 # Swap the input stack and the output stack.
+
 
 # Problem 6
 # Implement a queue using a static array.
@@ -43,7 +46,6 @@
 # Solution:
 # Retrieve the value at the tail pointer, then move it forward.
 # If it goes beyond the array bounds, wrap around to the start.
-
 
 # Method name: self.is_full()
 # Time complexity: O(1)
