@@ -1,5 +1,5 @@
-#1. Сложность addHead/removeHead и addTail/removeTail одинакова так как использую двусвязный списко
-#2. Релаизовал
+#1. The time complexity of addHead/removeHead and addTail/removeTail is O(1), since a doubly linked list is used.
+
 
 class Deque:
     def __init__(self):

@@ -1,36 +1,42 @@
 # Section: 5. Dequeue
 
 # Problem 7.3
-# A function that checks открытые закрыте скобки
+# A function that checks for balanced parentheses.
 # Method name: bracket_control
 # Time complexity: O(1)
-# Solution: используюу deque как стэк, с одной стороны ложу и с этой же стороны забираю
+# Solution: I use a deque as a stack, pushing and popping from the same end.
 
-# Problem 7.3
-# A function that возвращает инимыльный элемент в deque
+# Problem 7.4
+# A function that returns the minimal element in the deque.
 # Class: TwoStackDequeue
 # Method name: self.min()
-# Time complexity: O(n) o(1)
-# Solution: двусторонню очередь из двух стеков. Еще два стека в которых храню минимальные элементы. На вершине хранятся минимальные элементы.
-# Удаляя из стэка хранения данных, удаляю и из стэка минимальных элементов.
-# В момент когда, в одном из стеков заканчивюатся элементы, при перкладывании из другого стека, пересобираю и стэк минимальных элементов. 
-# А тот другой стэк минимальных элементов очищаю.
+# Time complexity: O(n) for worst case, O(1) for average case.
+# Solution: A double-ended queue implemented using two stacks.
+# I maintain two additional stacks that store the minimal elements.
+# The top of each stack holds the current minimum.
+# When removing from the data stack, I also remove from the corresponding min stack.
+# When one of the stacks runs out of elements, I transfer elements from the other stack,
+# rebuilding the corresponding min stack in the process, and clearing the other min stack.
 
 # Problem 7.5
-# Двустороннюю очередь сделанная с помощью динамического массива.
+# A double-ended queue implemented using a dynamic array.
 # Class: DynArrayDequeue
-# Time complexity: O(n) o(1) для "addFront", "addTail", "removeFront", "removeTail". n - число элементов в очереди.
-# Solution: Храню положение хвоста и длинну элементов в очереди. Положение головы вычисляю.
-# Реализовано увеличение capacity в два раза, и уменьшение в полтора, аналогично как для динамических массивов
-# Возможны два варианта, когда хвост позади головы. И другой вариант когда голова прошла, и вышла с другой стороны массива. 
-# То-есть хвост впереди головы. Эти случаи при изменении вместимости очереди обрабатываю по разному.
+# Time complexity: O(n) worst case, O(1) amortized for "addFront", "addTail", "removeFront", "removeTail",
+# where n is the number of elements in the queue.
+# Solution: I store the position of the tail and the current number of elements.
+# The head position is calculated.
+# Capacity is doubled or reduced by 1.5x, similar to dynamic array resizing.
+# There are two main cases: when the tail is behind the head,
+# and when the head has wrapped around and is now after the tail.
+# These cases are handled differently during capacity changes.
 
 # Problem 7.6
-# Функция которая проверяет баланс кобок.
+# A function that checks the balance of brackets.
 # Class: bracket_control
-# Time complexity: O(n) n- число символов
-# Solution: использу dequeue как стэк, кладу с одной стороны элементы, и с этой же стороны и забираю.
-# Добавил использование словаря. В целом задача, сводится к ранее решаемой в теме про стэк.
+# Time complexity: O(n), where n is the number of characters.
+# Solution: I use a deque as a stack, pushing and popping from the same end.
+# A dictionary is used for bracket matching.
+# Overall, this task reduces to the one previously solved in the section on stacks.
 
 
 import ctypes
