@@ -87,6 +87,10 @@ class TestOrderedList(unittest.TestCase):
         ol.delete(4)
         self.assertEqual(ol.get_all_val(),[2]) 
         
+        ol.delete(2)
+        self.assertEqual(ol.get_all_val(),[])       
+        
+        
         ol = self.OrderedList.from_list([1,2,3,3,4,5], True)
         ol.delete(3)
         self.assertEqual(ol.get_all_val(),[1,2,3,4,5]) 

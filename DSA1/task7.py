@@ -94,14 +94,14 @@ class OrderedList:
         self._len -= 1
         
         if node == self.head:
-            self.head = self.head.next
             self.head.prev = None
+            self.head = self.head.next
         else:
             node.prev.next = node.next
         
         if node == self.tail:
-            self.tail = self.tail.prev
             self.tail.next = None
+            self.tail = self.tail.prev
         else:
             node.next.prev = node.prev
             
