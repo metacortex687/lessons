@@ -1,56 +1,51 @@
-# Section: 5. Упорядоченый список
+# Section: 5. Ordered List
 
 # Problem 8
-# Удаление всех дупликатов
+# Removing all duplicates
 # Class: OrderedList
-# Method name: srlf.remove_duplicates()
+# Method name: self.remove_duplicates()
 # Time complexity: O(n)
-# Solution: Последовательно перебираю элементы. Если текущий элемент по значению равен следующему,
-# то удаляю этот элемент,  соединяя тот что за ним, с тем что после.
+# Solution: Iterate through the list sequentially. If the current element is equal in value to the next one,
+# remove the duplicate by skipping the current node and linking the previous node directly to the next one.
+
 
 # Problem 9
-# Слияние двух списков в один.
+# Merging two lists into one.
 # Class: OrderedList
-# Method name: self.contains_subsequence()
-# Time complexity: O(n)
-# Solution: Что бы слияние выполнялось за O(n) где n количество элементов в итоговм списке,   
-# Надо добавлять постепенно возрастающее или убывающее значение, что бы оно вставлялось в начало или в конец.
-# Что и реализовал, учитывая порядок в списках, совпадает они или различается.
+# Method name: self.merge()
+# Time complexity: O(n), where n is the number of elements in the resulting list
+# Solution: To ensure merging works in O(n), the elements should be inserted in increasing or decreasing order
+# so they get appended at the beginning or end. That’s what I implemented, based on whether the two lists have
+# matching or opposite ordering.
 
 
 # Problem 10
-# Слияние двух списков в один.
+# Checking if one list is a subsequence of another.
 # Class: OrderedList
 # Method name: self.contains_subsequence()
-# Time complexity: O(n1*(n2-n1)) где  n2 количество элементов в списке в котором ищем, 
-# Solution: Сравниваю длинны, умещается ли искомый список. И последовательно двигаюсь по элементам, 
-# сравнивая первые элементы а послед последующие.
-
+# Time complexity: O(n1 * (n2 - n1)), where n2 is the length of the list being searched
+# Solution: First compare the lengths to see if the subsequence can fit. Then iterate through the list,
+# comparing the start of the main list with the subsequence step by step.
 
 # Problem 11
-# Метод который определяет наиболее часто встречающееся значение.
+# A method that finds the most frequently occurring value.
 # Class: OrderedList
 # Method name: self.most_frequent_value()
 # Time complexity: O(n)
-# Solution: Использую словарь для хранения  числа элементов.
-
-
+# Solution: Use a dictionary to count the occurrences of each value.
 
 # Problem 12
-# Поиск за o(log N)
+# Searching in O(log N)
 # Class: OrderedList
-# Method name: self.find
+# Method name: self.find()
 # Time complexity: 
-# Solution: Реализовла только для списка длинны 3. 
-# Идея в том что бы использовать разреженный список как атрибут класса.
-# И хранить в Node down и up. Для навигации и обновления.
-# И реквизит span, для определения расстояния между узлами в разреженых списков.
-# После того как поиск упирается в элемент, он опускается на списко ниже и т.д.
-# Так же нужно обновление этих списков при вставке и удалении этих лементов.
-
-
-
-
+# Solution: Implemented only for a list of length 3.
+# The idea is to use a sparse list as a class attribute, where each Node has 'down' and 'up' links
+# for vertical navigation and updating.
+# Also use a 'span' attribute to track distances between nodes in the sparse levels.
+# Once the search reaches a node, it descends to the next level down, and so on.
+# Sparse levels need to be updated when elements are inserted or deleted.
+# Which I didn’t have time to implement, and I’m also unsure whether this approach is the right one.
 
 
 
