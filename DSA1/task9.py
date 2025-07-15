@@ -30,7 +30,7 @@ class NativeDictionary:
             _hash %= self.size
             
             if start_ondex == _hash:
-                raise Exception("Не удалось определить индекс")
+                raise Exception("Failed to determine index")
 
         return _hash
 
