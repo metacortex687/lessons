@@ -125,20 +125,20 @@ class PowerSet:
     def __repr__(self):
         return str(self.values_to_list())
     
-
-
-class RemovedValue:
-    pass    
-REMOVED = RemovedValue()   
-  
-    
+   
 class HashTable:
+    class RemovedValue:
+        pass    
+    REMOVED = RemovedValue()   
+    
     def __init__(self, sz, stp):
         self.size = sz
         self.step = stp
         self.slots = [None] * self.size
         self.count = 0
         self._index = -1
+        
+        
 
     def hash_fun(self, value: Any):
         value = str(type(value)) + str(value)
@@ -164,7 +164,7 @@ class HashTable:
         start_index = self.hash_fun(value)
         index = start_index
         while self.slots[index]  is not None and self.slots[index] != value:
-            if not find_value and self.slots[index]  is  REMOVED:
+            if not find_value and self.slots[index]  is  HashTable.REMOVED:
                 break
 
             index += self.step
@@ -199,7 +199,7 @@ class HashTable:
         if index is None:
             return False
         
-        self.slots[index] = REMOVED
+        self.slots[index] = HashTable.REMOVED
         self.count -= 1
         
         return True
@@ -219,7 +219,7 @@ class HashTable:
             
             value = self.slots[self._index]
             
-            if value is None or value is REMOVED:
+            if value is None or value is HashTable.REMOVED:
                 self._index += 1
                 continue
             
@@ -241,14 +241,15 @@ class HashTable:
         for v in self.slots:
             if v is None:
                 continue
-            if v is REMOVED:
+            if v is HashTable.REMOVED:
                 continue
             res.append(v)
         return res
     
     def __repr__(self):
         return str(self.values_to_list())
-       
+    
+    
     
 
 class Bag:
