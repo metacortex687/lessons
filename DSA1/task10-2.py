@@ -136,9 +136,10 @@ class HashTable:
         self.step = stp
         self.slots = [None] * self.size
         self.count = 0
-        self._index = 0
+        self._index = -1
 
-    def hash_fun(self, value):
+    def hash_fun(self, value: Any):
+        value = str(type(value)) + str(value)
         _hash = 0
         for e in value:
             _hash = (_hash*31+ord(e))%self.size
@@ -200,10 +201,13 @@ class HashTable:
         return True
     
     def __iter__(self):
-        self._index = 0
+        self._index = -1
         return self
     
     def __next__(self):
+        if self.count == 0:
+            raise StopIteration
+         
         self._index += 1
         while True:
             if self._index >= self.size:

@@ -19,6 +19,13 @@ class TestPowerSet(unittest.TestCase):
         self.assertEqual(ps.size(),0)
         self.assertFalse(ps.get("hello"))
         
+    def test_put_any_type(self):
+        ps = self.PowerSet()
+        ps.put("1")
+        self.assertEqual(ps.size(),1)
+        ps.put(1)    
+        self.assertEqual(ps.size(),2)    
+            
     def test_put_get_remove(self):
         ps = self.PowerSet()
         
@@ -79,6 +86,8 @@ class TestPowerSet(unittest.TestCase):
         
         ps1.put("a")
         ps2.put("b")
+        self.assertEqual(ps1.size(),1) 
+        self.assertEqual(ps2.size(),1) 
         
         ps = ps1.intersection(ps2) 
         self.assertEqual(ps.size(),0) 
@@ -183,7 +192,7 @@ class TestPowerSet_2(TestPowerSet):
         ps1.put("c")     
         ps2.put("c") 
         prod = ps1.prod(ps2)
-        self.assertEqual(prod,[("a","b"),("a","c"),("c","b"),("c","c")])  
+        self.assertCountEqual(prod,[("a","b"),("a","c"),("c","b"),("c","c")])  
         
     
     def test_many_intersection(self):
