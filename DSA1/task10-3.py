@@ -24,7 +24,12 @@ class TestPowerSet(unittest.TestCase):
         ps.put("1")
         self.assertEqual(ps.size(),1)
         ps.put(1)    
-        self.assertEqual(ps.size(),2)    
+        self.assertEqual(ps.size(),2) 
+        
+        ps.put("1")
+        self.assertEqual(ps.size(),2)
+        ps.put(1)    
+        self.assertEqual(ps.size(),2)       
             
     def test_put_get_remove(self):
         ps = self.PowerSet()
@@ -163,12 +168,31 @@ class TestPowerSet(unittest.TestCase):
              
     def test_put_get_many(self):   
         ps = self.PowerSet()
-        for i in range(10000):
+        for i in range(1000):
             ps.put(f"test{i}")
             
-        self.assertEqual(ps.size(),10000)
-        for i in range(10000):
-            self.assertTrue(ps.get(f"test{i}"))     
+        self.assertEqual(ps.size(),1000)
+        for i in range(1000):
+            self.assertTrue(ps.get(f"test{i}"))  
+            
+        self.assertEqual(ps.size(),1000) 
+        
+        for i in range(500):
+            self.assertTrue(ps.remove(f"test{i}"),f"i={i}") 
+            
+        count = 500
+        self.assertEqual(ps.size(),500)     
+        for i in range(500):
+            count += 1
+            ps.put(f"test{i}")  
+            self.assertEqual(ps.size(),count)
+            
+                  
+        self.assertEqual(ps.size(),1000)
+        for i in range(1000):
+            self.assertTrue(ps.get(f"test{i}"))      
+        
+        
       
 
 class TestPowerSet_2(TestPowerSet):

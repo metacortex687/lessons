@@ -10,13 +10,13 @@ class PowerSet:
     def size(self) -> int:
         return self.hash_table.count
 
-    def put(self, value: str) -> None:
+    def put(self, value: Any) -> None:
         self.hash_table.put(value)
 
-    def get(self, value: str) -> bool:
+    def get(self, value: Any) -> bool:
         return self.hash_table.find(value) is not None
 
-    def remove(self, value: str) -> bool:
+    def remove(self, value: Any) -> bool:
         return self.hash_table.remove(value)
 
     def union(self, set2: PowerSet) -> PowerSet:
@@ -79,6 +79,7 @@ class PowerSet:
 
 class RemovedValue:
     pass    
+REMOVED = RemovedValue()   
   
     
 class HashTable:
@@ -109,10 +110,12 @@ class HashTable:
         self.slots = ht.slots
         self.count = ht.count
 
-    def seek_slot(self, value):
+    def seek_slot(self, value, find_value = False):
         start_index = self.hash_fun(value)
         index = start_index
-        while self.slots[index]  is not None and self.slots[index]  is not RemovedValue and self.slots[index] != value:
+        while self.slots[index]  is not None and self.slots[index] != value:
+            if not find_value and self.slots[index]  is  REMOVED:
+                break
 
             index += self.step
             index %= self.size
@@ -146,7 +149,7 @@ class HashTable:
         if index is None:
             return False
         
-        self.slots[index] = RemovedValue()
+        self.slots[index] = REMOVED
         self.count -= 1
         
         return True
@@ -166,14 +169,14 @@ class HashTable:
             
             value = self.slots[self._index]
             
-            if value is None or value is RemovedValue:
+            if value is None or value is REMOVED:
                 self._index += 1
                 continue
             
             return value
           
     def find(self, value):
-        index = self.seek_slot(value)
+        index = self.seek_slot(value, find_value = True)
         
         if index == None:
             return None
@@ -188,7 +191,7 @@ class HashTable:
         for v in self.slots:
             if v is None:
                 continue
-            if v is RemovedValue:
+            if v is REMOVED:
                 continue
             res.append(v)
         return res

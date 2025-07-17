@@ -126,8 +126,10 @@ class PowerSet:
         return str(self.values_to_list())
     
 
+
 class RemovedValue:
     pass    
+REMOVED = RemovedValue()   
   
     
 class HashTable:
@@ -158,10 +160,12 @@ class HashTable:
         self.slots = ht.slots
         self.count = ht.count
 
-    def seek_slot(self, value):
+    def seek_slot(self, value, find_value = False):
         start_index = self.hash_fun(value)
         index = start_index
-        while self.slots[index]  is not None and self.slots[index]  is not RemovedValue and self.slots[index] != value:
+        while self.slots[index]  is not None and self.slots[index] != value:
+            if not find_value and self.slots[index]  is  REMOVED:
+                break
 
             index += self.step
             index %= self.size
@@ -195,7 +199,7 @@ class HashTable:
         if index is None:
             return False
         
-        self.slots[index] = RemovedValue()
+        self.slots[index] = REMOVED
         self.count -= 1
         
         return True
@@ -215,14 +219,14 @@ class HashTable:
             
             value = self.slots[self._index]
             
-            if value is None or value is RemovedValue:
+            if value is None or value is REMOVED:
                 self._index += 1
                 continue
             
             return value
           
     def find(self, value):
-        index = self.seek_slot(value)
+        index = self.seek_slot(value, find_value = True)
         
         if index == None:
             return None
@@ -237,14 +241,14 @@ class HashTable:
         for v in self.slots:
             if v is None:
                 continue
-            if v is RemovedValue:
+            if v is REMOVED:
                 continue
             res.append(v)
         return res
     
     def __repr__(self):
         return str(self.values_to_list())
-    
+       
     
 
 class Bag:
