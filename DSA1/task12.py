@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Any
 
+
 class NativeCache:
     def __init__(self, sz):
         self.size = sz
@@ -15,8 +16,7 @@ class NativeCache:
             return None
         
         return self.hits[i]
-    
-        
+         
     def put(self, key: str , value : Any):
         if self.size == self.count:
             self._remove_least_frequently_used()
@@ -71,11 +71,9 @@ class NativeCache:
             if min_val > self.hits[i]:
                 min_val = self.hits[i]
                 
-                
         for i in range(0,self.size):
            if self.hits[i] == min_val:
                 return i
-
         
     def _remove_least_frequently_used(self):
         i = self._find_least_frequently_used_slot()
@@ -84,9 +82,5 @@ class NativeCache:
         self.hits[i] = 0
         self.slots[i] = None      
         self.values[i] = None
-
-        
-        
-        
      
     

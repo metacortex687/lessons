@@ -45,10 +45,6 @@ class TestNativeCache(unittest.TestCase):
         for i in range(90,100):
             _str = f"test{i}" 
             self.assertEqual(nc.count_hit(_str), 2)        
-           
-        
-
-
         
         
 if __name__ == '__main__':
