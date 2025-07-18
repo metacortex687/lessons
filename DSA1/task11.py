@@ -24,13 +24,13 @@ class BloomFilter:
 
     def add(self, str1):
         self.filter |= self.hash1(str1)
-        self.filter |= self.hash1(str1)
+        self.filter |= self.hash2(str1)
 
 
     def is_value(self, str1) -> bool:
         
         _hash1 = self.hash1(str1)
-        _hash2 = self.hash1(str1)
+        _hash2 = self.hash2(str1)
         
         return (_hash1 & self.filter == _hash1) and  (_hash2 & self.filter == _hash2)
     
