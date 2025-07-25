@@ -6,7 +6,7 @@
 //2. Преобразует их в те которые надо сохранить
 //3. Сохраняет их в базу данных
 
-AgregatorEvents:
+EventAggregator:
     event_sources 
     event_translator
     event_writer 
