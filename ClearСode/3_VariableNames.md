@@ -8,7 +8,7 @@
 AgregatorEvents:
     event_sources 
     event_translator
-	event_writer 
+    event_writer 
 	 
 
 //Ещё два примера названий переменных (name, properties), в классе Event 
