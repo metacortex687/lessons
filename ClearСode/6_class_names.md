@@ -37,7 +37,7 @@ get_like_events - get_events
 get_post_events - get_events
 //аналогично выше
 
-get_comment_events - getevents
+get_comment_events - get_events
 //аналогично выше
 
 sync_all - sync_event_in_period
