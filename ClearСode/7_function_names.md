@@ -20,6 +20,7 @@ ask_participation — send_participation_request
 participation_response — handle_participation_response
 // обработчик ответа пользователя, вызывается как callback
 
+
 notify_empty_username — notify_username_required
 // оповещает пользователя об необходимости заполнить в Telegram имя пользователя
 
@@ -34,5 +35,6 @@ meeting_rating_response — handle_meeting_rating, save_meeting_rating
 
 sum_linked_list — add_elementwise
 складывает два списка поэлементно и возвращает третий, тип понятен из контекста.
+
 
 ```
