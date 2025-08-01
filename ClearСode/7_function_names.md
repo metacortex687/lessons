@@ -36,4 +36,5 @@ meeting_rating_response — handle_meeting_rating, save_meeting_rating
 sum_linked_list — add_elementwise
 складывает два списка поэлементно и возвращает третий, тип понятен из контекста.
 
+
 ```
