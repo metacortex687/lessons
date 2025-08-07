@@ -38,7 +38,7 @@ is_outborder_down = y < 0
 
 11. Избегайте сравнений на равенство вещественных чисел.
     //В unittest после деления, заменил сравнение на равенство assertEqual на проверку попадания в интервал 
-    self.assertAlmostEqual(value, expected, delta=0.0001)
+self.assertAlmostEqual(value, expected, delta=0.0001)
 
     
 12. Разработайте стратегию интернационализации/локализации текстовых сообщений в вашем коде
