@@ -22,7 +22,7 @@ is_input_layer =  i == 0
 is_output_layer =  i == count_layer
 
 6. Использую логические переменные. 
-    is_all_agent_die = count_agents == 0
+is_all_agent_die = count_agents == 0
 
 7. Использую логические переменные
 is_outborder_right = x >= MAP_WIDTH 
@@ -37,7 +37,7 @@ is_outborder_bottom = y >= MAP_HEIGHT
 is_outborder_down = y < 0
 
 11. Избегайте сравнений на равенство вещественных чисел.
-    //В unittest после деления, заменил сравнение assertEqual на проверку попадания в интервал 
+    //В unittest после деления, заменил сравнение на равенство assertEqual на проверку попадания в интервал 
     self.assertAlmostEqual(value, expected, delta=0.0001)
 
     
