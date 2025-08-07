@@ -37,7 +37,7 @@ is_outborder_bottom = y >= MAP_HEIGHT
 is_outborder_down = y < 0
 
 11. Избегайте сравнений на равенство вещественных чисел.
-    //В unittest после деления, сравниваю результат на попадание в интервал
+    //В unittest после деления, заменил сравнение assertEqual на проверку попадания в интервал 
     self.assertAlmostEqual(value, expected, delta=0.0001)
 
     
