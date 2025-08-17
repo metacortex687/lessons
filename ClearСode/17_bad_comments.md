@@ -149,7 +149,7 @@ if data is None:
                 "distinct_id": user_email,
                 "properties": {
                     "sync_event_id": action_id,
-                    "aisystant_task": original_action_type,  # Сохраняем исходный тип
+                    "aisystant_task": original_action_type, 
                     "section_id": section_id,
                     "question_id": question_id,
                     "course_passing_id": course_passing_id,
