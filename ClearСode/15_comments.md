@@ -4,15 +4,18 @@
 ```
 
 
-1) Раскрывает смысл
+1) Поясняет код
+
 #Получить уже загруженные события
 existing_events = self.find_events_by_sync_key(events)
 
-2) Раскрывает смысл
+2) Поясняет код
+
 #Получить события для начисления баллов отсортированные по дате и сгруппированные по пользователям
 self.sorted_events.get_sorted_awardable_events_by_user(date)
 
-3) 
+3) Поясняет код
+
 # Получить количество подтвержденных созвонов у пользователей, для определения более опытного
         user1_confirmed_count = get_user_confirmed_meetings_count(user1.telegram_id)
         user2_confirmed_count = get_user_confirmed_meetings_count(user2.telegram_id)
@@ -61,7 +64,8 @@ async def logged_send_message(context, chat_id, text, message_type="regular", ro
 
 ```
 
-1) Комментарий бессмысленен, то что функция основаная понятно из названия. То что используются параметры можно увидеть в самом начале.
+1) Комментарий бессмысленен, то что функция основаная понятно из названия. 
+То что используются параметры можно увидеть в самом начале.
 
 def main():
     """Основная функция с параметрами командной строки"""
@@ -75,7 +79,8 @@ def main():
             'to': to_date.isoformat()
 
         }
- 3) Комментарий не добавляет нового понимания. Можно убрать.
+
+ 3) Комментарий не добавляет нового понимания. Можно убрать. 
  
     def send_posthog_query(self, query: str) -> Tuple[List, List]:
         """
