@@ -80,28 +80,19 @@ POSTS_QUERY_ID = int(os.getenv("POSTS_QUERY_ID", 8))
 
 
 6. Прояснение. "В тестовой среде не работает SSL - используйте verify_ssl=False"
+
     def __init__(self,
-
                  discourse_base_url: str,
-
                  discourse_api_key: str,
-
                  discourse_username: str,
-
                  verify_ssl: bool = True):
 
         self.discourse_manager = DiscourseDataExplorerApi(
-
             base_url=discourse_base_url,
-
             api_key=discourse_api_key,
-
             api_username=discourse_username,
-
             # В тестовой среде не работает SSL - используйте verify_ssl=False
-
             verify_ssl=verify_ssl
-
         )
 
 7. Усиление. Добавил усиление в комментарий.       
@@ -135,11 +126,8 @@ load_dotenv('.env.test')
 
             #todo: привести работу с датами к единому стандарту
             sorted_items = sorted(
-
                 [(datetime.strptime(date, "%Y-%m-%d"), len(events))
-
                  for date, events in data[user_id].items()],
-
                 key=lambda x: x[0]
 
             )
