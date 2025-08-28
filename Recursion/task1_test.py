@@ -1,6 +1,7 @@
 import unittest
 from task1 import pow_rec
 
+
 class TestTask1(unittest.TestCase):
     def test_pow(self):
         self.assertEqual(pow_rec(0,0),1)
@@ -13,4 +14,5 @@ class TestTask1(unittest.TestCase):
         
 if __name__ == '__main__':
     unittest.main()
+   
    
