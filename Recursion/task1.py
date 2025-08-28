@@ -1,11 +1,11 @@
 #1. возведение числа N в степень M;
 # алгоритмическая сложность O(M)
-# файл тестов [task1_test.py](./task1_test.py)
+# файл тестов https://github.com/metacortex687/lessons/blob/main/Recursion/task1_test.py
 
-def pow(n,m):
+def pow_rec(n,m):
     if m == 0:
         return 1
-    return pow(n,m-1)*n
+    return pow_rec(n,m-1)*n
 
 
     
