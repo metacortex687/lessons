@@ -12,3 +12,5 @@
 !*.md
 
 __pycache__/
+.vscode/
+.venv/
