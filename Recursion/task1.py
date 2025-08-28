@@ -1,7 +1,6 @@
 #1. возведение числа N в степень M;
 # алгоритмическая сложность O(M)
-# файл тестов 
-# https://github.com/metacortex687/lessons/blob/HEAD/Recursion/task1_test.py
+# тесты → task1_test.py: https://github.com/metacortex687/lessons/blob/main/Recursion/task1_test.py
 
 
 def pow_rec(n,m):
