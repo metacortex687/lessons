@@ -3,7 +3,7 @@ from task5 import print_even_numbers
 
 from unittest.mock import patch, call, MagicMock
 
-class TestTask4(unittest.TestCase):
+class TestTask5(unittest.TestCase):
 
     def _assert_has_calls(self,data, mock_fun : MagicMock, any_order: bool):
         self.assertEqual(mock_fun.call_count,len(data))
