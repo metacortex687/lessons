@@ -9,8 +9,8 @@
 import os
 
 def find_files(path,result: list):
-    _scandir = os.scandir(path)
-    for entry in _scandir:
+    entries = os.scandir(path)
+    for entry in entries:
         if entry.is_dir():
             find_files(entry.path,result)
             continue
