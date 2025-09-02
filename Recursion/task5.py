@@ -1,6 +1,6 @@
 #5. печать только чётных значений из списка;
 # Алгоритмическая сложность O(n), где n - колличество элементов
-# тесты → ./task4_test.py: https://github.com/metacortex687/lessons/blob/main/Recursion/task5_test.py
+# тесты → ./task5_test.py: https://github.com/metacortex687/lessons/blob/main/Recursion/task5_test.py
 
 
 def print_even_numbers(lst):

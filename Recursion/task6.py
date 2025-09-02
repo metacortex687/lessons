@@ -1,6 +1,6 @@
 #6. печать элементов списка с чётными индексами;
 # Алгоритмическая сложность O(n), где n - колличество элементов
-# тесты → ./task4_test.py: https://github.com/metacortex687/lessons/blob/main/Recursion/task6_test.py
+# тесты → ./task6_test.py: https://github.com/metacortex687/lessons/blob/main/Recursion/task6_test.py
 
 
 def print_even_index_numbers(lst):

@@ -1,6 +1,6 @@
 # 7. нахождение второго максимального числа в списке 
 # Алгоритмическая сложность O(n), где n - колличество элементов в массиве
-# тесты → ./task4_test.py: https://github.com/metacortex687/lessons/blob/main/Recursion/task7_test.py
+# тесты → ./task7_test.py: https://github.com/metacortex687/lessons/blob/main/Recursion/task7_test.py
 
 def second_max(lst: list[int]) -> int:
     if len(lst) < 2:
