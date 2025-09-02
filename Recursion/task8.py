@@ -8,12 +8,17 @@
 
 import os
 
-def find_files(path: str, result: list[str]) -> None:
+def find_files(path: str, lst: list[str] | None = None) -> list[str]:
+    if lst is None:
+        lst = []
+        
     entries = os.scandir(path)
     for entry in entries:
         if entry.is_dir():
-            find_files(entry.path,result)
+            find_files(entry.path,lst)
             continue
-        result.append(entry.name)
+        lst.append(entry.name)
+
+    return lst
 
 
