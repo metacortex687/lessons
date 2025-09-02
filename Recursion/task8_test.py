@@ -32,13 +32,19 @@ class TestTask8(unittest.TestCase):
 
     def test_find_files(self):
         with patch('task8.os.scandir', side_effect = fake_scandir):
-            self.assertCountEqual(find_files("/empty"),[])
+            result = []
+            find_files("/empty",result)
+            self.assertCountEqual(result,[])
 
         with patch('task8.os.scandir', side_effect = fake_scandir):
-            self.assertCountEqual(find_files("/root/sub"),["b.log"])    
+            result = []
+            find_files("/root/sub",result)            
+            self.assertCountEqual(result,["b.log"])    
 
         with patch('task8.os.scandir', side_effect = fake_scandir):
-            self.assertCountEqual(find_files("/root"),["b.log","a.txt"])                      
+            result = []
+            find_files("/root",result)
+            self.assertCountEqual(result,["b.log","a.txt"])                      
 
 
 
