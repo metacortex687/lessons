@@ -62,6 +62,9 @@ class SimpleTree:
             self._count = 0
             return
         
+        NodeToDelete.Parent.Children.remove(NodeToDelete)
+        NodeToDelete.Parent = None
+
         self._count -= NodeToDelete._count()
 
 
