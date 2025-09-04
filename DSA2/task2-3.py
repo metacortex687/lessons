@@ -87,6 +87,14 @@ class TestTask2(unittest.TestCase):
         bst = self.BST(None)
         result = bst.DeleteNodeByKey(1)
         self.assertFalse(result)
+        self.assertEqual(0,bst.Count())
+
+        bst = self.BST(self.BSTNode(10,"100",None))
+        result = bst.DeleteNodeByKey(10)
+        self.assertTrue(result)
+        self.assertEqual(0,bst.Count())        
+
+
 
 
         bst = self._create_test_bst()
@@ -97,11 +105,12 @@ class TestTask2(unittest.TestCase):
 
         result = bst.DeleteNodeByKey(100)
         self.assertFalse(result)
+        self.assertEqual(15,bst.Count())
 
         result = bst.DeleteNodeByKey(10)
         self.assertTrue(result)
         self.assertEqual(12,bst.Count())
-
+        
         find_result = bst.FindNodeByKey(10)
         self.assertFalse(find_result.NodeHasKey)  
 
@@ -110,6 +119,9 @@ class TestTask2(unittest.TestCase):
 
         find_result = bst.FindNodeByKey(11)
         self.assertFalse(find_result.NodeHasKey)
+
+        result = bst.DeleteNodeByKey(8)
+        self.assertEqual(0,bst.Count())
 
 
 class TestTask2_2(unittest.TestCase):

@@ -246,16 +246,18 @@ class BST:
             return False
 
         deleted_node = find_result.Node
-
+       
         if deleted_node == self.Root:
             self.Root = None
             return True
         
         if deleted_node.Parent.LeftChild == deleted_node:
             deleted_node.Parent.LeftChild = None
+            deleted_node.Parent = None
             return True
         
         deleted_node.Parent.RightChild = None
+        deleted_node.Parent = None
 
         return True 
 
