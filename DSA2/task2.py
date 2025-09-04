@@ -54,6 +54,15 @@ class BSTNode:
             if self.LeftChild is None:
                 return self
             return self.LeftChild.FinMinMax(FindMax)
+        
+    def IsLeaf(self) -> bool:
+        return self.LeftChild is None and self.RightChild is None 
+    
+    def OneChild(self)->bool:
+        if self.IsLeaf():
+            return False
+        
+        return not ((self.LeftChild is not None) and ((self.RightChild is not None))) #todo проверить тесты когда убраны скобки
 
 
 class BSTFind:
@@ -107,6 +116,30 @@ class BST:
         
         return FromNode.FinMinMax(FindMax)
 
+    def _MoveSubtree(self,moved_node: BSTNode, parent: BSTNode) -> None:
+        if moved_node is None:
+            return
+
+        if moved_node.Parent is not None:
+            if moved_node.Parent.LeftChild == moved_node:
+                moved_node.Parent.LeftChild = None
+
+            if moved_node.Parent.RightChild == moved_node:
+                moved_node.Parent.RightChild = None                
+
+        moved_node.Parent = parent
+
+        if parent is None:
+            self.Root = moved_node
+            return
+
+        if moved_node.NodeKey > parent.NodeKey:
+            parent.RightChild = moved_node
+            return
+        
+        parent.LeftChild = moved_node
+ 
+
     def DeleteNodeByKey(self, key):
         if self.Root is None:
             return False
@@ -117,21 +150,34 @@ class BST:
             return False
 
         deleted_node = find_result.Node
-       
-        if deleted_node == self.Root:
-            self.Root = None
-            return True
-        
-        if deleted_node.Parent.LeftChild == deleted_node:
-            deleted_node.Parent.LeftChild = None
-            deleted_node.Parent = None
-            return True
-        
-        deleted_node.Parent.RightChild = None
-        deleted_node.Parent = None
 
-        return True 
+        if deleted_node.IsLeaf():
+            if deleted_node == self.Root:
+                self.Root = None
+                return True
 
+            if deleted_node.Parent.LeftChild == deleted_node:
+                deleted_node.Parent.LeftChild = None
+                return True
+            
+            deleted_node.Parent.RightChild = None
+            return True 
+        
+        if deleted_node.OneChild():
+            child = deleted_node.LeftChild
+            if child is None:
+                child = deleted_node.RightChild
+            self._MoveSubtree(child,deleted_node.Parent)
+            return True 
+        
+        min_right_node = deleted_node.RightChild.FinMinMax(False)
+        self._MoveSubtree(min_right_node.RightChild,min_right_node.Parent)
+        self._MoveSubtree(min_right_node,deleted_node.Parent)
+        self._MoveSubtree(deleted_node.RightChild,min_right_node)
+        self._MoveSubtree(deleted_node.LeftChild,min_right_node)
+
+        return True        
+ 
     def Count(self):
         if self.Root is None:
             return 0
