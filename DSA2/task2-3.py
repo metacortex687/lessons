@@ -94,8 +94,18 @@ class TestTask2(unittest.TestCase):
         self.assertTrue(result)
         self.assertEqual(0,bst.Count())        
 
-
-
+        bst = self._create_test_bst()
+        self.assertEqual(15,bst.Count())
+        bst.DeleteNodeByKey(1)
+        self.assertEqual(14,bst.Count())
+        bst.DeleteNodeByKey(3)
+        self.assertEqual(13,bst.Count())
+        bst.DeleteNodeByKey(15)
+        self.assertEqual(12,bst.Count())
+        bst.DeleteNodeByKey(14)
+        self.assertEqual(10,bst.Count())
+        bst.DeleteNodeByKey(9)
+        self.assertEqual(9,bst.Count())
 
         bst = self._create_test_bst()
         self.assertEqual(15,bst.Count())

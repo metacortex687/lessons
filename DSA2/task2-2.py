@@ -224,9 +224,11 @@ class BST:
 
         if find_result.ToLeft:
             find_result.Node.LeftChild = new_node
+            new_node.Parent = find_result.Node
             return True
         
         find_result.Node.RightChild = new_node
+        new_node.Parent = find_result.Node
 
         return True
   
