@@ -6,7 +6,7 @@
 # Class: aBST
 # Method: WideAllNodes(self) -> list[int]
 # - kept the method name for compatibility in case it is used in automatic testing.
-# Time Complexity: O(n) - where n is the number of nodes in the tree
+# Time Complexity: O(n) - where n is the size of the array
 
 # Solution: In the  array representation of the tree, 
 # the elements are already in the required order,

@@ -7,7 +7,7 @@
 # Метод: FindLowestCommonAncestor(self,key1: int, key2: int) -> int
 # Вычислительная сложность:  O(log n) - где n количество узлов в дереве
 
-# Решение: Вначале нахожу индексы. 
+# Решение: Вначале нахожу индексы ключей. 
 # Далее, последовательно  применяя к наибольшему индексу формулу для поиска родителя  (I - 1) / 2
 # продолжаю до тех пор пока индексы не совпадут.
 # Для упрощения алгоритма элемент считаю сам себе предком.  
@@ -61,23 +61,17 @@ class aBST:
     def FindLowestCommonAncestor(self,key1: int, key2: int) -> int:
         
         index1 = self.FindKeyIndex(key1)
+        index2 = self.FindKeyIndex(key2)
 
-        if index1 is None:
-            return None
-        
-        if index1 == 0:
-            return key1
-        
-        if index1 is None:
+        if index1 is None or index2 is None:
             return None
         
         if key1 == key2:
             return key1
         
-        index2 = self.FindKeyIndex(key2)
-        if index2 is None:
-            return key2
-
+        if index1 == 0:
+            return key1
+        
         if index2 == 0:
             return key2
         
