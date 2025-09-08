@@ -46,12 +46,15 @@ class aBST:
         return [key for key in self.Tree if key is not None]
 
     def _AddKey(self,key, index):
+        if index >= len(self.Tree):
+            return -1
+        
         if self.Tree[index] is None:
             self.Tree[index] = key
             return index 
         
         if self.Tree[index] == key:
-            return -1
+            return index
         
         return self._AddKey(key,self._NextIndex(key,index))
 
