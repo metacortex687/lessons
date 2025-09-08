@@ -28,7 +28,7 @@ class aBST:
             return None
         
         if self.Tree[index] is None:
-            return None
+            return -index
         
         if self.Tree[index] == key:
             return index
@@ -47,21 +47,19 @@ class aBST:
       
     def WideAllNodes(self) -> list[int]:
         return [key for key in self.Tree if key is not None]
-
-    def _AddKey(self,key, index):
-        if index >= len(self.Tree):
-            return -1
-        
-        if self.Tree[index] is None:
-            self.Tree[index] = key
-            return index 
-        
-        if self.Tree[index] == key:
-            return index
-        
-        return self._AddKey(key,self._NextIndex(key,index))
-
         
     def AddKey(self, key):
-        return self._AddKey(key,0); 
+        if self.Tree[0] is None:
+            self.Tree[0] = key
+            return 0
+
+        index = self.FindKeyIndex(key)
+        if index is None:
+            return -1
+        
+        if index < 0:
+            index = -index
+            self.Tree[index] = key
+
+        return index
 

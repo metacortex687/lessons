@@ -25,9 +25,9 @@ class aBST:
     def _FindKeyIndex(self, key, index):
         if index >= len(self.Tree):
             return None
-
+        
         if self.Tree[index] is None:
-            return None
+            return -index
         
         if self.Tree[index] == key:
             return index
@@ -46,24 +46,25 @@ class aBST:
       
     def WideAllNodes(self) -> list[int]:
         return [key for key in self.Tree if key is not None]
-
-    def _AddKey(self,key, index):
-        if index >= len(self.Tree):
-            return -1
-        
-        if self.Tree[index] is None:
-            self.Tree[index] = key
-            return index 
-        
-        if self.Tree[index] == key:
-            return index
-        
-        return self._AddKey(key,self._NextIndex(key,index))
-
         
     def AddKey(self, key):
-        return self._AddKey(key,0); 
+        if self.Tree[0] is None:
+            self.Tree[0] = key
+            return 0
 
+        index = self.FindKeyIndex(key)
+        if index is None:
+            return -1
+        
+        if index < 0:
+            index = -index
+            self.Tree[index] = key
+
+        return index
+      
+    def WideAllNodes(self) -> list[int]:
+        return [key for key in self.Tree if key is not None]
+    
     def FindLowestCommonAncestor(self,key1: int, key2: int) -> int:
         
         index1 = self.FindKeyIndex(key1)
@@ -84,10 +85,7 @@ class aBST:
         index = self._FindLCAByIndex(index1,index2)
 
         return self.Tree[index]
-    
-    def _IndexParent(self, index):
-        return index
-    
+      
     def _FindLCAByIndex(self,index1,index2):
         if index1 == index2:
             return index1

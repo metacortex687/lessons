@@ -26,6 +26,7 @@ class TestTask4(unittest.TestCase):
 
 
     def test_AddKeyValue(self):
+
         abst = self.aBST(0)
         self.assertEqual(0,abst.AddKey(50))
         self.assertEqual(0,abst.AddKey(50))
@@ -58,6 +59,10 @@ class TestTask4(unittest.TestCase):
 
 
     def test_FindKeyIndex(self):
+        abst = self.aBST(3)
+        self.assertEqual(0,abst.FindKeyIndex(10))
+        self.assertEqual(0,abst.FindKeyIndex(15))
+
         abst = self.aBST(0)
         abst.AddKey(10)
         self.assertEqual(0,abst.FindKeyIndex(10))
@@ -66,19 +71,19 @@ class TestTask4(unittest.TestCase):
         added_elements = [(0,50),(1,25),(2,75),(4,37),(5,62),(6,84),(11,55),(14,92)]
 
         abst = self.aBST(3)
-        for _, key in added_elements: 
-            self.assertIsNone(abst.FindKeyIndex(key))
-            abst.AddKey(key)
+        for i, key in added_elements: 
+            self.assertEqual(-i,abst.FindKeyIndex(key))
+            self.assertEqual(i,abst.AddKey(key))
 
         for expected_index, key in added_elements:
             finded_index = abst.FindKeyIndex(key)
             self.assertEqual(expected_index,finded_index)
 
-        self.assertIsNone(abst.FindKeyIndex(3))
-        self.assertIsNone(abst.FindKeyIndex(7))
-        self.assertIsNone(abst.FindKeyIndex(8))
-        self.assertIsNone(abst.FindKeyIndex(12))
-        self.assertIsNone(abst.FindKeyIndex(13))
+        self.assertTrue(abst.FindKeyIndex(3) < 0)
+        self.assertTrue(abst.FindKeyIndex(7) < 0)
+        self.assertTrue(abst.FindKeyIndex(8) < 0)
+        self.assertTrue(abst.FindKeyIndex(12) < 0)
+        self.assertTrue(abst.FindKeyIndex(13) < 0)
 
 
     def test_WideAllKeys(self):
