@@ -24,6 +24,9 @@ class aBST:
         return self._FindKeyIndex(key,0)
     
     def _FindKeyIndex(self, key, index):
+        if index >= len(self.Tree):
+            return None
+        
         if self.Tree[index] is None:
             return None
         

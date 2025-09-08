@@ -58,10 +58,16 @@ class TestTask4(unittest.TestCase):
 
 
     def test_FindKeyIndex(self):
+        abst = self.aBST(0)
+        abst.AddKey(10)
+        self.assertEqual(0,abst.FindKeyIndex(10))
+        self.assertIsNone(abst.FindKeyIndex(15))
+
         added_elements = [(0,50),(1,25),(2,75),(4,37),(5,62),(6,84),(11,55),(14,92)]
 
         abst = self.aBST(3)
         for _, key in added_elements: 
+            self.assertIsNone(abst.FindKeyIndex(key))
             abst.AddKey(key)
 
         for expected_index, key in added_elements:
