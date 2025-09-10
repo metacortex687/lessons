@@ -38,7 +38,6 @@ def _GenerateBBSTIndexOrder(count: int):
             if position >= len(index_order_result):
                 index_order_result.extend([None] * (position+1-len(index_order_result)))
 
-
             if left_index == right_index:
                 index_order_result[position] = left_index
                 continue
