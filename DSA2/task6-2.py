@@ -1,26 +1,30 @@
 # Раздел: 6. Строим сбалансированные двоичные деревья поиска (2)
 
-# Задача 2 
-# Добавьте метод проверки, действительно ли дерево получилось правильным 
+# Задача 2
+# Добавьте метод проверки, действительно ли дерево получилось правильным
 
-# Класс: BalancedBST 
+# Класс: BalancedBST
 # Метод: IsValidBST(self) -> bool:
 # Вычислительная сложность:  O(n) - где n количество узлов в дереве
 
-# Решение: 
-# Рекурсивно проеряю условие на правильность ключа для всех непустых потомков
+# Решение:
+# Рекурсивно проверяю условие на правильность ключа для всех непустых потомков
 
-# Задача 4 
-# Добавьте метод проверки, действительно ли дерево получилось сбалансированным 
+# Задача 4
+# Добавьте метод проверки, действительно ли дерево получилось сбалансированным
 
-# Класс: BalancedBST 
+# Класс: BalancedBST
 # Метод: IsBalanced(self) -> bool:
-# Вычислительная сложность:  O(n^2) - где n количество узлов в дереве
+# Вычислительная сложность:  O(n) - где n количество узлов в дереве
 
-# Решение: 
-# O(n^2) получается так как приходится проверять для каждого узал максимаьлную глубину его потомков
-# надо считать как мах Level и MinLevel
-# использую заполненное поле левел  
+# Решение:
+# Рассматривался вариант решения, полностью повторяющий условие задачи. 
+# Но в этом случае, если не кэшировать определение глубины поддерева, то в этом случае алгоритмическая сложность O(n^2).
+#     
+# Использую вариант решения, когда определяю максимальный и минимальный путь до узлов, в которых хотя бы один потомок пустой.
+# И если разница между этими путями больше 1, тогда дерево не сбалансировано. 
+#  
+# При определении максимального и минимального пути, использую поле "Level" в узле, предполагая, что оно заполнено верно.
 
 
 class BSTNode:
@@ -51,43 +55,26 @@ class BSTNode:
 
         return nodes
 
-    def MaxLevel(self):
+    def MaxPath(self):
         if self.LeftChild is None and self.RightChild is None:
             return self.Level
 
         if self.RightChild is None:
-            return self.LeftChild.MaxLevel()
+            return self.LeftChild.MaxPath()
 
         if self.LeftChild is None:
-            return self.RightChild.MaxLevel()
+            return self.RightChild.MaxPath()
 
-        return max(self.LeftChild.MaxLevel(), self.RightChild.MaxLevel())
+        return max(self.LeftChild.MaxPath(), self.RightChild.MaxPath())
+
+    def MinPath(self):
+        if self.LeftChild is None or self.RightChild is None:
+            return self.Level
+
+        return min(self.LeftChild.MinPath(), self.RightChild.MinPath())
 
     def IsBalanced(self):
-        if self.LeftChild is None and self.RightChild is None:
-            return True
-
-        if self.RightChild is None:
-            return self.LeftChild.IsBalanced() and (
-                self.LeftChild.MaxLevel() - self.Level <= 1
-            )
-
-        if self.LeftChild is None:
-            return self.RightChild.IsBalanced() and (
-                self.RightChild.MaxLevel() - self.Level <= 1
-            )
-
-        left_max_level = self.LeftChild.MaxLevel()
-        right_max_level = self.RightChild.MaxLevel()
-        hight_difference = max(right_max_level, left_max_level) - min(
-            right_max_level, left_max_level
-        )
-
-        return (
-            self.LeftChild.IsBalanced()
-            and self.RightChild.IsBalanced()
-            and hight_difference <= 1
-        )
+        return self.MaxPath() - self.MinPath() <= 1
 
     def IsValidBST(self) -> bool:
 
@@ -113,7 +100,7 @@ class BSTNode:
 class BalancedBST:
 
     def __init__(self):
-        self.Root: BSTNode = None  # корень дерева
+        self.Root: BSTNode = None
 
     def GenerateTree(self, a: list) -> None:
         if len(a) == 0:

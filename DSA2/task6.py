@@ -1,11 +1,11 @@
 class BSTNode:
 
     def __init__(self, key: int, parent: "BSTNode"):
-        self.NodeKey: int = key  # ключ узла
-        self.Parent: "BSTNode" = parent  # родитель или None для корня
-        self.LeftChild: "BSTNode" = None  # левый потомок
-        self.RightChild: "BSTNode" = None  # правый потомок
-        self.Level: int = 0  # уровень узла
+        self.NodeKey: int = key
+        self.Parent: "BSTNode" = parent
+        self.LeftChild: "BSTNode" = None
+        self.RightChild: "BSTNode" = None
+        self.Level: int = 0
 
     def WideAllNodes(self) -> list["BSTNode"]:
         nodes = [self]
@@ -26,49 +26,32 @@ class BSTNode:
 
         return nodes
 
-    def MaxLevel(self):
+    def MaxPath(self):
         if self.LeftChild is None and self.RightChild is None:
             return self.Level
 
         if self.RightChild is None:
-            return self.LeftChild.MaxLevel()
+            return self.LeftChild.MaxPath()
 
         if self.LeftChild is None:
-            return self.RightChild.MaxLevel()
+            return self.RightChild.MaxPath()
 
-        return max(self.LeftChild.MaxLevel(), self.RightChild.MaxLevel())
+        return max(self.LeftChild.MaxPath(), self.RightChild.MaxPath())
+
+    def MinPath(self):
+        if self.LeftChild is None or self.RightChild is None:
+            return self.Level
+
+        return min(self.LeftChild.MinPath(), self.RightChild.MinPath())
 
     def IsBalanced(self):
-        if self.LeftChild is None and self.RightChild is None:
-            return True
- 
-        if self.RightChild is None:
-            return self.LeftChild.IsBalanced() and (
-                self.LeftChild.MaxLevel() - self.Level <= 1
-            )
-
-        if self.LeftChild is None:
-            return self.RightChild.IsBalanced() and (
-                self.RightChild.MaxLevel() - self.Level <= 1
-            )
-
-        left_max_level = self.LeftChild.MaxLevel()
-        right_max_level = self.RightChild.MaxLevel()
-        hight_difference = max(right_max_level, left_max_level) - min(
-            right_max_level, left_max_level
-        )
-
-        return (
-            self.LeftChild.IsBalanced()
-            and self.RightChild.IsBalanced()
-            and hight_difference <= 1
-        )
+        return self.MaxPath() - self.MinPath() <= 1
 
 
 class BalancedBST:
 
     def __init__(self):
-        self.Root: BSTNode = None  # корень дерева
+        self.Root: BSTNode = None
 
     def GenerateTree(self, a: list) -> None:
         if len(a) == 0:
@@ -109,4 +92,5 @@ class BalancedBST:
         if root_node is None:
             return True
 
-        return root_node.IsBalanced()  # сбалансировано ли дерево с корнем root_node
+        return root_node.IsBalanced()
+    
