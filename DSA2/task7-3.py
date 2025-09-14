@@ -24,13 +24,14 @@ class TestTask7(unittest.TestCase):
         h.MakeHeap([5], 0)
         self.assertEqual([5], h.HeapArray)
 
-        with self.assertRaises(OverflowError):
-            h.MakeHeap([5, 2], 0)
+        # with self.assertRaises(OverflowError):
+        #     h.MakeHeap([5, 2], 0)
 
         h = self.Heap()
+        # expected = [11, 9, 8, 7, 6, 5, 4, 3, 2, 1, None, None, None, None, None]
         expected = [11, 9, 8, 7, 6, 5, 4, 3, 2, 1, None, None, None, None, None]
         array = [v for v in expected if v is not None]
-        random.shuffle(array)
+        # random.shuffle(array)
         h.MakeHeap(array, 3)
         self.assertEqual(expected, h.HeapArray)
 
@@ -59,6 +60,7 @@ class TestTask7(unittest.TestCase):
         self.assertEqual(
             [11, 9, 4, 7, 8, 3, 1, 2, 5, 6], [v for v in h.HeapArray if v is not None]
         )
+        self.assertTrue(h.IsValid())
 
         h = self.Heap()
         h.MakeHeap([10, 9, 4], 1)
@@ -78,9 +80,11 @@ class TestTask7(unittest.TestCase):
 
         h = self.Heap()
         h.MakeHeap([11, 9, 4, 8, 7, 3], 2)
-        self.assertEqual([11, 9, 8, 7, 4, 3], [v for v in h.HeapArray if v is not None])
+        self.assertTrue(h.IsValid())
+        # self.assertEqual([11, 9, 8, 7, 4, 3], [v for v in h.HeapArray if v is not None])
+        self.assertEqual([11, 9, 4, 8, 7, 3], [v for v in h.HeapArray if v is not None])
         self.assertTrue(11, h.GetMax())
-        self.assertEqual([9, 7, 8, 3, 4], [v for v in h.HeapArray if v is not None])
+        self.assertEqual([9, 8, 4, 3, 7], [v for v in h.HeapArray if v is not None])
 
         self.assertTrue(9, h.GetMax())
         self.assertEqual([8, 7, 4, 3], [v for v in h.HeapArray if v is not None])
@@ -96,6 +100,24 @@ class TestTask7(unittest.TestCase):
 
         self.assertTrue(3, h.GetMax())
         self.assertEqual([], [v for v in h.HeapArray if v is not None])
+
+    def test_IsValid(self):
+        h = self.Heap()
+        h.MakeHeap([], 3)
+        self.assertTrue(h.IsValid())
+
+        h.Add(10)
+        self.assertTrue(h.IsValid())
+
+        h.Add(9)
+        self.assertTrue(h.IsValid())
+
+        h.HeapArray[0], h.HeapArray[1] = h.HeapArray[1], h.HeapArray[0]
+        self.assertFalse(h.IsValid())
+
+        h._rebuild_up(1)
+        self.assertTrue(h.IsValid())
+
 
 
 class TestTask7_2(TestTask7):

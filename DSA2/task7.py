@@ -1,3 +1,14 @@
+# Section: 6. Heaps
+#
+# Task 3
+# Add a method to check that the array actually represents a valid heap.
+#
+# Class: Heap
+# Method: IsValid(self) -> bool:
+# Time complexity: O(n) - where n is the number of elements in the heap
+# Solution:
+# Recursively check the condition that the parent is greater than its children.
+
 class Heap:
 
     def __init__(self):
@@ -6,13 +17,18 @@ class Heap:
 
     def MakeHeap(self, a: list[int], depth: int):
         size = pow(2, depth + 1) - 1
-        if len(a) > size:
-            raise OverflowError("Array size exceeds heap capacity")
+        # if len(a) > size:
+        #     raise OverflowError("Array size exceeds heap capacity")
 
-        self.HeapArray = sorted(a.copy(), reverse=True)
-        self.HeapArray.extend([None] * (size - len(self.HeapArray)))
+        self.HeapArray = [None] * size
 
-        self._last_index = len(a) - 1
+        for key in a:
+            self.Add(key)
+
+        # self.HeapArray = sorted(a.copy(), reverse=True)
+        # self.HeapArray.extend([None] * (size - len(self.HeapArray)))
+
+        # self._last_index = len(a) - 1
 
     def _allocate_slot(self) -> int:
         self._last_index += 1
@@ -83,4 +99,36 @@ class Heap:
         self._rebuild_up(idx_last_slot)
 
         return True
+
+    def _IsValid(self, idx):
+        result = True
+
+        idx_left_child = idx * 2 + 1
+        idx_righ_child = idx * 2 + 2
+
+        if (
+            idx_left_child <= self._last_index
+            and self.HeapArray[idx_left_child] > self.HeapArray[idx]
+        ):
+            return False
+
+        if (
+            idx_righ_child <= self._last_index
+            and self.HeapArray[idx_righ_child] > self.HeapArray[idx]
+        ):
+            return False
+
+        if idx_left_child <= self._last_index:
+            result = result and self._IsValid(idx_left_child)
+
+        if idx_righ_child <= self._last_index:
+            result = result and self._IsValid(idx_righ_child)
+
+        return result
+
+    def IsValid(self) -> bool:
+        if self._last_index < 1:
+            return True
+
+        return self._IsValid(0)
     
