@@ -101,6 +101,21 @@ class TestTask7(unittest.TestCase):
         self.assertTrue(3, h.GetMax())
         self.assertEqual([], [v for v in h.HeapArray if v is not None])
 
+        self.assertTrue(-1, h.GetMax())
+        self.assertEqual([], [v for v in h.HeapArray if v is not None])
+
+    def test_GetMax_many(self):
+        array = [v for v in range(10)]
+        h = self.Heap()
+        h.MakeHeap([], 4)
+
+        for e in array:
+            h.Add(e)
+
+        array.sort(reverse=True)
+        for e in array:
+            self.assertEqual(e, h.GetMax())
+
     def test_IsValid(self):
         h = self.Heap()
         h.MakeHeap([], 3)
@@ -117,7 +132,6 @@ class TestTask7(unittest.TestCase):
 
         h._rebuild_up(1)
         self.assertTrue(h.IsValid())
-
 
 
 class TestTask7_2(TestTask7):

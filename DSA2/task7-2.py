@@ -112,10 +112,12 @@ class Heap:
     def GetMax(self):
         if len(self.HeapArray) == 0:
             return -1
-
+        
+        result = self.HeapArray[0]
         self.HeapArray[0] = self.HeapArray[self._last_index]
         self._deallocate_last_slot()
         self._rebuild_down(0)
+        return result
 
     def Add(self, key):
         idx_last_slot = self._allocate_slot()
