@@ -5,20 +5,35 @@
 
 # Класс: SimpleTreeNode
 # Метод: Rebalance(self):
-# Вычислительная сложность: в лучшем случае O(m*log(n)) где n - количество эелментов, а m - количество элементов 
-# которые требуется переместить для востановления баланса. В худшем случае O(n^2), где n - количество эелментов.
-# В лучшем случае если двоичное дерево более мнее сбалансировано, и перемещаемые узлы не требуется подымать вверх, 
-# что-бы выполнить условие, что родитель больше потомков.
+# Вычислительная сложность: в лучшем случае O(m * log n) где n - количество элементов, а m - количество элементов
+# которые требуется переместить для восстановления баланса. В худшем O(n^2) в случае если элементы вытянуты в цепочку.
 
 # Решение:
-# Определяю максимальный путь от вершины, до узлов у которых нет потомков (листья)
-# И минимальный путь от вершины, до узла у окторого не хватает хотя бы одного потомка.
-# В случае если разница между ними больше 1, значит дерево несблансированно.
-# 
-# Далее вставляю узел в нехватающего потомка у элемента у которого минимальный путь.
-# И если он оказывается больше родителя, то подымаюсь вверх определяя момент пока он не станет меньше радителя.
-# А все элемента на этом пути опускаю вниз.  
+# Определяю максимальный путь от вершины, до узлов у которых нет потомков.
+# И минимальный путь от вершины, до узла у которого не хватает хотя бы одного потомка.
+# В случае если разница между ними больше 1, значит дерево несбалансированно.
+# И буду выполнять балансировку, пока дерево не станет сбалансированным.
+#
+# Вставляю узел до которого максимальный путь,в виде потомка к элементу до которого минимальный путь.
+# И далее он "всплывает" вверх ("BubbleUp()"), пока не упрется в родителя у которого значение больше или равно чем у него.
+# При всплывании отслеживаю, чтобы сохранялся корректный порядок дочерних узлов.
+#
+# Получение минимального и максимального пути кэширую храня значение в узлах.
+# Пространственная сложность (по памяти) при кэшировании сохраняется неизменной O(n).
+# При первом вызове "Rebalance" получение максимального и минимального пути занимает О(n) времени.
+# Поскольку очищаю путь вверх до корня при изменениях потомков у узлов, последующие вызовы занимают в лучшем случае O(log n).
+# В худшем O(n)
 
+
+# Задача 3
+# Добавьте метод, который для любого заданного подузла текущего дерева определит общее количество чётных поддеревьев.
+
+# Класс: SimpleTreeNode
+# Метод: CountEvenSubtrees(self) -> int:
+# Вычислительная сложность: O(n) где n - чисол элементов в дереве
+
+# Решение: рекурсивно считаю колличество узлов.
+# Количество узлов кэшируется, что позволяет исключить квадратичную алогоритмическую сложность.
 
 
 class SimpleTreeNode:
@@ -79,6 +94,7 @@ class SimpleTreeNode:
         self.Children.sort(key=lambda node: node.NodeValue)
 
     def Rebalance(self):
+
         if self.MaxPath() - self.MinPath() < 2:
             return None
 
@@ -86,21 +102,17 @@ class SimpleTreeNode:
         node_start_parent = self._NodeAtMinPath()
 
         node_moved._ClearCacheUp()
-        node_moved.Parent.Children.remove(node_moved)
-        node_moved.Parent = None
+        node_start_parent._ClearCacheUp()
 
-        node_parent, node_child = node_start_parent._FindPositionUp(
-            node_moved.NodeValue, None
-        )
+        node_start_parent.AddChild(node_moved)
+        upper_bound_parent = node_moved.BubbleUp()
+        node_moved._ClearCacheUp()
 
-        node_moved.AddChild(node_child)
-
-        if node_parent is not None:
-            node_parent._ClearCacheUp()
-            node_parent.AddChild(node_moved)
+        # if upper_bound_parent is not None:
+        #     upper_bound_parent._ClearCacheUp()
 
         new_root = None
-        if node_parent is None:
+        if upper_bound_parent is None:
             new_root = node_moved
 
         next_new_root = None
@@ -116,16 +128,35 @@ class SimpleTreeNode:
 
         return new_root
 
-    def _FindPositionUp(
-        self, value, child: "SimpleTreeNode"
-    ) -> tuple["SimpleTreeNode", "SimpleTreeNode"]:
-        if self.NodeValue >= value:
-            return self, child
-
+    def BubbleUp(self) -> "SimpleTreeNode":
         if self.Parent is None:
-            return None, self
+            return None
 
-        return self.Parent._FindPositionUp(value, self)
+        if self.Parent.NodeValue >= self.NodeValue:
+            return self.Parent
+
+        self.Parent.Children, self.Children = self.Children, self.Parent.Children
+
+        if self.Parent is not None:
+            for child in self.Parent.Children:
+                child.Parent = self.Parent
+
+        self.Children.remove(self)
+        self.Children.append(self.Parent)
+        self.SortChildren()
+        self.Parent.SortChildren()
+
+        if self.Parent.Parent is not None:
+            self.Parent.Parent.Children.remove(self.Parent)
+            self.Parent.Parent.Children.append(self)
+            self.Parent.Parent.SortChildren()
+
+        self.Parent.Parent, self.Parent = self, self.Parent.Parent
+
+        for child in self.Children:
+            child.Parent = self
+
+        return self.BubbleUp()
 
     def _ClearCacheUp(self):
         if (
@@ -203,6 +234,7 @@ class SimpleTreeNode:
 
         if NewChild.Parent is not None:
             NewChild.Parent.Children.remove(NewChild)
+            NewChild.Parent.SortChildren()
 
         NewChild.Parent = self
         self.Children.append(NewChild)
@@ -217,6 +249,16 @@ class SimpleTreeNode:
             result += child.CountEvenSubtrees()
 
         return result
+
+    def AddValue(self, val):
+        if len(self.Children) < 2:
+            self.AddChild(SimpleTreeNode(val, None))
+            return
+
+        if self.NodeValue <= val:
+            self.Children[1].AddValue(val)
+
+        self.Children[0].AddValue(val)
 
 
 class SimpleTree:
@@ -279,15 +321,14 @@ class SimpleTree:
             return []
 
         return self.Root.EvenTrees()
-    
+
     def CountEvenSubtrees(self):
         if self.Root is None:
             return 0
-        
+
         self.Root._ClearCache()
 
         return self.Root.CountEvenSubtrees()
-
 
     def Rebalance(self):
         if self.Root is None:
@@ -311,3 +352,10 @@ class SimpleTree:
 
         self.Root._ClearCache()
         return self.Root.MaxPath()
+
+    def AddValue(self, val):
+        if self.Root is None:
+            self.Root = SimpleTreeNode(val, None)
+            return
+
+        self.Root.AddValue(val)

@@ -1,4 +1,6 @@
 import unittest
+import random
+import sys
 
 
 # run tests:
@@ -152,7 +154,15 @@ class TestTask9(unittest.TestCase):
 
 
 class TestTask9_2(unittest.TestCase):
-    from task9_2 import SimpleTree, SimpleTreeNode
+    import importlib.util
+    import sys
+
+    spec = importlib.util.spec_from_file_location("task9-2", "./DSA2/task9-2.py")
+    task9_2 = importlib.util.module_from_spec(spec)
+    sys.modules["task9-2"] = task9_2
+    spec.loader.exec_module(task9_2)
+    SimpleTree = task9_2.SimpleTree
+    SimpleTreeNode = task9_2.SimpleTreeNode
 
     def test_Rebalance(self):
         st = self.SimpleTree(None)
@@ -215,6 +225,23 @@ class TestTask9_2(unittest.TestCase):
         st.Rebalance()
         self.assertEqual(n11, st.Root)
 
+    def test_Rebalance_many_elements(self):
+        st = self.SimpleTree(None)
+
+        values = [v for v in range(1, 40)]
+
+        random.seed(42)
+        random.shuffle(values)
+
+        for v in values:
+            st.AddValue(v)
+
+        self.assertTrue(st.MaxPath() - st.MinPath() > 1)
+
+        # sys.setrecursionlimit(5000)
+        st.Rebalance()
+
+        self.assertTrue(st.MaxPath() - st.MinPath() < 2)
 
     def test_CountEvenSubtrees(self):
         n1 = self.SimpleTreeNode(1)
@@ -242,7 +269,6 @@ class TestTask9_2(unittest.TestCase):
         st.AddChild(n8, n10)
 
         self.assertEqual(3, st.CountEvenSubtrees())
-
 
 
 if __name__ == "__main__":

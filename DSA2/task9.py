@@ -125,3 +125,4 @@ class SimpleTree:
             return []
 
         return self.Root.EvenTrees()
+
