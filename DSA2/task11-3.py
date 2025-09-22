@@ -162,30 +162,23 @@ class TestTask11_2(unittest.TestCase):
         result = s.FindAllCicles()
         self.assertCountEqual([[0, 1, 2], [1, 2, 3], [0, 1, 3, 2], [5, 6, 7]], result)
 
-
     def test_FindTreeDiameter(self):
         st = self.SimpleTree(None)
-        #self.assertEqual(0,st.FindTreeDiameter())
+        # self.assertEqual(0,st.FindTreeDiameter())
 
-        root = self.SimpleTreeNode("_root",None)
+        root = self.SimpleTreeNode("_root", None)
         st = self.SimpleTree(root)
-        #self.assertEqual(0,st.FindTreeDiameter())
+        # self.assertEqual(0,st.FindTreeDiameter())
 
-        l1 = self.SimpleTreeNode(0,None)
-        st.AddChild(root,l1)
+        l1 = self.SimpleTreeNode(0, None)
+        st.AddChild(root, l1)
 
-        self.assertEqual(1,st.FindTreeDiameter())
+        self.assertEqual(1, st.FindTreeDiameter())
 
-        r1 = self.SimpleTreeNode(0,None) 
-        st.AddChild(root,r1)
-        self.assertEqual(2,st.FindTreeDiameter())
+        r1 = self.SimpleTreeNode(0, None)
+        st.AddChild(root, r1)
+        self.assertEqual(2, st.FindTreeDiameter())
 
-        
 
 if __name__ == "__main__":
     unittest.main()
-
-
-
-
-
