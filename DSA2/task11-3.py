@@ -107,6 +107,16 @@ class TestTask11(unittest.TestCase):
         s.AddEdge(2, 3)
         self.assertEqual([v3, v2], s.BreadthFirstSearch(3, 2))
 
+    def test_BreadthFirstSearch_1_1(self):
+        s = self.SimpleGraph(5)
+        v0 = s.AddVertex(0)
+        v1 = s.AddVertex(1)
+        self.assertEqual([], s.BreadthFirstSearch(1, 1))
+        self.assertEqual([], s.BreadthFirstSearch(1, 1))
+
+        s.AddEdge(1,1)
+        self.assertEqual([1], s.BreadthFirstSearch(1, 1))
+        self.assertEqual([1], s.BreadthFirstSearch(1, 1))
 
 class TestTask11_2(unittest.TestCase):
 

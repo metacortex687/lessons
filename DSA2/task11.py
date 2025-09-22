@@ -139,6 +139,10 @@ class SimpleGraph:
         return []
 
     def BreadthFirstSearch(self, VFrom, VTo):
+
+        if VFrom == VTo and self.IsEdge(VFrom, VFrom):
+            return [VFrom]
+        
         for v in self.vertex:
             if v is None:
                 continue

@@ -8,14 +8,14 @@
 # Метод: FindTreeDiameter(self):
 # Вычислительная сложность: O(n) - где n колличество ребер в графе
 
-# Решение: Нахожу наиболее удаленный от корня узел (до него максимальный путь). 
+# Решение: Нахожу наиболее удаленный от корня узел (до него максимальный путь).
 # И далее методом BFS от него делаю обход узлов, самый последний является самым удаленным.
-# Для вычисления, расстояний при распространении передаю, минимальный уровень который был посещен при распространении (уровень горки). 
+# Для вычисления, расстояний при распространении передаю, минимальный уровень который был посещен при распространении (уровень горки).
 # Расстояние это уровень стартового узла минус минимальный уровень на пути, плюс уровень конечного узла минус минимальный уровень на пути.
 
 
 # Задача 3
-# Добавьте метод, который находит все циклы в текущем (неориентированном) графе с использованием BFS. 
+# Добавьте метод, который находит все циклы в текущем (неориентированном) графе с использованием BFS.
 
 # Класс: SimpleGraph
 # Метод: FindAllCicles(self) -> list[list[int]]:
@@ -32,7 +32,7 @@
 # В случае если эти пути содержат общие точки, значит фигура похожа на "эскимо", они имеют общий путь.
 # Тогда убираю из дальнейшего распространения.
 
-# Если нет общих точек, то соединяю эти пути как цикл и возвращаю массив.  
+# Если нет общих точек, то соединяю эти пути как цикл и возвращаю массив.
 # Для удобства тестирования, массив привожу к виду, что бы первый индекс был наименьшим во всем списке.
 # И второй индекс, так как возможен обход в двух направлениях, был наименьшим из возможных.
 #
@@ -181,7 +181,11 @@ class SimpleGraph:
 
         return []
 
-    def BreadthFirstSearch(self, VFrom: int, VTo: int):
+    def BreadthFirstSearch(self, VFrom, VTo):
+
+        if VFrom == VTo:
+            return [VFrom]
+        
         for v in self.vertex:
             if v is None:
                 continue
@@ -190,13 +194,17 @@ class SimpleGraph:
 
         queue = Queue()
         queue.enqueue(VFrom)
-        self.vertex[VFrom].Hit = True
 
-        curent_index = VFrom
-        curent_vertex = self.vertex[curent_index]
+        curent_index = None
+        curent_vertex = None
 
         while not queue.IsEmpty():
+            curent_index = queue.dequeue()
+            curent_vertex = self.vertex[curent_index]
+            curent_vertex.Hit = True
+
             for i, vertex in enumerate(self.vertex):
+
                 if vertex is None:
                     continue
 
@@ -207,15 +215,11 @@ class SimpleGraph:
                     continue
 
                 self.vertex[i].PrevNode = curent_vertex
-                self.vertex[i].Hit = True
 
                 if i == VTo:
                     return self.vertex[i].PathTo()
 
                 queue.enqueue(i)
-
-            curent_index = queue.dequeue()
-            curent_vertex = self.vertex[curent_index]
 
         return []
 
@@ -274,7 +278,7 @@ class SimpleGraph:
                     )
                     if path is None:
                         curent_vertex.visited_from.remove(idx_intersection)
-                        #vertex.visited_from.remove(idx_intersection)
+                        # vertex.visited_from.remove(idx_intersection)
                         continue
                     result.append(path)
 
