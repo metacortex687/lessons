@@ -151,6 +151,7 @@ class SimpleGraph:
 
         queue = Queue()
         queue.enqueue(VFrom)
+        self.vertex[VFrom].Hit = True
 
         curent_index = None
         curent_vertex = None
@@ -158,10 +159,9 @@ class SimpleGraph:
         while not queue.IsEmpty():
             curent_index = queue.dequeue()
             curent_vertex = self.vertex[curent_index]
-            curent_vertex.Hit = True
-
+            
             for i, vertex in enumerate(self.vertex):
-                
+
                 if vertex is None:
                     continue
 
@@ -176,6 +176,7 @@ class SimpleGraph:
                 if i == VTo:
                     return self.vertex[i].PathTo()
 
+                self.vertex[i].Hit = True
                 queue.enqueue(i)
 
         return []

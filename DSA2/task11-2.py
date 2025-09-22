@@ -64,8 +64,11 @@ class SimpleGraph:
         self.max_vertex = size
         self.m_adjacency = [[0] * size for _ in range(size)]
         self.vertex: list[Vertex | None] = [None] * size
+        self._index = 0
 
     def AddVertex(self, value) -> Vertex:
+        # self.vertex[self._index] = value
+        # self._index += 1
         for i, _v in enumerate(self.vertex):
             if _v is None:
                 self.vertex[i] = Vertex(value)
@@ -194,6 +197,7 @@ class SimpleGraph:
 
         queue = Queue()
         queue.enqueue(VFrom)
+        self.vertex[VFrom].Hit = True
 
         curent_index = None
         curent_vertex = None
@@ -201,8 +205,7 @@ class SimpleGraph:
         while not queue.IsEmpty():
             curent_index = queue.dequeue()
             curent_vertex = self.vertex[curent_index]
-            curent_vertex.Hit = True
-
+            
             for i, vertex in enumerate(self.vertex):
 
                 if vertex is None:
@@ -219,6 +222,7 @@ class SimpleGraph:
                 if i == VTo:
                     return self.vertex[i].PathTo()
 
+                self.vertex[i].Hit = True
                 queue.enqueue(i)
 
         return []
