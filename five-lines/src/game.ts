@@ -421,35 +421,7 @@ namespace App {
     }
   }
 
-  interface Input {
-    handle(player: Player, map: Map): void;
-  }
-
-  class Right implements Input {
-    handle(player: Player, map: Map) {
-      player.moveHorizontal(map, 1);
-    }
-  }
-
-  class Left implements Input {
-    handle(player: Player, map: Map) {
-      player.moveHorizontal(map, -1);
-    }
-  }
-
-  class Up implements Input {
-    handle(player: Player, map: Map) {
-      player.moveVertical(map, -1);
-    }
-  }
-
-  class Down implements Input {
-    handle(player: Player, map: Map) {
-      player.moveVertical(map, 1);
-    }
-  }
-
-  class Player {
+  export class Player {
     constructor(private x: number, private y: number) {}
 
     pushHorisontal(map: Map, tile: Tile, dx: number) {
@@ -479,8 +451,6 @@ namespace App {
     }
   }
 
-  // let player = new Player(1, 1);
-
   let rawMap: number[][] = [
     [2, 2, 2, 2, 2, 2, 2, 2],
     [2, 3, 0, 1, 1, 2, 0, 2],
@@ -490,7 +460,7 @@ namespace App {
     [2, 2, 2, 2, 2, 2, 2, 2],
   ];
 
-  class Map {
+  export class Map {
     private map!: Tile[][];
     constructor() {
       this.load_data();
@@ -570,36 +540,24 @@ namespace App {
     }
   }
 
-  const LEFT_KEY = "ArrowLeft";
-  const UP_KEY = "ArrowUp";
-  const RIGHT_KEY = "ArrowRight";
-  const DOWN_KEY = "ArrowDown";
-
   export class Game {
-    inputs_push(key: string) {
-      if (key === LEFT_KEY || key === "a") this.inputs.push(new Left());
-      else if (key === UP_KEY || key === "w") this.inputs.push(new Up());
-      else if (key === RIGHT_KEY || key === "d") this.inputs.push(new Right());
-      else if (key === DOWN_KEY || key === "s") this.inputs.push(new Down());
-    }
     private player: Player;
     private map: Map;
-    public inputs: Input[];
+
     constructor() {
       this.map = new Map();
       this.player = new Player(1, 1);
-      this.inputs = [];
     }
 
-    update() {
-      this.handleInputs(this.player, this.map);
+    update(inputs: Inputs) {
+      this.handleInputs(inputs);
       this.map.update();
     }
 
-    handleInputs(player: Player, map: Map) {
-      while (this.inputs.length > 0) {
-        let current = this.inputs.pop()!;
-        current.handle(player, map);
+    handleInputs(inputs: Inputs) {
+      while (!inputs.is_empty()) {
+        let current = inputs.pop()!;
+        current.handle(this.player, this.map);
       }
     }
 

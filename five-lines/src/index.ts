@@ -13,11 +13,12 @@ function createGraphics() {
 }
 
 const game = new App.Game();
+const inputs = new App.Inputs();
 
 function gameLoop() {
   let before = Date.now();
   let g = createGraphics();
-  game.update();
+  game.update(inputs);
   game.draw(g);
   let after = Date.now();
   let frameTime = after - before;
@@ -30,7 +31,7 @@ window.onload = () => {
 };
 
 window.addEventListener("keydown", (e) => {
-  game.inputs_push(e.key);
+  inputs.push(e.key);
 });
 
 console.log("tsc bundling ok ");
