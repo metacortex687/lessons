@@ -10,7 +10,14 @@
 # Разрешить все .py-файлы
 !*.py
 !*.md
+!*.ts
+!*.html
+!*.json
 
 __pycache__/
 .vscode/
 .venv/
+
+*.js
+*.sh
+.vscode
