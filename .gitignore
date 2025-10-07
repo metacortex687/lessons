@@ -13,6 +13,7 @@
 !*.ts
 !*.html
 !*.json
+!*.png
 
 __pycache__/
 .vscode/
