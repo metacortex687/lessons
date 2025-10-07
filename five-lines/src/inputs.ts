@@ -77,18 +77,14 @@ namespace App {
       ArrowDown: RawInput.DOWN,
     };
 
-    public inputs: Input[];
+    private inputs: Input[];
 
     constructor() {
       this.inputs = [];
     }
 
-    getInputs() {
-      return this.inputs;
-    }
-
     is_empty() {
-      return inputs.getInputs().length == 0;
+      return this.inputs.length == 0;
     }
 
     pop() {
