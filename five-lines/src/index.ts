@@ -5,11 +5,10 @@ const SLEEP = 1000 / FPS;
 
 function createGraphics() {
   let canvas = document.getElementById("GameCanvas") as HTMLCanvasElement;
-  let g = canvas.getContext("2d");
-
-  if (!g) return null;
+  let g = canvas.getContext("2d")!;
 
   g.clearRect(0, 0, canvas.width, canvas.height);
+
   return g;
 }
 
@@ -17,7 +16,7 @@ const game = new App.Game();
 
 function gameLoop() {
   let before = Date.now();
-  let g = createGraphics()!;
+  let g = createGraphics();
   game.update();
   game.draw(g);
   let after = Date.now();
@@ -34,4 +33,4 @@ window.addEventListener("keydown", (e) => {
   game.inputs_push(e.key);
 });
 
-console.log('tsc bundling ok ');
+console.log("tsc bundling ok ");
