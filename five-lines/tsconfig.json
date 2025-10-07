@@ -1,8 +1,11 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": true,
-        "sourceMap": false
-    }
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "none",
+    "outFile": "./index.js",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "files": ["src/game.ts", "src/index.ts"]
 }
+
