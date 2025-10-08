@@ -24,7 +24,8 @@ SELECT * FROM tasks WHERE status = 'pending' and priority = (SELECT max(priority
 
 SELECT d.dwarf_id, d.name dwarf_name, count(*) count_items 
 FROM dwarves d INNER JOIN items itm 
-ON d.dwarf_id = itm.owner_id or itm.owner_id is NULL GROUP BY d.dwarf_id, d.name
+ON d.dwarf_id = itm.owner_id or itm.owner_id is NULL 
+GROUP BY d.dwarf_id, d.name
 
 Описание решения: Использую внутреннее соединение, если у предмета owner_id NULL, это значит, что им владеют все гномы. 
 Далее эту таблицу, содержащую уникальные строки гном-предмет, группирую по гномам и считаю количество строк.
