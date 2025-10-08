@@ -3,31 +3,22 @@
 const FPS = 30;
 const SLEEP = 1000 / FPS;
 
-function createGraphics() {
-  let canvas = document.getElementById("GameCanvas") as HTMLCanvasElement;
-  let g = canvas.getContext("2d")!;
-
-  g.clearRect(0, 0, canvas.width, canvas.height);
-
-  return g;
-}
-
 const game = new App.Game();
 const inputs = new App.Inputs();
 
-function gameLoop() {
+function gameLoop(tile_renderer: App.TileRenderer) {
   let before = Date.now();
-  let g = createGraphics();
   game.update(inputs);
-  game.draw(g);
+  game.draw(tile_renderer);
   let after = Date.now();
   let frameTime = after - before;
   let sleep = SLEEP - frameTime;
-  setTimeout(() => gameLoop(), sleep);
+  setTimeout(() => gameLoop(tile_renderer), sleep);
 }
 
 window.onload = () => {
-  gameLoop();
+  let tile_renderer = new App.TileRenderer("GameCanvas");
+  gameLoop(tile_renderer);
 };
 
 window.addEventListener("keydown", (e) => {

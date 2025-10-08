@@ -1,5 +1,4 @@
 namespace App {
-  const TILE_SIZE = 30;
 
   interface FallingState {
     drop(map: Map, y: number, x: number): void;
@@ -146,7 +145,7 @@ namespace App {
 
     moveVertical(player: Player, map: Map, dy: number): void;
     moveHorizontal(player: Player, map: Map, dx: number): void;
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void;
+    draw(tr: TileRenderer, x: number, y: number): void;
     isLock1(): boolean;
     isLock2(): boolean;
     isAir(): boolean;
@@ -165,9 +164,10 @@ namespace App {
       player.move(map, dx, 0);
     }
 
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-      g.fillStyle = "#ccffcc";
-      g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    draw(tr: TileRenderer, x: number, y: number): void {
+      tr.fillRect(x,y,"#ccffcc");
+      // g.fillStyle = "#ccffcc";
+      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     isAir(): boolean {
@@ -191,9 +191,10 @@ namespace App {
     moveVertical(player: Player, map: Map, dy: number): void {}
     moveHorizontal(player: Player, map: Map, dx: number): void {}
 
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-      g.fillStyle = "#999999";
-      g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    draw(tr: TileRenderer, x: number, y: number): void {
+      tr.fillRect(x,y,"#999999");
+      // g.fillStyle = "#999999";
+      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     isAir(): boolean {
@@ -229,9 +230,10 @@ namespace App {
       this.falling.moveHorizontal(player, map, this, dx);
     }
 
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-      g.fillStyle = "#0000cc";
-      g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    draw(tr: TileRenderer, x: number, y: number): void {
+      tr.fillRect(x,y,"#0000cc");
+      // g.fillStyle = "#0000cc";
+      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
     isAir(): boolean {
       return false;
@@ -258,7 +260,7 @@ namespace App {
       player.move(map, dx, 0);
     }
 
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {}
+    draw(tr: TileRenderer, x: number, y: number): void {}
 
     isLock1(): boolean {
       return false;
@@ -280,7 +282,7 @@ namespace App {
     moveVertical(player: Player, map: Map, dy: number): void {}
     moveHorizontal(player: Player, map: Map, dx: number): void {}
 
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {}
+    draw(tr: TileRenderer, x: number, y: number): void {}
 
     isLock1(): boolean {
       return false;
@@ -311,9 +313,10 @@ namespace App {
     moveHorizontal(player: Player, map: Map, dx: number): void {
       this.fallStrategy.moveHorizontal(player, map, this, dx);
     }
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-      g.fillStyle = "#8b4513";
-      g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    draw(tr: TileRenderer, x: number, y: number): void {
+      tr.fillRect(x,y,"#8b4513");
+      // g.fillStyle = "#8b4513";
+      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     isLock1(): boolean {
@@ -343,8 +346,8 @@ namespace App {
       this.keyConf.removeLock(map);
       player.move(map, dx, 0);
     }
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-      this.keyConf.draw(g, x, y);
+    draw(tr: TileRenderer, x: number, y: number): void {
+      this.keyConf.draw(tr, x, y);
     }
 
     isLock1(): boolean {
@@ -375,9 +378,10 @@ namespace App {
   }
 
   class KeyConfiguration {
-    draw(g: CanvasRenderingContext2D, x: number, y: number) {
-      g.fillStyle = this.color;
-      g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    draw(tr: TileRenderer, x: number, y: number) {
+      tr.fillRect(x,y,this.color);
+      // g.fillStyle = this.color;
+      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
     removeLock(map: Map) {
       map.remove(this.removeStrategy);
@@ -406,8 +410,8 @@ namespace App {
     update(map: Map, x: number, y: number): void {}
     moveVertical(player: Player, map: Map, dy: number): void {}
     moveHorizontal(player: Player, map: Map, dx: number): void {}
-    draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-      this.keyConf.draw(g, x, y);
+    draw(tr: TileRenderer, x: number, y: number): void {
+      this.keyConf.draw(tr, x, y);
     }
 
     isLock1(): boolean {
@@ -427,9 +431,10 @@ namespace App {
     pushHorisontal(map: Map, tile: Tile, dx: number) {
       map.pushHorisontal(this, tile, this.x, this.y, dx);
     }
-    draw(g: CanvasRenderingContext2D) {
-      g.fillStyle = "#ff0000";
-      g.fillRect(this.x * TILE_SIZE, this.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    draw(tr: TileRenderer) {
+      tr.fillRect(this.x,this.y,"#ff0000");
+      // g.fillStyle = "#ff0000";
+      // g.fillRect(this.x * TILE_SIZE, this.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     moveHorizontal(map: Map, dx: number) {
@@ -499,10 +504,10 @@ namespace App {
       this.map[y][x] = new Air();
     }
 
-    draw(g: CanvasRenderingContext2D) {
+    draw(tr: TileRenderer) {
       for (let y = 0; y < this.map.length; y++) {
         for (let x = 0; x < this.map[y].length; x++) {
-          this.map[y][x].draw(g, x, y);
+          this.map[y][x].draw(tr, x, y);
         }
       }
     }
@@ -561,9 +566,10 @@ namespace App {
       }
     }
 
-    draw(g: CanvasRenderingContext2D) {
-      this.map.draw(g);
-      this.player.draw(g);
+    draw(tr: TileRenderer) {
+      tr.clearRect();
+      this.map.draw(tr);
+      this.player.draw(tr);
     }
   }
 }

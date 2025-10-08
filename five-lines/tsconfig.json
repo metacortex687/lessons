@@ -6,6 +6,6 @@
     "rootDir": "./src",
     "strict": true
   },
-  "files": ["src/game.ts","src/inputs.ts", "src/index.ts"]
+  "files": ["src/tile_renderer.ts","src/game.ts","src/inputs.ts", "src/index.ts"]
 }
 
