@@ -65,8 +65,8 @@ WHERE count_incomplete = (SELECT max(count_incomplete) FROM profession_incomplet
 7. Для каждого типа предметов узнать средний возраст гномов, владеющих этими предметами.
 
 ```sql
-SELECT item_type, avg(age_dwarf) owner_average_age FROM 
-(SELECT DISTINCT itm.type item_type, dwarf_id, d.age age_dwarf 
+SELECT item_type, avg(dwarf_age) owner_average_age FROM 
+(SELECT DISTINCT itm.type item_type, dwarf_id, d.age dwarf_age 
 FROM Items itm INNER JOIN Dwarves  d 
 ON itm.owner_id = d.dwarf_id or itm.owner_id is NULL) 
 GROUP BY item_type  
