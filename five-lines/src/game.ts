@@ -1,5 +1,4 @@
 namespace App {
-
   interface FallingState {
     drop(map: Map, y: number, x: number): void;
     moveHorizontal(player: Player, map: Map, tile: Tile, dx: number): void;
@@ -85,22 +84,22 @@ namespace App {
   }
   class Key1Value implements RawTileValue {
     transform(): Tile {
-      return new Key(YELLOW_KEY);
+      return YELLOW_KEY_LOCK_FACTORY.createKey();
     }
   }
   class Lock1Value implements RawTileValue {
     transform(): Tile {
-      return new LockTile(YELLOW_KEY);
+      return YELLOW_KEY_LOCK_FACTORY.createLock();
     }
   }
   class Key2Value implements RawTileValue {
     transform(): Tile {
-      return new Key(BLUE_KEY);
+      return BLUE_KEY_LOCK_FACTORY.createKey();
     }
   }
   class Lock2Value implements RawTileValue {
     transform(): Tile {
-      return new LockTile(BLUE_KEY);
+      return BLUE_KEY_LOCK_FACTORY.createLock();
     }
   }
 
@@ -146,8 +145,6 @@ namespace App {
     moveVertical(player: Player, map: Map, dy: number): void;
     moveHorizontal(player: Player, map: Map, dx: number): void;
     draw(tr: TileRenderer, x: number, y: number): void;
-    isLock1(): boolean;
-    isLock2(): boolean;
     isAir(): boolean;
   }
 
@@ -165,9 +162,7 @@ namespace App {
     }
 
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x,y,"#ccffcc");
-      // g.fillStyle = "#ccffcc";
-      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      tr.fillRect(x, y, "#ccffcc");
     }
 
     isAir(): boolean {
@@ -192,9 +187,7 @@ namespace App {
     moveHorizontal(player: Player, map: Map, dx: number): void {}
 
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x,y,"#999999");
-      // g.fillStyle = "#999999";
-      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      tr.fillRect(x, y, "#999999");
     }
 
     isAir(): boolean {
@@ -231,9 +224,7 @@ namespace App {
     }
 
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x,y,"#0000cc");
-      // g.fillStyle = "#0000cc";
-      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      tr.fillRect(x, y, "#0000cc");
     }
     isAir(): boolean {
       return false;
@@ -314,9 +305,7 @@ namespace App {
       this.fallStrategy.moveHorizontal(player, map, this, dx);
     }
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x,y,"#8b4513");
-      // g.fillStyle = "#8b4513";
-      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      tr.fillRect(x, y, "#8b4513");
     }
 
     isLock1(): boolean {
@@ -334,20 +323,20 @@ namespace App {
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    constructor(private keyConf: KeyConfiguration) {}
+    constructor(private lock: LockTile, private color: string) {}
 
     update(map: Map, x: number, y: number): void {}
 
     moveVertical(player: Player, map: Map, dy: number): void {
-      this.keyConf.removeLock(map);
+      map.removeTile(this.lock);
       player.move(map, 0, dy);
     }
     moveHorizontal(player: Player, map: Map, dx: number): void {
-      this.keyConf.removeLock(map);
+      map.removeTile(this.lock);
       player.move(map, dx, 0);
     }
     draw(tr: TileRenderer, x: number, y: number): void {
-      this.keyConf.draw(tr, x, y);
+      tr.fillRect(x, y, this.color);
     }
 
     isLock1(): boolean {
@@ -361,69 +350,43 @@ namespace App {
     }
   }
 
-  interface RemoveStrategy {
-    check(tile: Tile): boolean;
-  }
+  class KeyLockFactory {
+    private key: Key;
+    private lock: LockTile;
 
-  class RemoveLock1 implements RemoveStrategy {
-    check(tile: Tile) {
-      return tile.isLock1();
+    constructor(private color: string) {
+      this.lock = new LockTile(this.color);
+      this.key = new Key(this.lock, this.color);
     }
-  }
 
-  class RemoveLock2 implements RemoveStrategy {
-    check(tile: Tile) {
-      return tile.isLock2();
+    createKey(): Tile {
+      return this.key;
     }
-  }
 
-  class KeyConfiguration {
-    draw(tr: TileRenderer, x: number, y: number) {
-      tr.fillRect(x,y,this.color);
-      // g.fillStyle = this.color;
-      // g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-    }
-    removeLock(map: Map) {
-      map.remove(this.removeStrategy);
-    }
-    constructor(
-      private color: string,
-      private _1: boolean,
-      private removeStrategy: RemoveStrategy
-    ) {}
-    is1(): boolean {
-      return this._1;
-    }
-    private getColor(): string | CanvasGradient | CanvasPattern {
-      return this.color;
+    createLock(): Tile {
+      return this.lock;
     }
   }
-
-  const YELLOW_KEY = new KeyConfiguration("#ffcc00", true, new RemoveLock1());
-  const BLUE_KEY = new KeyConfiguration("#00ccff", false, new RemoveLock2());
 
   class LockTile implements Tile {
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    constructor(private keyConf: KeyConfiguration) {}
+    constructor(private color: string) {}
     update(map: Map, x: number, y: number): void {}
     moveVertical(player: Player, map: Map, dy: number): void {}
     moveHorizontal(player: Player, map: Map, dx: number): void {}
     draw(tr: TileRenderer, x: number, y: number): void {
-      this.keyConf.draw(tr, x, y);
+      tr.fillRect(x,y,this.color);
     }
 
-    isLock1(): boolean {
-      return this.keyConf.is1();
-    }
-    isLock2(): boolean {
-      return !this.keyConf.is1();
-    }
     isAir(): boolean {
       return false;
     }
   }
+
+  const YELLOW_KEY_LOCK_FACTORY = new KeyLockFactory("#ffcc00");
+  const BLUE_KEY_LOCK_FACTORY = new KeyLockFactory("#00ccff");
 
   export class Player {
     constructor(private x: number, private y: number) {}
@@ -432,9 +395,7 @@ namespace App {
       map.pushHorisontal(this, tile, this.x, this.y, dx);
     }
     draw(tr: TileRenderer) {
-      tr.fillRect(this.x,this.y,"#ff0000");
-      // g.fillStyle = "#ff0000";
-      // g.fillRect(this.x * TILE_SIZE, this.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      tr.fillRect(this.x, this.y, "#ff0000");
     }
 
     moveHorizontal(map: Map, dx: number) {
@@ -485,10 +446,10 @@ namespace App {
       return this.map[y][x].isAir();
     }
 
-    remove(shouldRemove: RemoveStrategy) {
+    removeTile(tile: Tile) {
       for (let y = 0; y < this.map.length; y++) {
         for (let x = 0; x < this.map[y].length; x++) {
-          if (shouldRemove.check(this.map[y][x])) {
+          if (this.map[y][x] === tile) {
             this.map[y][x] = new Air();
           }
         }
