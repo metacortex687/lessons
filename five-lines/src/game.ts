@@ -169,12 +169,6 @@ namespace App {
       return false;
     }
 
-    isLock1(): boolean {
-      return false;
-    }
-    isLock2(): boolean {
-      return false;
-    }
   }
 
   class Unbreakable implements Tile {
@@ -194,12 +188,6 @@ namespace App {
       return false;
     }
 
-    isLock1(): boolean {
-      return false;
-    }
-    isLock2(): boolean {
-      return false;
-    }
   }
 
   class Stone implements Tile {
@@ -230,12 +218,6 @@ namespace App {
       return false;
     }
 
-    isLock1(): boolean {
-      return false;
-    }
-    isLock2(): boolean {
-      return false;
-    }
   }
 
   class Air implements Tile {
@@ -253,12 +235,6 @@ namespace App {
 
     draw(tr: TileRenderer, x: number, y: number): void {}
 
-    isLock1(): boolean {
-      return false;
-    }
-    isLock2(): boolean {
-      return false;
-    }
     isAir(): boolean {
       return true;
     }
@@ -275,12 +251,6 @@ namespace App {
 
     draw(tr: TileRenderer, x: number, y: number): void {}
 
-    isLock1(): boolean {
-      return false;
-    }
-    isLock2(): boolean {
-      return false;
-    }
     isAir(): boolean {
       return false;
     }
@@ -308,12 +278,6 @@ namespace App {
       tr.fillRect(x, y, "#8b4513");
     }
 
-    isLock1(): boolean {
-      return false;
-    }
-    isLock2(): boolean {
-      return false;
-    }
     isAir(): boolean {
       return false;
     }
@@ -339,12 +303,6 @@ namespace App {
       tr.fillRect(x, y, this.color);
     }
 
-    isLock1(): boolean {
-      return false;
-    }
-    isLock2(): boolean {
-      return false;
-    }
     isAir(): boolean {
       return false;
     }
