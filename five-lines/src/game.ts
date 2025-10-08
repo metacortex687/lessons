@@ -377,7 +377,7 @@ namespace App {
     moveVertical(player: Player, map: Map, dy: number): void {}
     moveHorizontal(player: Player, map: Map, dx: number): void {}
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x,y,this.color);
+      tr.fillRect(x, y, this.color);
     }
 
     isAir(): boolean {
@@ -528,7 +528,7 @@ namespace App {
     }
 
     draw(tr: TileRenderer) {
-      tr.clearRect();
+      tr.clearСanvas();
       this.map.draw(tr);
       this.player.draw(tr);
     }

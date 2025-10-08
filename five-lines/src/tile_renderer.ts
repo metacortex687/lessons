@@ -17,7 +17,7 @@ namespace App {
       this.g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
-    clearRect() {
+    clearСanvas() {
       this.g.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
   }
