@@ -84,22 +84,22 @@ namespace App {
   }
   class Key1Value implements RawTileValue {
     transform(): Tile {
-      return YELLOW_KEY_LOCK_FACTORY.createKey();
+      return YELLOW_KEY_LOCK_FACTORY.key();
     }
   }
   class Lock1Value implements RawTileValue {
     transform(): Tile {
-      return YELLOW_KEY_LOCK_FACTORY.createLock();
+      return YELLOW_KEY_LOCK_FACTORY.lock();
     }
   }
   class Key2Value implements RawTileValue {
     transform(): Tile {
-      return BLUE_KEY_LOCK_FACTORY.createKey();
+      return BLUE_KEY_LOCK_FACTORY.key();
     }
   }
   class Lock2Value implements RawTileValue {
     transform(): Tile {
-      return BLUE_KEY_LOCK_FACTORY.createLock();
+      return BLUE_KEY_LOCK_FACTORY.lock();
     }
   }
 
@@ -308,21 +308,21 @@ namespace App {
     }
   }
 
-  class KeyLockFactory {
-    private key: Key;
-    private lock: LockTile;
+  class KeyLockProvider {
+    private _key: Key;
+    private _lock: LockTile;
 
     constructor(private color: string) {
-      this.lock = new LockTile(this.color);
-      this.key = new Key(this.lock, this.color);
+      this._lock = new LockTile(this.color);
+      this._key = new Key(this._lock, this.color);
     }
 
-    createKey(): Tile {
-      return this.key;
+    key(): Tile {
+      return this._key;
     }
 
-    createLock(): Tile {
-      return this.lock;
+    lock(): Tile {
+      return this._lock;
     }
   }
 
@@ -343,8 +343,8 @@ namespace App {
     }
   }
 
-  const YELLOW_KEY_LOCK_FACTORY = new KeyLockFactory("#ffcc00");
-  const BLUE_KEY_LOCK_FACTORY = new KeyLockFactory("#00ccff");
+  const YELLOW_KEY_LOCK_FACTORY = new KeyLockProvider("#ffcc00");
+  const BLUE_KEY_LOCK_FACTORY = new KeyLockProvider("#00ccff");
 
   export class Player {
     constructor(private x: number, private y: number) {}
