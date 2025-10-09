@@ -103,6 +103,12 @@ namespace App {
     }
   }
 
+  class DoorValue implements RawTileValue {
+    transform(): Tile {
+      return new Door();
+    }
+  }
+
   class RawTile {
     transform(): Tile {
       return this.value.transform();
@@ -119,6 +125,7 @@ namespace App {
     static readonly LOCK1 = new RawTile(new Lock1Value());
     static readonly KEY2 = new RawTile(new Key2Value());
     static readonly LOCK2 = new RawTile(new Lock2Value());
+    static readonly DOOR = new RawTile(new DoorValue());
 
     private constructor(private value: RawTileValue) {}
   }
@@ -136,6 +143,7 @@ namespace App {
     RawTile.LOCK1,
     RawTile.KEY2,
     RawTile.LOCK2,
+    RawTile.DOOR,
   ];
 
   interface Tile {
@@ -168,7 +176,6 @@ namespace App {
     isAir(): boolean {
       return false;
     }
-
   }
 
   class Unbreakable implements Tile {
@@ -187,7 +194,25 @@ namespace App {
     isAir(): boolean {
       return false;
     }
+  }
 
+  class Door implements Tile {
+    getBlockOnTopState(): FallingState {
+      return new Resting();
+    }
+    update(map: Map, x: number, y: number): void {}
+
+    moveVertical(player: Player, map: Map, dy: number): void {}
+    moveHorizontal(player: Player, map: Map, dx: number): void {}
+
+    draw(tr: TileRenderer, x: number, y: number): void {
+      // tr.fillRect(x, y, "#999999");
+      tr.drawDoor(x, y);
+    }
+
+    isAir(): boolean {
+      return false;
+    }
   }
 
   class Stone implements Tile {
@@ -217,7 +242,6 @@ namespace App {
     isAir(): boolean {
       return false;
     }
-
   }
 
   class Air implements Tile {
@@ -376,7 +400,7 @@ namespace App {
   }
 
   let rawMap: number[][] = [
-    [2, 2, 2, 2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 2, 12, 2],
     [2, 3, 0, 1, 1, 2, 0, 2],
     [2, 4, 2, 6, 1, 2, 0, 2],
     [2, 8, 4, 1, 1, 2, 0, 2],
