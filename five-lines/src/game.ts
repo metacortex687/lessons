@@ -308,7 +308,7 @@ namespace App {
     }
   }
 
-  class KeyLockProvider {
+  class KeyLockBundle {
     private _key: Key;
     private _lock: LockTile;
 
@@ -343,8 +343,8 @@ namespace App {
     }
   }
 
-  const YELLOW_KEY_LOCK_FACTORY = new KeyLockProvider("#ffcc00");
-  const BLUE_KEY_LOCK_FACTORY = new KeyLockProvider("#00ccff");
+  const YELLOW_KEY_LOCK_FACTORY = new KeyLockBundle("#ffcc00");
+  const BLUE_KEY_LOCK_FACTORY = new KeyLockBundle("#00ccff");
 
   export class Player {
     constructor(private x: number, private y: number) {}
