@@ -6,7 +6,8 @@ namespace App {
 
   class Falling implements FallingState {
     drop(map: Map, y: number, x: number): void {
-      map.drop(x, y);
+      map.moveTileTo(x,y,x,y+1);
+      // map.dropTile(x, y);
     }
     moveHorizontal(player: Player, map: Map, tile: Tile, dx: number): void {}
   }
@@ -393,7 +394,7 @@ namespace App {
     }
 
     moveToTile(map: Map, newx: number, newy: number) {
-      map.movePlayerToTile(this.x, this.y, newx, newy);
+      map.moveTileTo(this.x, this.y, newx, newy);
       this.x = newx;
       this.y = newy;
     }
@@ -442,11 +443,6 @@ namespace App {
       return this.map[y][x].getBlockOnTopState();
     }
 
-    drop(x: number, y: number): void {
-      this.map[y + 1][x] = this.map[y][x];
-      this.map[y][x] = new Air();
-    }
-
     draw(tr: TileRenderer) {
       for (let y = 0; y < this.map.length; y++) {
         for (let x = 0; x < this.map[y].length; x++) {
@@ -463,9 +459,9 @@ namespace App {
       this.map[y + dy][x].moveVertical(player, this, dy);
     }
 
-    movePlayerToTile(x: number, y: number, newx: number, newy: number) {
+    moveTileTo(x: number, y: number, newx: number, newy: number) {
+      this.map[newy][newx] = this.map[y][x];
       this.map[y][x] = new Air();
-      this.map[newy][newx] = new PlayerTile();
     }
 
     pushHorisontal(
