@@ -393,7 +393,7 @@ namespace App {
     }
 
     moveToTile(map: Map, newx: number, newy: number) {
-      map.moveToTile(this.x, this.y, newx, newy);
+      map.movePlayerToTile(this.x, this.y, newx, newy);
       this.x = newx;
       this.y = newy;
     }
@@ -463,7 +463,7 @@ namespace App {
       this.map[y + dy][x].moveVertical(player, this, dy);
     }
 
-    moveToTile(x: number, y: number, newx: number, newy: number) {
+    movePlayerToTile(x: number, y: number, newx: number, newy: number) {
       this.map[y][x] = new Air();
       this.map[newy][newx] = new PlayerTile();
     }
