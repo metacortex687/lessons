@@ -91,20 +91,18 @@ SELECT
 	D1.name AS LeftDwarfName,
 	R.relationship AS Relationship,
 	D2.name RightDwarfName
-    
-FROM 
+FROM
 	Dwarves D1
 JOIN
-	Relationships  R
+	Relationships R
 ON
 	D1.dwarf_id = R.dwarf_id
 JOIN
-    Dwarves D2
-ON 
+	Dwarves D2
+ON
 	R.related_to = D2.dwarf_id
 WHERE
 	R.relationship in ('Супруг','Родитель', 'Друг')
-
 
 UNION
 
@@ -113,18 +111,17 @@ SELECT
 	CASE
 		WHEN R.relationship = 'Родитель' THEN 'Ребенок'
 		ELSE R.relationship
-	END AS  Relationship
-	D1.name RightDwarfName,
-    
-FROM 
+	END AS Relationship,
+	D1.name as RightDwarfName
+FROM
 	Dwarves D1
 JOIN
-	Relationships  R
+	Relationships R
 ON
 	D1.dwarf_id = R.dwarf_id
 JOIN
-    Dwarves D2
-ON 
+	Dwarves D2
+ON
 	R.related_to = D2.dwarf_id
 WHERE
 	R.relationship in ('Супруг', 'Родитель')
