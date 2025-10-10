@@ -1,14 +1,40 @@
 namespace App {
   const TILE_SIZE = 30;
 
-  const SVG_DOOR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+  const SVG_DOOR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1d4c07ff" stroke="currentColor" stroke-width="2"
      stroke-linecap="round" stroke-linejoin="round"> <rect x="5" y="2" width="14" height="20" rx="1.5" ry="1.5"/>
       <circle cx="15.5" cy="12" r="1.25" fill="currentColor"/> </svg>`;
+
+  class ImgSVGCache {
+    private cache = new globalThis.Map<string, HTMLImageElement>();
+
+    getImg(svgMarkup: string): HTMLImageElement {
+      const key = svgMarkup;
+      const cached = this.cache.get(key);
+      if (cached) return cached;
+
+      const blob = new Blob([svgMarkup], { type: "image/svg+xml" });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        console.error("Ошибка загрузки SVG");
+      };
+      
+      img.src = url; 
+      this.cache.set(key, img);
+      return img;
+    }
+  }
 
   export class TileRenderer {
     private g: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
-    private svgImgCache = new globalThis.Map<string, HTMLImageElement>();
+    private svgImgCache = new ImgSVGCache(); //Решение проблемы с мерцанием картинки
 
     constructor(private html_canvas_element_id: string) {
       this.canvas = document.getElementById(
@@ -23,46 +49,14 @@ namespace App {
     }
 
     drawDoor(x: number, y: number) {
-      const color = "#1d4c07ff";
-      const colored = SVG_DOOR.replace(/fill="[^"]*"/g, `fill="${color}"`);
       this.fillRect(x, y, "#999999");
-      this.drawSvgString(colored, x, y);
-    }
-
-    private drawSvgString(svgMarkup: string, x: number, y: number) {
-      // 1) быстрый путь: картинка уже есть
-      const cached = this.svgImgCache.get(svgMarkup);
-      if (cached && cached.complete) {
-        this.g.drawImage(
-          cached,
-          x * TILE_SIZE,
-          y * TILE_SIZE,
-          TILE_SIZE,
-          TILE_SIZE
-        );
-        return;
-      }
-
-      // 2) грузим один раз и кладём в кеш
-      const blob = new Blob([svgMarkup], { type: "image/svg+xml" });
-      const url = URL.createObjectURL(blob);
-      const img = new Image();
-      // необязательно, но иногда помогает браузеру:
-      // (не во всех движках влияет, но не мешает)
-      (img as any).decoding = "sync";
-
-      img.onload = () => {
-        this.svgImgCache.set(svgMarkup, img);
-        this.g.drawImage(
-          img,
-          x * TILE_SIZE,
-          y * TILE_SIZE,
-          TILE_SIZE,
-          TILE_SIZE
-        );
-        URL.revokeObjectURL(url);
-      };
-      img.src = url;
+      this.g.drawImage(
+        this.svgImgCache.getImg(SVG_DOOR),
+        x * TILE_SIZE,
+        y * TILE_SIZE,
+        TILE_SIZE,
+        TILE_SIZE
+      );
     }
 
     clearСanvas() {
