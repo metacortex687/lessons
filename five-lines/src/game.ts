@@ -6,7 +6,7 @@ namespace App {
 
   class Falling implements FallingState {
     drop(map: Map, y: number, x: number): void {
-      map.moveTileTo(x,y,x,y+1);
+      map.moveTileTo(x, y, x, y + 1);
       // map.dropTile(x, y);
     }
     moveHorizontal(player: Player, map: Map, tile: Tile, dx: number): void {}
@@ -171,7 +171,7 @@ namespace App {
     }
 
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x, y, "#ccffcc");
+      tr.drawRect(x, y, "#ccffcc");
     }
 
     isAir(): boolean {
@@ -189,7 +189,7 @@ namespace App {
     moveHorizontal(player: Player, map: Map, dx: number): void {}
 
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x, y, "#999999");
+      tr.drawRect(x, y, "#999999");
     }
 
     isAir(): boolean {
@@ -238,7 +238,7 @@ namespace App {
     }
 
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x, y, "#0000cc");
+      tr.drawRect(x, y, "#0000cc");
     }
     isAir(): boolean {
       return false;
@@ -300,7 +300,7 @@ namespace App {
       this.fallStrategy.moveHorizontal(player, map, this, dx);
     }
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x, y, "#8b4513");
+      tr.drawRect(x, y, "#8b4513");
     }
 
     isAir(): boolean {
@@ -325,7 +325,7 @@ namespace App {
       player.move(map, dx, 0);
     }
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x, y, this.color);
+      tr.drawRect(x, y, this.color);
     }
 
     isAir(): boolean {
@@ -360,7 +360,7 @@ namespace App {
     moveVertical(player: Player, map: Map, dy: number): void {}
     moveHorizontal(player: Player, map: Map, dx: number): void {}
     draw(tr: TileRenderer, x: number, y: number): void {
-      tr.fillRect(x, y, this.color);
+      tr.drawRect(x, y, this.color);
     }
 
     isAir(): boolean {
@@ -378,7 +378,7 @@ namespace App {
       map.pushHorisontal(this, tile, this.x, this.y, dx);
     }
     draw(tr: TileRenderer) {
-      tr.fillRect(this.x, this.y, "#ff0000");
+      tr.drawRect(this.x, this.y, "#ff0000");
     }
 
     moveHorizontal(map: Map, dx: number) {

@@ -24,8 +24,8 @@ namespace App {
         URL.revokeObjectURL(url);
         console.error("Ошибка загрузки SVG");
       };
-      
-      img.src = url; 
+
+      img.src = url;
       this.cache.set(key, img);
       return img;
     }
@@ -43,13 +43,13 @@ namespace App {
       this.g = this.canvas.getContext("2d")!;
     }
 
-    fillRect(x: number, y: number, color: string) {
+    drawRect(x: number, y: number, color: string) {
       this.g.fillStyle = color;
       this.g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     drawDoor(x: number, y: number) {
-      this.fillRect(x, y, "#999999");
+      this.drawRect(x, y, "#999999");
       this.g.drawImage(
         this.svgImgCache.getImg(SVG_DOOR),
         x * TILE_SIZE,
