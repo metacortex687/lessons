@@ -7,7 +7,6 @@ namespace App {
   class Falling implements FallingState {
     drop(map: Map, y: number, x: number): void {
       map.moveTileTo(x, y, x, y + 1);
-      // map.dropTile(x, y);
     }
     moveHorizontal(player: Player, map: Map, tile: Tile, dx: number): void {}
   }
@@ -45,9 +44,15 @@ namespace App {
   }
   class AirValue implements RawTileValue {
     transform(): Tile {
-      return new Air();
+      return new Air(new EmptyGround());
     }
   }
+  class GardenValue implements RawTileValue {
+    transform(): Tile {
+      return new Air(new Garden());
+    }
+  }
+
   class FluxValue implements RawTileValue {
     transform(): Tile {
       return new Flux();
@@ -127,6 +132,7 @@ namespace App {
     static readonly KEY2 = new RawTile(new Key2Value());
     static readonly LOCK2 = new RawTile(new Lock2Value());
     static readonly DOOR = new RawTile(new DoorValue());
+    static readonly GARDEN = new RawTile(new GardenValue());
 
     private constructor(private value: RawTileValue) {}
   }
@@ -145,6 +151,7 @@ namespace App {
     RawTile.KEY2,
     RawTile.LOCK2,
     RawTile.DOOR,
+    RawTile.GARDEN,
   ];
 
   interface Tile {
@@ -155,9 +162,32 @@ namespace App {
     moveHorizontal(player: Player, map: Map, dx: number): void;
     draw(tr: TileRenderer, x: number, y: number): void;
     isAir(): boolean;
+    getGroundLayer(): GroundLayer;
+    setGroundLayer(gl: GroundLayer): void;
+  }
+
+  interface GroundLayer {
+    draw(tr: TileRenderer, x: number, y: number): void;
+  }
+
+  class EmptyGround implements GroundLayer {
+    draw(tr: TileRenderer, x: number, y: number): void {}
+  }
+
+  class Garden implements GroundLayer {
+    draw(tr: TileRenderer, x: number, y: number): void {
+      tr.drawRect(x, y, "#000000ff");
+    }
   }
 
   class Flux implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
@@ -180,6 +210,13 @@ namespace App {
   }
 
   class Unbreakable implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
@@ -198,6 +235,13 @@ namespace App {
   }
 
   class Door implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
@@ -217,6 +261,13 @@ namespace App {
   }
 
   class Stone implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     private falling: FallingState;
 
     constructor(falling: FallingState) {
@@ -246,6 +297,15 @@ namespace App {
   }
 
   class Air implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
+    constructor(private ground: GroundLayer) {}
+
     getBlockOnTopState(): FallingState {
       return new Falling();
     }
@@ -258,7 +318,9 @@ namespace App {
       player.move(map, dx, 0);
     }
 
-    draw(tr: TileRenderer, x: number, y: number): void {}
+    draw(tr: TileRenderer, x: number, y: number): void {
+      this.ground.draw(tr, x, y);
+    }
 
     isAir(): boolean {
       return true;
@@ -266,6 +328,13 @@ namespace App {
   }
 
   class PlayerTile implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
@@ -282,6 +351,13 @@ namespace App {
   }
 
   class Box implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
@@ -309,6 +385,13 @@ namespace App {
   }
 
   class Key implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
@@ -352,6 +435,13 @@ namespace App {
   }
 
   class LockTile implements Tile {
+    private grounLayer: GroundLayer = new EmptyGround();
+    getGroundLayer(): GroundLayer {
+      return this.grounLayer;
+    }
+    setGroundLayer(gl: GroundLayer): void {
+      this.grounLayer = gl;
+    }
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
@@ -402,7 +492,7 @@ namespace App {
 
   let rawMap: number[][] = [
     [2, 2, 2, 2, 2, 2, 12, 2],
-    [2, 3, 0, 1, 1, 2, 0, 2],
+    [2, 3, 0, 13, 1, 2, 0, 2],
     [2, 4, 2, 6, 1, 2, 0, 2],
     [2, 8, 4, 1, 1, 2, 0, 2],
     [2, 4, 1, 1, 1, 9, 0, 2],
@@ -433,7 +523,7 @@ namespace App {
       for (let y = 0; y < this.map.length; y++) {
         for (let x = 0; x < this.map[y].length; x++) {
           if (this.map[y][x] === tile) {
-            this.map[y][x] = new Air();
+            this.map[y][x] = new Air(new EmptyGround());
           }
         }
       }
@@ -461,7 +551,7 @@ namespace App {
 
     moveTileTo(x: number, y: number, newx: number, newy: number) {
       this.map[newy][newx] = this.map[y][x];
-      this.map[y][x] = new Air();
+      this.map[y][x] = new Air(new EmptyGround());
     }
 
     pushHorisontal(
