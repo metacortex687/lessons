@@ -1,12 +1,14 @@
-// import { Game } from "./game";
+import { Game } from "./game.js";
+import { Inputs } from "./inputs.js";
+import { TileRenderer } from "./tile_renderer.js";
 
 const FPS = 30;
 const SLEEP = 1000 / FPS;
 
-const game = new App.Game();
-const inputs = new App.Inputs();
+const game = new Game();
+const inputs = new Inputs();
 
-function gameLoop(tile_renderer: App.TileRenderer) {
+function gameLoop(tile_renderer: TileRenderer) {
   let before = Date.now();
   game.update(inputs);
   game.draw(tile_renderer);
@@ -17,7 +19,7 @@ function gameLoop(tile_renderer: App.TileRenderer) {
 }
 
 window.onload = () => {
-  let tile_renderer = new App.TileRenderer("GameCanvas");
+  let tile_renderer = new TileRenderer("GameCanvas");
   gameLoop(tile_renderer);
 };
 

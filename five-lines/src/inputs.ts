@@ -1,4 +1,5 @@
-namespace App {
+import {GameMap, Player} from "./map.js";
+
   interface Input {
     handle(player: Player, map: GameMap): void;
   }
@@ -95,4 +96,4 @@ namespace App {
       this.inputs.push(this.RawInputs[key].transform());
     }
   }
-}
+

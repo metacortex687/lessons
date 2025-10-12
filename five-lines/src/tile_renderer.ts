@@ -1,4 +1,4 @@
-namespace App {
+
   const TILE_SIZE = 30;
 
   const SVG_DOOR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1d4c07ff" stroke="currentColor" stroke-width="2"
@@ -63,4 +63,4 @@ namespace App {
       this.g.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
   }
-}
+

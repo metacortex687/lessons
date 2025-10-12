@@ -1,4 +1,7 @@
-namespace App {
+import { Player, GameMap } from "./map.js"
+import {Inputs} from "./inputs.js"
+import {TileRenderer} from "./tile_renderer.js"
+
   export class Game {
     private player: Player;
     private map: GameMap;
@@ -26,4 +29,4 @@ namespace App {
       this.player.draw(tr);
     }
   }
-}
+

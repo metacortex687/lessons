@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "none",
-    "outFile": "./index.js",
+    "module": "es2020",
+    "moduleResolution": "bundler",          // или "node16" — оба ок
     "rootDir": "./src",
-    "strict": true
+    "outDir": "./dist",
+    "lib": ["es2020", "dom"],               // чтобы были Canvas/Window и т.п.
+    "strict": true,
+    "sourceMap": true,                      // удобно дебажить
+    "noEmitOnError": true,                  // не выпускать битые сборки
+    "verbatimModuleSyntax": true           // честно сохранять ESM-синтаксис
   },
-  "files": ["src/tile_renderer.ts","src/map.ts","src/game.ts","src/inputs.ts", "src/index.ts"]
+  "include": ["src/**/*.ts"]
 }
 

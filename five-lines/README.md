@@ -26,3 +26,9 @@ If you have feedback or comments on this repo don't hesitate to write me a messa
 
 Thank you for checking it out.
 
+----
+
+Запуск:
+python -m http.server 5173
+http://localhost:5173/
+

@@ -1,4 +1,6 @@
-namespace App {
+
+import {TileRenderer} from "./tile_renderer.js";
+
   interface FallingState {
     drop(map: GameMap, y: number, x: number): void;
     moveHorizontal(player: Player, map: GameMap, tile: Tile, dx: number): void;
@@ -578,4 +580,4 @@ namespace App {
           this.map[y][x].update(this, x, y);
     }
   }
-}
+
