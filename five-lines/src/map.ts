@@ -1,18 +1,23 @@
 namespace App {
   interface FallingState {
-    drop(map: Map, y: number, x: number): void;
-    moveHorizontal(player: Player, map: Map, tile: Tile, dx: number): void;
+    drop(map: GameMap, y: number, x: number): void;
+    moveHorizontal(player: Player, map: GameMap, tile: Tile, dx: number): void;
   }
 
   class Falling implements FallingState {
-    drop(map: Map, y: number, x: number): void {
+    drop(map: GameMap, y: number, x: number): void {
       map.moveTileTo(x, y, x, y + 1);
     }
-    moveHorizontal(player: Player, map: Map, tile: Tile, dx: number): void {}
+    moveHorizontal(
+      player: Player,
+      map: GameMap,
+      tile: Tile,
+      dx: number
+    ): void {}
   }
 
   class FallStrategy {
-    moveHorizontal(player: Player, map: Map, tile: Tile, dx: number) {
+    moveHorizontal(player: Player, map: GameMap, tile: Tile, dx: number) {
       this.falling.moveHorizontal(player, map, tile, dx);
     }
     private falling: FallingState;
@@ -21,11 +26,11 @@ namespace App {
       this.falling = falling;
     }
 
-    update(map: Map, x: number, y: number): void {
+    update(map: GameMap, x: number, y: number): void {
       this.drop(map, y, x);
     }
 
-    private drop(map: Map, y: number, x: number) {
+    private drop(map: GameMap, y: number, x: number) {
       this.falling = map.getBlockOnTopState(x, y + 1);
 
       this.falling.drop(map, y, x);
@@ -33,8 +38,8 @@ namespace App {
   }
 
   class Resting implements FallingState {
-    drop(map: Map, y: number, x: number): void {}
-    moveHorizontal(player: Player, map: Map, tile: Tile, dx: number): void {
+    drop(map: GameMap, y: number, x: number): void {}
+    moveHorizontal(player: Player, map: GameMap, tile: Tile, dx: number): void {
       player.pushHorisontal(map, tile, dx);
     }
   }
@@ -156,10 +161,10 @@ namespace App {
 
   interface Tile {
     getBlockOnTopState(): FallingState;
-    update(map: Map, x: number, y: number): void;
+    update(map: GameMap, x: number, y: number): void;
 
-    moveVertical(player: Player, map: Map, dy: number): void;
-    moveHorizontal(player: Player, map: Map, dx: number): void;
+    moveVertical(player: Player, map: GameMap, dy: number): void;
+    moveHorizontal(player: Player, map: GameMap, dx: number): void;
     draw(tr: TileRenderer, x: number, y: number): void;
     isAir(): boolean;
     getGroundLayer(): GroundLayer;
@@ -191,12 +196,12 @@ namespace App {
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: Map, x: number, y: number): void {}
+    update(map: GameMap, x: number, y: number): void {}
 
-    moveVertical(player: Player, map: Map, dy: number): void {
+    moveVertical(player: Player, map: GameMap, dy: number): void {
       player.move(map, 0, dy);
     }
-    moveHorizontal(player: Player, map: Map, dx: number): void {
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {
       player.move(map, dx, 0);
     }
 
@@ -220,10 +225,10 @@ namespace App {
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: Map, x: number, y: number): void {}
+    update(map: GameMap, x: number, y: number): void {}
 
-    moveVertical(player: Player, map: Map, dy: number): void {}
-    moveHorizontal(player: Player, map: Map, dx: number): void {}
+    moveVertical(player: Player, map: GameMap, dy: number): void {}
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {}
 
     draw(tr: TileRenderer, x: number, y: number): void {
       tr.drawRect(x, y, "#999999");
@@ -245,10 +250,10 @@ namespace App {
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: Map, x: number, y: number): void {}
+    update(map: GameMap, x: number, y: number): void {}
 
-    moveVertical(player: Player, map: Map, dy: number): void {}
-    moveHorizontal(player: Player, map: Map, dx: number): void {}
+    moveVertical(player: Player, map: GameMap, dy: number): void {}
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {}
 
     draw(tr: TileRenderer, x: number, y: number): void {
       // tr.fillRect(x, y, "#999999");
@@ -279,12 +284,12 @@ namespace App {
     }
     private fallStrategy: FallStrategy;
 
-    update(map: Map, x: number, y: number): void {
+    update(map: GameMap, x: number, y: number): void {
       this.fallStrategy.update(map, x, y);
     }
 
-    moveVertical(player: Player, map: Map, dy: number): void {}
-    moveHorizontal(player: Player, map: Map, dx: number): void {
+    moveVertical(player: Player, map: GameMap, dy: number): void {}
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {
       this.falling.moveHorizontal(player, map, this, dx);
     }
 
@@ -309,12 +314,12 @@ namespace App {
     getBlockOnTopState(): FallingState {
       return new Falling();
     }
-    update(map: Map, x: number, y: number): void {}
+    update(map: GameMap, x: number, y: number): void {}
 
-    moveVertical(player: Player, map: Map, dy: number): void {
+    moveVertical(player: Player, map: GameMap, dy: number): void {
       player.move(map, 0, dy);
     }
-    moveHorizontal(player: Player, map: Map, dx: number): void {
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {
       player.move(map, dx, 0);
     }
 
@@ -338,10 +343,10 @@ namespace App {
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: Map, x: number, y: number): void {}
+    update(map: GameMap, x: number, y: number): void {}
 
-    moveVertical(player: Player, map: Map, dy: number): void {}
-    moveHorizontal(player: Player, map: Map, dx: number): void {}
+    moveVertical(player: Player, map: GameMap, dy: number): void {}
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {}
 
     draw(tr: TileRenderer, x: number, y: number): void {}
 
@@ -363,7 +368,7 @@ namespace App {
     }
     private fallStrategy: FallStrategy;
 
-    update(map: Map, x: number, y: number): void {
+    update(map: GameMap, x: number, y: number): void {
       this.fallStrategy.update(map, x, y);
     }
 
@@ -371,8 +376,8 @@ namespace App {
       this.fallStrategy = new FallStrategy(falling);
     }
 
-    moveVertical(player: Player, map: Map, dy: number): void {}
-    moveHorizontal(player: Player, map: Map, dx: number): void {
+    moveVertical(player: Player, map: GameMap, dy: number): void {}
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {
       this.fallStrategy.moveHorizontal(player, map, this, dx);
     }
     draw(tr: TileRenderer, x: number, y: number): void {
@@ -397,13 +402,13 @@ namespace App {
     }
     constructor(private lock: LockTile, private color: string) {}
 
-    update(map: Map, x: number, y: number): void {}
+    update(map: GameMap, x: number, y: number): void {}
 
-    moveVertical(player: Player, map: Map, dy: number): void {
+    moveVertical(player: Player, map: GameMap, dy: number): void {
       map.removeTile(this.lock);
       player.move(map, 0, dy);
     }
-    moveHorizontal(player: Player, map: Map, dx: number): void {
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {
       map.removeTile(this.lock);
       player.move(map, dx, 0);
     }
@@ -446,9 +451,9 @@ namespace App {
       return new Resting();
     }
     constructor(private color: string) {}
-    update(map: Map, x: number, y: number): void {}
-    moveVertical(player: Player, map: Map, dy: number): void {}
-    moveHorizontal(player: Player, map: Map, dx: number): void {}
+    update(map: GameMap, x: number, y: number): void {}
+    moveVertical(player: Player, map: GameMap, dy: number): void {}
+    moveHorizontal(player: Player, map: GameMap, dx: number): void {}
     draw(tr: TileRenderer, x: number, y: number): void {
       tr.drawRect(x, y, this.color);
     }
@@ -464,26 +469,26 @@ namespace App {
   export class Player {
     constructor(private x: number, private y: number) {}
 
-    pushHorisontal(map: Map, tile: Tile, dx: number) {
+    pushHorisontal(map: GameMap, tile: Tile, dx: number) {
       map.pushHorisontal(this, tile, this.x, this.y, dx);
     }
     draw(tr: TileRenderer) {
       tr.drawRect(this.x, this.y, "#ff0000");
     }
 
-    moveHorizontal(map: Map, dx: number) {
+    moveHorizontal(map: GameMap, dx: number) {
       map.moveHorizontal(this, this.x, this.y, dx);
     }
 
-    moveVertical(map: Map, dy: number) {
+    moveVertical(map: GameMap, dy: number) {
       map.moveVertical(this, this.x, this.y, dy);
     }
 
-    move(map: Map, dx: number, dy: number) {
+    move(map: GameMap, dx: number, dy: number) {
       this.moveToTile(map, this.x + dx, this.y + dy);
     }
 
-    moveToTile(map: Map, newx: number, newy: number) {
+    moveToTile(map: GameMap, newx: number, newy: number) {
       map.moveTileTo(this.x, this.y, newx, newy);
       this.x = newx;
       this.y = newy;
@@ -499,7 +504,7 @@ namespace App {
     [2, 2, 2, 2, 2, 2, 2, 2],
   ];
 
-  export class Map {
+  export class GameMap {
     private map!: Tile[][];
     constructor() {
       this.load_data();

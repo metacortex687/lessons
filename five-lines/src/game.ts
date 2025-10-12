@@ -1,12 +1,10 @@
 namespace App {
-  
-
   export class Game {
     private player: Player;
-    private map: Map;
+    private map: GameMap;
 
     constructor() {
-      this.map = new Map();
+      this.map = new GameMap();
       this.player = new Player(1, 1);
     }
 

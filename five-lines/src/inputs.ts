@@ -1,28 +1,28 @@
 namespace App {
   interface Input {
-    handle(player: Player, map: Map): void;
+    handle(player: Player, map: GameMap): void;
   }
 
   class Right implements Input {
-    handle(player: Player, map: Map) {
+    handle(player: Player, map: GameMap) {
       player.moveHorizontal(map, 1);
     }
   }
 
   class Left implements Input {
-    handle(player: Player, map: Map) {
+    handle(player: Player, map: GameMap) {
       player.moveHorizontal(map, -1);
     }
   }
 
   class Up implements Input {
-    handle(player: Player, map: Map) {
+    handle(player: Player, map: GameMap) {
       player.moveVertical(map, -1);
     }
   }
 
   class Down implements Input {
-    handle(player: Player, map: Map) {
+    handle(player: Player, map: GameMap) {
       player.moveVertical(map, 1);
     }
   }
