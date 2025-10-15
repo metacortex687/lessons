@@ -21,22 +21,19 @@ SELECT
 	  , 1.0)) AS overall_success_score,
 	JSON_BUILD_OBJECT (
 		'member_ids', (
-			SELECT JSON_AGG(em.dwarf_id)
+			SELECT JSON_AGG(em.dwarf_id ORDER BY em.dwarf_id)
 			FROM EXPEDITION_MEMBERS em
 			WHERE e_val.expedition_id = em.expedition_id
-			ORDER BY em.dwarf_id
 		),
 		'artifact_ids', (
-			SELECT JSON_AGG(ea.artifact_id)
+			SELECT JSON_AGG(ea.artifact_id ORDER BY em.artifact_id)
 			FROM EXPEDITION_ARTIFACTS ea
 			WHERE e_val.expedition_id = ea.expedition_id
-			ORDER BY ea.artifact_id
 		),
 		'site_ids', (
-			SELECT JSON_AGG(es.site_id)
+			SELECT JSON_AGG(es.site_id ORDER BY em.site_id)
 			FROM EXPEDITION_SITES es
 			WHERE e_val.expedition_id = es.expedition_id
-			ORDER BY es.site_id
 		)		
 	) AS related_entities	
 FROM
