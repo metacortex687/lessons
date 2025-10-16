@@ -1,4 +1,5 @@
-import {GameMap, Player} from "./map.js";
+import {GameMap} from "./map.js";
+import { Player } from "./player.js";
 
   interface Input {
     handle(player: Player, map: GameMap): void;

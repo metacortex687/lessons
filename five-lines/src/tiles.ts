@@ -1,5 +1,6 @@
-  import {GameMap, Player} from "./map.js";
+  import {GameMap} from "./map.js";
   import { TileRenderer } from "./tile_renderer.js";
+  import { Player } from "./player.js";
   
   interface FallingState {
     drop(map: GameMap, y: number, x: number): void;

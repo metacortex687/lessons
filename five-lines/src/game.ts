@@ -1,6 +1,7 @@
-import { Player, GameMap } from "./map.js"
+import { GameMap } from "./map.js"
 import {Inputs} from "./inputs.js"
 import {TileRenderer} from "./tile_renderer.js"
+import { Player } from "./player.js";
 
   export class Game {
     private player: Player;

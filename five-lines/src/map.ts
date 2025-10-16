@@ -4,8 +4,7 @@ import { type Tile } from "./tiles.js";
 import { Air, EmptyGround, Garden, Flux, 
   Unbreakable, PlayerTile, Stone, Resting, Falling,
   Box, KeyLockBundle, Door} from "./tiles.js";
-
-
+import { Player } from "./player.js";
 
 
   interface RawTileValue {
@@ -126,35 +125,6 @@ import { Air, EmptyGround, Garden, Flux,
 
   const YELLOW_KEY_LOCK_FACTORY = new KeyLockBundle("#ffcc00");
   const BLUE_KEY_LOCK_FACTORY = new KeyLockBundle("#00ccff");
-
-  export class Player {
-    constructor(private x: number, private y: number) {}
-
-    pushHorisontal(map: GameMap, tile: Tile, dx: number) {
-      map.pushHorisontal(this, tile, this.x, this.y, dx);
-    }
-    draw(tr: TileRenderer) {
-      tr.drawRect(this.x, this.y, "#ff0000");
-    }
-
-    moveHorizontal(map: GameMap, dx: number) {
-      map.moveHorizontal(this, this.x, this.y, dx);
-    }
-
-    moveVertical(map: GameMap, dy: number) {
-      map.moveVertical(this, this.x, this.y, dy);
-    }
-
-    move(map: GameMap, dx: number, dy: number) {
-      this.moveToTile(map, this.x + dx, this.y + dy);
-    }
-
-    moveToTile(map: GameMap, newx: number, newy: number) {
-      map.moveTileTo(this.x, this.y, newx, newy);
-      this.x = newx;
-      this.y = newy;
-    }
-  }
 
   let rawMap: number[][] = [
     [2, 2, 2, 2, 2, 2, 12, 2],
