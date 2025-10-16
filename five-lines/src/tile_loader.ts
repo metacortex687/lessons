@@ -14,7 +14,6 @@ import {
   Door,
 } from "./tiles.js";
 
-
 interface RawTileValue {
   transform(): Tile;
 }
@@ -133,7 +132,7 @@ const RAW_TILES = [
 const YELLOW_KEY_LOCK_FACTORY = new KeyLockBundle("#ffcc00");
 const BLUE_KEY_LOCK_FACTORY = new KeyLockBundle("#00ccff");
 
-export class TileLoader {
+export class NumberToTileTransformer {
   transform(i: number): Tile {
     return RAW_TILES[i].transform();
   }
