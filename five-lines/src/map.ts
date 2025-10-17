@@ -198,8 +198,8 @@ class LayerGround implements Layer {
 }
 
 export class GameMap {
-  private layer_mid: Layer; // = new Layer();
-  private layer_ground: Layer; // = new Layer();
+  private layer_mid: Layer; 
+  private layer_ground: Layer; 
 
   constructor() {
     this.layer_mid = new LayerMid();
