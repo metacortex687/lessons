@@ -1,5 +1,5 @@
 import { TileRenderer } from "./tile_renderer.js";
-import { type Tile } from "./tiles.js";
+import { Falling, type Tile } from "./tiles.js";
 import { Air, EmptyGround } from "./tiles.js";
 import { Player } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
@@ -13,7 +13,22 @@ let rawMap: number[][] = [
   [2, 2, 2, 2, 2, 2, 2, 2],
 ];
 
-class Layer {
+interface Layer
+{
+  update(map: GameMap): void;
+  pushHorisontal(map:GameMap, player: Player, tile: Tile, x: number, y: number, dx: number): void;
+  moveTileTo(x: number, y: number, newx: number, newy: number): void;
+  moveVertical(map:GameMap,player: Player, x: number, y: number, dy: number): void;
+  moveHorizontal(map:GameMap,player: Player, x: number, y: number, dx: number): void;
+  draw(tr: TileRenderer): void;
+  getBlockOnTopState(x: number, y: number): Falling;
+  removeTile(tile: Tile): void;
+
+}
+
+
+
+class LayerMid implements Layer  {
   private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
   private map!: Tile[][];
 
@@ -90,10 +105,36 @@ class Layer {
   }
 }
 
-export class GameMap {
-  private layer = new Layer();
 
-  constructor() {}
+
+// class LayerGround implements Layer {
+//   update(map: GameMap): void {
+//   }
+//   pushHorisontal(map: GameMap, player: Player, tile: Tile, x: number, y: number, dx: number): void {
+//   }
+//   moveTileTo(x: number, y: number, newx: number, newy: number): void {
+//   }
+//   moveVertical(map: GameMap, player: Player, x: number, y: number, dy: number): void {
+//   }
+//   moveHorizontal(map: GameMap, player: Player, x: number, y: number, dx: number): void {
+//   }
+//   draw(tr: TileRenderer): void {
+//   }
+//   getBlockOnTopState(x: number, y: number): Falling {
+//     return 
+//   }
+//   removeTile(tile: Tile): void {
+//   }
+  
+// }
+
+
+export class GameMap {
+  private layer: Layer;// = new Layer();
+
+  constructor() {
+    this.layer = new LayerMid();
+  }
 
   getBlockOnTopState(x: number, y: number) {
     return this.layer.getBlockOnTopState(x,y);
