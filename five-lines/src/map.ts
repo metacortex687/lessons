@@ -61,13 +61,7 @@ class LayerMid implements Layer {
   }
 
   private load_data() {
-    this.map = new Array(rawMap.length);
-    for (let y = 0; y < rawMap.length; y++) {
-      this.map[y] = new Array(rawMap[y].length);
-      for (let x = 0; x < rawMap[y].length; x++) {
-        this.map[y][x] = this.tile_loader.transform(rawMap[y][x]);
-      }
-    }
+    this.map = this.tile_loader.load_data(rawMap);   
   }
 
   removeTile(tile: Tile) {
@@ -149,13 +143,7 @@ class LayerGround implements Layer {
   }
 
   private load_data() {
-    this.map = new Array(rawMapGround.length);
-    for (let y = 0; y < rawMapGround.length; y++) {
-      this.map[y] = new Array(rawMapGround[y].length);
-      for (let x = 0; x < rawMapGround[y].length; x++) {
-        this.map[y][x] = this.tile_loader.transform(rawMapGround[y][x]);
-      }
-    }
+    this.map = this.tile_loader.load_data(rawMapGround);   
   }
 
   update(map: GameMap): void {}
