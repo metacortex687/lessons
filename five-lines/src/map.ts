@@ -48,7 +48,7 @@ export interface Layer {
     dx: number
   ): void;
   draw(tr: TileRenderer): void;
-  getBlockOnTopState(layer:Layer, x: number, y: number): Falling;
+  getBlockOnTopState(x: number, y: number): Falling;
   removeTile(tile: Tile): void;
 }
 
@@ -86,7 +86,7 @@ class LayerMid implements Layer {
     }
   }
 
-  getBlockOnTopState(layer:Layer,x: number, y: number) {
+  getBlockOnTopState(x: number, y: number) {
     return this.getMap()[y][x].getBlockOnTopState();
   }
 
@@ -171,7 +171,7 @@ class LayerGround implements Layer {
     }
   }
 
-  getBlockOnTopState(layer:Layer,x: number, y: number): Falling {
+  getBlockOnTopState(x: number, y: number): Falling {
     return new Resting();
   }
   removeTile(tile: Tile): void {}
