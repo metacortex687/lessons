@@ -57,11 +57,7 @@ class LayerMid implements Layer {
   private map!: Tile[][];
 
   constructor() {
-    this.load_data();
-  }
-
-  private load_data() {
-    this.map = this.tile_loader.load_data(rawMap);   
+    this.map = this.tile_loader.load_data(rawMap);  
   }
 
   removeTile(tile: Tile) {
@@ -139,11 +135,7 @@ class LayerGround implements Layer {
   private map!: Tile[][];
 
   constructor() {
-    this.load_data();
-  }
-
-  private load_data() {
-    this.map = this.tile_loader.load_data(rawMapGround);   
+    this.map = this.tile_loader.load_data(rawMapGround); 
   }
 
   update(map: GameMap): void {}
