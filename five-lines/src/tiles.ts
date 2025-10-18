@@ -1,4 +1,4 @@
-  import {GameMap} from "./map.js";
+  import {GameMap, type Layer} from "./map.js";
   import { TileRenderer } from "./tile_renderer.js";
   import { Player } from "./player.js";
   
@@ -29,12 +29,12 @@
       this.falling = falling;
     }
 
-    update(map: GameMap, x: number, y: number): void {
-      this.drop(map, y, x);
+    update(layer:Layer, map: GameMap, x: number, y: number): void {
+      this.drop(layer,map, y, x);
     }
 
-    private drop(map: GameMap, y: number, x: number) {
-      this.falling = map.getBlockOnTopState(x, y + 1);
+    private drop(layer:Layer, map: GameMap, y: number, x: number) {
+      this.falling = layer.getBlockOnTopState(layer, x, y + 1);
 
       this.falling.drop(map, y, x);
     }
@@ -51,7 +51,7 @@
   
   export interface Tile {
     getBlockOnTopState(): FallingState;
-    update(map: GameMap, x: number, y: number): void;
+    update(layer:Layer,map: GameMap, x: number, y: number): void;
 
     moveVertical(player: Player, map: GameMap, dy: number): void;
     moveHorizontal(player: Player, map: GameMap, dx: number): void;
@@ -86,7 +86,7 @@
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: GameMap, x: number, y: number): void {}
+    update(layer:Layer,map: GameMap, x: number, y: number): void {}
 
     moveVertical(player: Player, map: GameMap, dy: number): void {
       player.move(map, 0, dy);
@@ -115,7 +115,7 @@
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: GameMap, x: number, y: number): void {}
+    update(layer:Layer,map: GameMap, x: number, y: number): void {}
 
     moveVertical(player: Player, map: GameMap, dy: number): void {}
     moveHorizontal(player: Player, map: GameMap, dx: number): void {}
@@ -140,7 +140,7 @@
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: GameMap, x: number, y: number): void {}
+    update(layer:Layer,map: GameMap, x: number, y: number): void {}
 
     moveVertical(player: Player, map: GameMap, dy: number): void {}
     moveHorizontal(player: Player, map: GameMap, dx: number): void {}
@@ -174,8 +174,8 @@
     }
     private fallStrategy: FallStrategy;
 
-    update(map: GameMap, x: number, y: number): void {
-      this.fallStrategy.update(map, x, y);
+    update(layer:Layer,map: GameMap, x: number, y: number): void {
+      this.fallStrategy.update(layer,map, x, y);
     }
 
     moveVertical(player: Player, map: GameMap, dy: number): void {}
@@ -204,7 +204,7 @@
     getBlockOnTopState(): FallingState {
       return new Falling();
     }
-    update(map: GameMap, x: number, y: number): void {}
+    update(layer:Layer,map: GameMap, x: number, y: number): void {}
 
     moveVertical(player: Player, map: GameMap, dy: number): void {
       player.move(map, 0, dy);
@@ -233,7 +233,7 @@
     getBlockOnTopState(): FallingState {
       return new Resting();
     }
-    update(map: GameMap, x: number, y: number): void {}
+    update(layer:Layer,map: GameMap, x: number, y: number): void {}
 
     moveVertical(player: Player, map: GameMap, dy: number): void {}
     moveHorizontal(player: Player, map: GameMap, dx: number): void {}
@@ -258,8 +258,8 @@
     }
     private fallStrategy: FallStrategy;
 
-    update(map: GameMap, x: number, y: number): void {
-      this.fallStrategy.update(map, x, y);
+    update(layer:Layer,map: GameMap, x: number, y: number): void {
+      this.fallStrategy.update(layer,map, x, y);
     }
 
     constructor(falling: FallingState) {
@@ -292,7 +292,7 @@
     }
     constructor(private lock: LockTile, private color: string) {}
 
-    update(map: GameMap, x: number, y: number): void {}
+    update(layer:Layer,map: GameMap, x: number, y: number): void {}
 
     moveVertical(player: Player, map: GameMap, dy: number): void {
       map.removeTile(this.lock);
@@ -341,7 +341,7 @@
       return new Resting();
     }
     constructor(private color: string) {}
-    update(map: GameMap, x: number, y: number): void {}
+    update(layer:Layer,map: GameMap, x: number, y: number): void {}
     moveVertical(player: Player, map: GameMap, dy: number): void {}
     moveHorizontal(player: Player, map: GameMap, dx: number): void {}
     draw(tr: TileRenderer, x: number, y: number): void {

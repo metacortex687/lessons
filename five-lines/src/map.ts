@@ -22,7 +22,7 @@ let rawMapGround: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-interface Layer {
+export interface Layer {
   update(map: GameMap): void;
   pushHorisontal(
     map: GameMap,
@@ -48,7 +48,7 @@ interface Layer {
     dx: number
   ): void;
   draw(tr: TileRenderer): void;
-  getBlockOnTopState(x: number, y: number): Falling;
+  getBlockOnTopState(layer:Layer, x: number, y: number): Falling;
   removeTile(tile: Tile): void;
 }
 
@@ -86,7 +86,7 @@ class LayerMid implements Layer {
     }
   }
 
-  getBlockOnTopState(x: number, y: number) {
+  getBlockOnTopState(layer:Layer,x: number, y: number) {
     return this.getMap()[y][x].getBlockOnTopState();
   }
 
@@ -126,7 +126,7 @@ class LayerMid implements Layer {
   update(map: GameMap) {
     for (let y = this.getMap().length - 1; y >= 0; y--)
       for (let x = 0; x < this.getMap()[y].length; x++)
-        this.getMap()[y][x].update(map, x, y);
+        this.getMap()[y][x].update(this,map, x, y);
   }
 }
 
@@ -171,7 +171,7 @@ class LayerGround implements Layer {
     }
   }
 
-  getBlockOnTopState(x: number, y: number): Falling {
+  getBlockOnTopState(layer:Layer,x: number, y: number): Falling {
     return new Resting();
   }
   removeTile(tile: Tile): void {}
@@ -184,10 +184,6 @@ export class GameMap {
   constructor() {
     this.layer_mid = new LayerMid();
     this.layer_ground = new LayerGround();
-  }
-
-  getBlockOnTopState(x: number, y: number) {
-    return this.layer_mid.getBlockOnTopState(x, y);
   }
 
   draw(tr: TileRenderer) {
