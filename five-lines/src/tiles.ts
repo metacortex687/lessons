@@ -34,7 +34,7 @@
     }
 
     private drop(layer:Layer, map: GameMap, y: number, x: number) {
-      this.falling = layer.getBlockOnTopState(layer, x, y + 1);
+      this.falling = layer.getBlockOnTopState(x, y + 1);
 
       this.falling.drop(map, y, x);
     }
