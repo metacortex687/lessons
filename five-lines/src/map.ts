@@ -3,6 +3,7 @@ import { Falling, Resting, type Tile } from "./tiles.js";
 import { Air, EmptyGround } from "./tiles.js";
 import { Player } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
+import { Array2d } from "./array2D.js";
 
 let rawMap: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
@@ -54,40 +55,37 @@ export interface Layer {
 
 class LayerMid implements Layer {
   private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
-  private map!: Tile[][];
+  private map: Array2d<Tile>;
 
-  constructor() {
-    this.map = this.tile_loader.load_data(rawMap);  
+  constructor(private size_x: number, private size_y: number ) {
+    this.map = this.tile_loader.load_tile_array_2D(size_x,size_y,rawMap);
   }
 
   removeTile(tile: Tile) {
-    for (let y = 0; y < this.map.length; y++) {
-      for (let x = 0; x < this.map[y].length; x++) {
-        if (this.map[y][x] === tile) {
-          this.map[y][x] = new Air(new EmptyGround());
-        }
-      }
-    }
-  }
-
-  private getMap() {
-    return this.map;
+    this.map.removeTile(tile,new Air(new EmptyGround()));
+    // for (let y = 0; y < this.map.length; y++) {
+    //   for (let x = 0; x < this.map[y].length; x++) {
+    //     if (this.map[y][x] === tile) {
+    //       this.map[y][x] = new Air(new EmptyGround());
+    //     }
+    //   }
+    // }
   }
 
   isAir(y: number, x: number) {
-    return this.getMap()[y][x].isAir();
+    return this.map.getValue(x,y).isAir();
   }
 
   draw(tr: TileRenderer) {
-    for (let y = 0; y < this.getMap().length; y++) {
-      for (let x = 0; x < this.getMap()[y].length; x++) {
-        this.getMap()[y][x].draw(tr, x, y);
+    for (let y = 0; y < this.size_y; y++) {
+      for (let x = 0; x < this.size_x; x++) {
+        this.map.getValue(x,y).draw(tr, x, y);
       }
     }
   }
 
   getBlockOnTopState(x: number, y: number) {
-    return this.getMap()[y][x].getBlockOnTopState();
+    return this.map.getValue(x,y).getBlockOnTopState();
   }
 
   moveHorizontal(
@@ -97,16 +95,16 @@ class LayerMid implements Layer {
     y: number,
     dx: number
   ) {
-    this.getMap()[y][x + dx].moveHorizontal(player, map, dx);
+    this.map.getValue(x + dx,y).moveHorizontal(player, map, dx);
   }
 
   moveVertical(map: GameMap, player: Player, x: number, y: number, dy: number) {
-    this.getMap()[y + dy][x].moveVertical(player, map, dy);
+    this.map.getValue(x,y + dy).moveVertical(player, map, dy);
   }
 
   moveTileTo(x: number, y: number, newx: number, newy: number) {
-    this.getMap()[newy][newx] = this.getMap()[y][x];
-    this.getMap()[y][x] = new Air(new EmptyGround());
+    this.map.setValue(newx,newy,this.map.getValue(x,y));
+    this.map.setValue(x,y,new Air(new EmptyGround()));
   }
 
   pushHorisontal(
@@ -118,24 +116,30 @@ class LayerMid implements Layer {
     dx: number
   ) {
     if (this.isAir(y, x + dx + dx) && !this.isAir(y + 1, x + dx)) {
-      this.getMap()[y][x + dx + dx] = tile;
+      //this.map[y][x + dx + dx] = tile;
+      this.map.setValue(x + dx + dx,y, tile);
       player.moveToTile(map, x + dx, y);
     }
   }
 
   update(map: GameMap) {
-    for (let y = this.getMap().length - 1; y >= 0; y--)
-      for (let x = 0; x < this.getMap()[y].length; x++)
-        this.getMap()[y][x].update(this,map, x, y);
+    for (let y = this.size_y - 1; y >= 0; y--)
+      for (let x = 0; x < this.size_x; x++)
+        this.map.getValue(x,y).update(this, map, x, y);
   }
 }
 
 class LayerGround implements Layer {
   private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
-  private map!: Tile[][];
+   private map: Array2d<Tile>;
 
-  constructor() {
-    this.map = this.tile_loader.load_data(rawMapGround); 
+  // constructor() {
+  //   this.map = this.tile_loader.load_tile_array_2D(rawMapGround);
+
+  // }
+
+  constructor(private size_x: number, private size_y: number ) {
+    this.map = this.tile_loader.load_tile_array_2D(size_x,size_y,rawMapGround);
   }
 
   update(map: GameMap): void {}
@@ -164,9 +168,9 @@ class LayerGround implements Layer {
   ): void {}
 
   draw(tr: TileRenderer): void {
-    for (let y = 0; y < this.map.length; y++) {
-      for (let x = 0; x < this.map[y].length; x++) {
-        this.map[y][x].draw(tr, x, y);
+    for (let y = 0; y < this.size_y; y++) {
+      for (let x = 0; x < this.size_x; x++) {
+        this.map.getValue(x,y).draw(tr, x, y);
       }
     }
   }
@@ -178,12 +182,12 @@ class LayerGround implements Layer {
 }
 
 export class GameMap {
-  private layer_mid: Layer; 
-  private layer_ground: Layer; 
+  private layer_mid: Layer;
+  private layer_ground: Layer;
 
   constructor() {
-    this.layer_mid = new LayerMid();
-    this.layer_ground = new LayerGround();
+    this.layer_mid = new LayerMid(8,6);
+    this.layer_ground = new LayerGround(8,6);
   }
 
   draw(tr: TileRenderer) {

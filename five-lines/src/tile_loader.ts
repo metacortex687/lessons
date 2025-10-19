@@ -1,4 +1,6 @@
 import { type Tile } from "./tiles.js";
+import { Array2d } from "./array2D.js";
+
 import {
   Air,
   EmptyGround,
@@ -137,14 +139,23 @@ export class NumberToTileTransformer {
     return RAW_TILES[i].transform();
   }
 
-  load_data(rawMap:number[][]) {
-    let map = new Array(rawMap.length);
-    for (let y = 0; y < rawMap.length; y++) {
-      map[y] = new Array(rawMap[y].length);
-      for (let x = 0; x < rawMap[y].length; x++) {
-        map[y][x] = this.transform(rawMap[y][x]);
+  load_tile_array_2D(size_x: number, size_y: number, rawMap: number[][]) {
+    let map = new Array2d<Tile>(size_x,size_y);
+    for (let y = 0; y < size_y; y++) {
+      for (let x = 0; x < size_x; x++) {
+        map.setValue(x,y,this.transform(rawMap[y][x]));
       }
-    }
-    return map
+    } 
+    
+    return map;
+
+    // let map = new Array(rawMap.length);
+    // for (let y = 0; y < rawMap.length; y++) {
+    //   map[y] = new Array(rawMap[y].length);
+    //   for (let x = 0; x < rawMap[y].length; x++) {
+    //     map[y][x] = this.transform(rawMap[y][x]);
+    //   }
+    // }
+    // return map;
   }
 }
