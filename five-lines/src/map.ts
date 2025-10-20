@@ -63,13 +63,6 @@ class LayerMid implements Layer {
 
   removeTile(tile: Tile) {
     this.map.removeTile(tile,new Air(new EmptyGround()));
-    // for (let y = 0; y < this.map.length; y++) {
-    //   for (let x = 0; x < this.map[y].length; x++) {
-    //     if (this.map[y][x] === tile) {
-    //       this.map[y][x] = new Air(new EmptyGround());
-    //     }
-    //   }
-    // }
   }
 
   isAir(y: number, x: number) {
@@ -77,11 +70,7 @@ class LayerMid implements Layer {
   }
 
   draw(tr: TileRenderer) {
-    for (let y = 0; y < this.size_y; y++) {
-      for (let x = 0; x < this.size_x; x++) {
-        this.map.getValue(x,y).draw(tr, x, y);
-      }
-    }
+    this.map.appleToAllCels((v,x,y) => v.draw(tr, x, y))
   }
 
   getBlockOnTopState(x: number, y: number) {
@@ -116,27 +105,23 @@ class LayerMid implements Layer {
     dx: number
   ) {
     if (this.isAir(y, x + dx + dx) && !this.isAir(y + 1, x + dx)) {
-      //this.map[y][x + dx + dx] = tile;
       this.map.setValue(x + dx + dx,y, tile);
       player.moveToTile(map, x + dx, y);
     }
   }
 
   update(map: GameMap) {
-    for (let y = this.size_y - 1; y >= 0; y--)
-      for (let x = 0; x < this.size_x; x++)
-        this.map.getValue(x,y).update(this, map, x, y);
+    this.map.appleToAllCels((v,x,y) => v.update(this, map, x, y))
+
+    // for (let y = this.size_y - 1; y >= 0; y--)
+    //   for (let x = 0; x < this.size_x; x++)
+    //     this.map.getValue(x,y).update(this, map, x, y);
   }
 }
 
 class LayerGround implements Layer {
   private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
    private map: Array2d<Tile>;
-
-  // constructor() {
-  //   this.map = this.tile_loader.load_tile_array_2D(rawMapGround);
-
-  // }
 
   constructor(private size_x: number, private size_y: number ) {
     this.map = this.tile_loader.load_tile_array_2D(size_x,size_y,rawMapGround);
