@@ -83,11 +83,11 @@ class LayerMid implements Layer {
     y: number,
     dx: number
   ) {
-    this.map.getValue(x + dx, y).moveHorizontal(this, player, map, dx);
+    this.map.getValue(x + dx, y).moveHorizontal(this, player, dx);
   }
 
   moveVertical(map: GameMap, player: Player, x: number, y: number, dy: number) {
-    this.map.getValue(x, y + dy).moveVertical(this, player, map, dy);
+    this.map.getValue(x, y + dy).moveVertical(this, player, dy);
   }
 
   moveTileTo(x: number, y: number, newx: number, newy: number) {

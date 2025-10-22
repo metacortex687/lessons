@@ -5,8 +5,8 @@ import { type Tile } from "./tiles.js";
   export class Player {
     constructor(private x: number, private y: number) {}
 
-    pushHorisontal(map: GameMap, tile: Tile, dx: number) {
-      map.pushHorisontal(this, tile, this.x, this.y, dx);
+    pushHorisontal(layer: Layer, tile: Tile, dx: number) {
+      layer.pushHorisontal(this, tile, this.x, this.y, dx);
     }
     draw(tr: TileRenderer) {
       tr.drawRect(this.x, this.y, "#ff0000");
@@ -20,7 +20,7 @@ import { type Tile } from "./tiles.js";
       map.moveVertical(this, this.x, this.y, dy);
     }
 
-    move(layer: Layer, map: GameMap, dx: number, dy: number) {
+    move(layer: Layer, dx: number, dy: number) {
       this.moveToTile(layer, this.x + dx, this.y + dy);
     }
 
