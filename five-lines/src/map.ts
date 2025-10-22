@@ -84,11 +84,11 @@ class LayerMid implements Layer {
     y: number,
     dx: number
   ) {
-    this.map.getValue(x + dx, y).moveHorizontal(player, map, dx);
+    this.map.getValue(x + dx, y).moveHorizontal(this,player, map, dx);
   }
 
   moveVertical(map: GameMap, player: Player, x: number, y: number, dy: number) {
-    this.map.getValue(x, y + dy).moveVertical(player, map, dy);
+    this.map.getValue(x, y + dy).moveVertical(this,player, map, dy);
   }
 
   moveTileTo(x: number, y: number, newx: number, newy: number) {
@@ -106,16 +106,12 @@ class LayerMid implements Layer {
   ) {
     if (this.isAir(y, x + dx + dx) && !this.isAir(y + 1, x + dx)) {
       this.map.setValue(x + dx + dx, y, tile);
-      player.moveToTile(map, x + dx, y);
+      player.moveToTile(this,map, x + dx, y);
     }
   }
 
   update(map: GameMap) {
     this.map.appleToAllCels((v, x, y) => v.update(this, map, x, y));
-
-    // for (let y = this.size_y - 1; y >= 0; y--)
-    //   for (let x = 0; x < this.size_x; x++)
-    //     this.map.getValue(x,y).update(this, map, x, y);
   }
 }
 
@@ -190,10 +186,6 @@ export class GameMap {
 
   moveVertical(player: Player, x: number, y: number, dy: number) {
     this.layer_mid.moveVertical(this, player, x, y, dy);
-  }
-
-  moveTileTo(x: number, y: number, newx: number, newy: number) {
-    this.layer_mid.moveTileTo(x, y, newx, newy);
   }
 
   pushHorisontal(player: Player, tile: Tile, x: number, y: number, dx: number) {

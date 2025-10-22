@@ -149,13 +149,5 @@ export class NumberToTileTransformer {
     
     return map;
 
-    // let map = new Array(rawMap.length);
-    // for (let y = 0; y < rawMap.length; y++) {
-    //   map[y] = new Array(rawMap[y].length);
-    //   for (let x = 0; x < rawMap[y].length; x++) {
-    //     map[y][x] = this.transform(rawMap[y][x]);
-    //   }
-    // }
-    // return map;
   }
 }

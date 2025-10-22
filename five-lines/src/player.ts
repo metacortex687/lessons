@@ -1,4 +1,4 @@
-import { GameMap } from "./map.js";
+import { GameMap, type Layer } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { type Tile } from "./tiles.js";
   
@@ -20,12 +20,12 @@ import { type Tile } from "./tiles.js";
       map.moveVertical(this, this.x, this.y, dy);
     }
 
-    move(map: GameMap, dx: number, dy: number) {
-      this.moveToTile(map, this.x + dx, this.y + dy);
+    move(layer: Layer, map: GameMap, dx: number, dy: number) {
+      this.moveToTile(layer,map, this.x + dx, this.y + dy);
     }
 
-    moveToTile(map: GameMap, newx: number, newy: number) {
-      map.moveTileTo(this.x, this.y, newx, newy);
+    moveToTile(layer: Layer, map: GameMap, newx: number, newy: number) {
+      layer.moveTileTo(this.x, this.y, newx, newy);
       this.x = newx;
       this.y = newy;
     }
