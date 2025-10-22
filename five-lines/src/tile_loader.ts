@@ -45,12 +45,12 @@ class PlayerValue implements RawTileValue {
     return new PlayerTile();
   }
 }
-class StoneValue implements RawTileValue {
+class WaterValue implements RawTileValue {
   transform(): Tile {
     return new Water(new Resting());
   }
 }
-class FallingStoneValue implements RawTileValue {
+class FallingWaterValue implements RawTileValue {
   transform(): Tile {
     return new Water(new Falling());
   }
@@ -100,8 +100,8 @@ class RawTile {
   static readonly FLUX = new RawTile(new FluxValue());
   static readonly UNBREAKABLE = new RawTile(new UnbreakableValue());
   static readonly PLAYER = new RawTile(new PlayerValue());
-  static readonly STONE = new RawTile(new StoneValue());
-  static readonly FALLING_STONE = new RawTile(new FallingStoneValue());
+  static readonly STONE = new RawTile(new WaterValue());
+  static readonly FALLING_STONE = new RawTile(new FallingWaterValue());
   static readonly BOX = new RawTile(new BoxValue());
   static readonly FALLING_BOX = new RawTile(new FallingBoxValue());
   static readonly KEY1 = new RawTile(new Key1Value());
