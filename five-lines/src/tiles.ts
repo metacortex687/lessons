@@ -295,11 +295,11 @@
     update(layer:Layer,map: GameMap, x: number, y: number): void {}
 
     moveVertical(layer: Layer,player: Player, map: GameMap, dy: number): void {
-      map.removeTile(this.lock);
+      layer.removeTile(this.lock);
       player.move(layer,map, 0, dy);
     }
     moveHorizontal(layer: Layer, player: Player, map: GameMap, dx: number): void {
-      map.removeTile(this.lock);
+      layer.removeTile(this.lock);
       player.move(layer,map, dx, 0);
     }
     draw(tr: TileRenderer, x: number, y: number): void {

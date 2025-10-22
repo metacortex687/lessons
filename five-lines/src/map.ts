@@ -84,11 +84,11 @@ class LayerMid implements Layer {
     y: number,
     dx: number
   ) {
-    this.map.getValue(x + dx, y).moveHorizontal(this,player, map, dx);
+    this.map.getValue(x + dx, y).moveHorizontal(this, player, map, dx);
   }
 
   moveVertical(map: GameMap, player: Player, x: number, y: number, dy: number) {
-    this.map.getValue(x, y + dy).moveVertical(this,player, map, dy);
+    this.map.getValue(x, y + dy).moveVertical(this, player, map, dy);
   }
 
   moveTileTo(x: number, y: number, newx: number, newy: number) {
@@ -106,7 +106,7 @@ class LayerMid implements Layer {
   ) {
     if (this.isAir(y, x + dx + dx) && !this.isAir(y + 1, x + dx)) {
       this.map.setValue(x + dx + dx, y, tile);
-      player.moveToTile(this,map, x + dx, y);
+      player.moveToTile(this, map, x + dx, y);
     }
   }
 
@@ -190,10 +190,6 @@ export class GameMap {
 
   pushHorisontal(player: Player, tile: Tile, x: number, y: number, dx: number) {
     this.layer_mid.pushHorisontal(this, player, tile, x, y, dx);
-  }
-
-  removeTile(tile: Tile) {
-    this.layer_mid.removeTile(tile);
   }
 
   update() {
