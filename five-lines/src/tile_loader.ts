@@ -8,7 +8,7 @@ import {
   Flux,
   Unbreakable,
   PlayerTile,
-  Stone,
+  Water,
   Resting,
   Falling,
   Box,
@@ -47,12 +47,12 @@ class PlayerValue implements RawTileValue {
 }
 class StoneValue implements RawTileValue {
   transform(): Tile {
-    return new Stone(new Resting());
+    return new Water(new Resting());
   }
 }
 class FallingStoneValue implements RawTileValue {
   transform(): Tile {
-    return new Stone(new Falling());
+    return new Water(new Falling());
   }
 }
 class BoxValue implements RawTileValue {
@@ -140,14 +140,13 @@ export class NumberToTileTransformer {
   }
 
   load_tile_array_2D(size_x: number, size_y: number, rawMap: number[][]) {
-    let map = new Array2d<Tile>(size_x,size_y);
+    let map = new Array2d<Tile>(size_x, size_y);
     for (let y = 0; y < size_y; y++) {
       for (let x = 0; x < size_x; x++) {
-        map.setValue(x,y,this.transform(rawMap[y][x]));
+        map.setValue(x, y, this.transform(rawMap[y][x]));
       }
-    } 
-    
-    return map;
+    }
 
+    return map;
   }
 }
