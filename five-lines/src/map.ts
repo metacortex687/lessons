@@ -34,14 +34,12 @@ export interface Layer {
   ): void;
   moveTileTo(x: number, y: number, newx: number, newy: number): void;
   moveVertical(
-    map: GameMap,
     player: Player,
     x: number,
     y: number,
     dy: number
   ): void;
   moveHorizontal(
-    map: GameMap,
     player: Player,
     x: number,
     y: number,
@@ -77,7 +75,6 @@ class LayerMid implements Layer {
   }
 
   moveHorizontal(
-    map: GameMap,
     player: Player,
     x: number,
     y: number,
@@ -86,7 +83,7 @@ class LayerMid implements Layer {
     this.map.getValue(x + dx, y).moveHorizontal(this, player, dx);
   }
 
-  moveVertical(map: GameMap, player: Player, x: number, y: number, dy: number) {
+  moveVertical(player: Player, x: number, y: number, dy: number) {
     this.map.getValue(x, y + dy).moveVertical(this, player, dy);
   }
 
@@ -135,14 +132,12 @@ class LayerGround implements Layer {
   ): void {}
   moveTileTo(x: number, y: number, newx: number, newy: number): void {}
   moveVertical(
-    map: GameMap,
     player: Player,
     x: number,
     y: number,
     dy: number
   ): void {}
   moveHorizontal(
-    map: GameMap,
     player: Player,
     x: number,
     y: number,
@@ -178,11 +173,11 @@ export class GameMap {
   }
 
   moveHorizontal(player: Player, x: number, y: number, dx: number) {
-    this.layer_mid.moveHorizontal(this, player, x, y, dx);
+    this.layer_mid.moveHorizontal(player, x, y, dx);
   }
 
   moveVertical(player: Player, x: number, y: number, dy: number) {
-    this.layer_mid.moveVertical(this, player, x, y, dy);
+    this.layer_mid.moveVertical(player, x, y, dy);
   }
 
   pushHorisontal(player: Player, tile: Tile, x: number, y: number, dx: number) {
