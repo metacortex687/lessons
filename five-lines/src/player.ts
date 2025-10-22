@@ -21,10 +21,10 @@ import { type Tile } from "./tiles.js";
     }
 
     move(layer: Layer, map: GameMap, dx: number, dy: number) {
-      this.moveToTile(layer,map, this.x + dx, this.y + dy);
+      this.moveToTile(layer, this.x + dx, this.y + dy);
     }
 
-    moveToTile(layer: Layer, map: GameMap, newx: number, newy: number) {
+    moveToTile(layer: Layer, newx: number, newy: number) {
       layer.moveTileTo(this.x, this.y, newx, newy);
       this.x = newx;
       this.y = newy;

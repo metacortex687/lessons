@@ -26,7 +26,6 @@ let rawMapGround: number[][] = [
 export interface Layer {
   update(map: GameMap): void;
   pushHorisontal(
-    map: GameMap,
     player: Player,
     tile: Tile,
     x: number,
@@ -97,7 +96,6 @@ class LayerMid implements Layer {
   }
 
   pushHorisontal(
-    map: GameMap,
     player: Player,
     tile: Tile,
     x: number,
@@ -106,7 +104,7 @@ class LayerMid implements Layer {
   ) {
     if (this.isAir(y, x + dx + dx) && !this.isAir(y + 1, x + dx)) {
       this.map.setValue(x + dx + dx, y, tile);
-      player.moveToTile(this, map, x + dx, y);
+      player.moveToTile(this, x + dx, y);
     }
   }
 
@@ -129,7 +127,6 @@ class LayerGround implements Layer {
 
   update(map: GameMap): void {}
   pushHorisontal(
-    map: GameMap,
     player: Player,
     tile: Tile,
     x: number,
@@ -189,7 +186,7 @@ export class GameMap {
   }
 
   pushHorisontal(player: Player, tile: Tile, x: number, y: number, dx: number) {
-    this.layer_mid.pushHorisontal(this, player, tile, x, y, dx);
+    this.layer_mid.pushHorisontal(player, tile, x, y, dx);
   }
 
   update() {
