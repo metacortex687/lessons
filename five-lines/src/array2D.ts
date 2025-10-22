@@ -19,17 +19,16 @@ export class Array2d<T extends object> {
     return this.map[y][x];
   }
 
-  removeTile(tile: T, new_tile: T) {
-    const p = this.pos.get(tile);
-    this.map[p!.y][p!.x] = new_tile;
-    this.pos.set(new_tile, p!);
-    this.pos.delete(tile);
+  change_value(value: T, new_value: T) {
+    const p = this.pos.get(value);
+    this.map[p!.y][p!.x] = new_value;
+    this.pos.set(new_value, p!);
+    this.pos.delete(value);
   }
 
   appleToAllCels(f: (value: T, x: number, y: number) => void): void {
     for (let y = 0; y < this.size_y; y++) {
-      for (let x = 0; x < this.size_x; x++) 
-        f(this.map[y][x],x,y);
+      for (let x = 0; x < this.size_x; x++) f(this.map[y][x], x, y);
     }
   }
 }
