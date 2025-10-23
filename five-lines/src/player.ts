@@ -9,7 +9,7 @@ import { Position } from "./position.js";
     pushHorisontal(layer: Layer, tile: Tile, dx: number) {
       layer.pushHorisontal(this, tile, this.pos, dx);
     }
-    
+
     draw(tr: TileRenderer) {
       tr.drawRect(this.pos, "#ff0000");
     }
@@ -22,12 +22,13 @@ import { Position } from "./position.js";
       map.moveVertical(this, this.pos, dy);
     }
 
+    // move(layer: Layer, dx: number, dy: number) {
     move(layer: Layer, dx: number, dy: number) {
-      this.moveToTile(layer, this.pos.getX() + dx, this.pos.getY() + dy);
+      this.moveToTile(layer, new Position(this.pos.getX() + dx, this.pos.getY() + dy));
     }
 
-    moveToTile(layer: Layer, newx: number, newy: number) {
-      let new_pos = new Position(newx,newy);
+    moveToTile(layer: Layer, new_pos: Position) {
+      // let new_pos = new Position(newx,newy);
       layer.moveTileTo(this.pos, new_pos);
       this.pos = new_pos;
 

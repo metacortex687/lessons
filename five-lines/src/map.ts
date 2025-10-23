@@ -97,7 +97,7 @@ class LayerMid implements Layer {
   ) {
     if (this.isAir(new Position(pos.getX() + dx + dx,pos.getY())) && !this.isAir(new Position(pos.getX() + dx, pos.getY() + 1))) {
       this.map.setValue(pos.getX() + dx + dx, pos.getY(), tile);
-      player.moveToTile(this, pos.getX() + dx, pos.getY());
+      player.moveToTile(this, new Position(pos.getX() + dx, pos.getY()));
     }
   }
 
