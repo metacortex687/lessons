@@ -1,32 +1,34 @@
 import { GameMap, type Layer } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { type Tile } from "./tiles.js";
+import { Position } from "./position.js";
   
   export class Player {
-    constructor(private x: number, private y: number) {}
+    constructor(private pos: Position) {}
 
     pushHorisontal(layer: Layer, tile: Tile, dx: number) {
-      layer.pushHorisontal(this, tile, this.x, this.y, dx);
+      layer.pushHorisontal(this, tile, this.pos.getX(), this.pos.getY(), dx);
     }
     draw(tr: TileRenderer) {
-      tr.drawRect(this.x, this.y, "#ff0000");
+      tr.drawRect(this.pos.getX(), this.pos.getY(), "#ff0000");
     }
 
     moveHorizontal(map: GameMap, dx: number) {
-      map.moveHorizontal(this, this.x, this.y, dx);
+      map.moveHorizontal(this, this.pos.getX(), this.pos.getY(), dx);
     }
 
     moveVertical(map: GameMap, dy: number) {
-      map.moveVertical(this, this.x, this.y, dy);
+      map.moveVertical(this, this.pos.getX(), this.pos.getY(), dy);
     }
 
     move(layer: Layer, dx: number, dy: number) {
-      this.moveToTile(layer, this.x + dx, this.y + dy);
+      this.moveToTile(layer, this.pos.getX() + dx, this.pos.getY() + dy);
     }
 
     moveToTile(layer: Layer, newx: number, newy: number) {
-      layer.moveTileTo(this.x, this.y, newx, newy);
-      this.x = newx;
-      this.y = newy;
+      layer.moveTileTo(this.pos.getX(), this.pos.getY(), newx, newy);
+      this.pos = new Position(newx,newy);
+      // this.x = newx;
+      // this.y = newy;
     }
   }

@@ -2,6 +2,7 @@ import { GameMap } from "./map.js"
 import {Inputs} from "./inputs.js"
 import {TileRenderer} from "./tile_renderer.js"
 import { Player } from "./player.js";
+import { Position } from "./position.js";
 
   export class Game {
     private player: Player;
@@ -9,7 +10,7 @@ import { Player } from "./player.js";
 
     constructor() {
       this.map = new GameMap();
-      this.player = new Player(1, 1);
+      this.player = new Player(new Position(1, 1));
     }
 
     update(inputs: Inputs) {
