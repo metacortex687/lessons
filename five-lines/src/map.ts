@@ -4,6 +4,7 @@ import { Air, EmptyGround } from "./tiles.js";
 import { Player } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
 import { Array2d } from "./array2D.js";
+import { Position } from "./position.js";
 
 let rawMap: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
@@ -28,25 +29,22 @@ export interface Layer {
   pushHorisontal(
     player: Player,
     tile: Tile,
-    x: number,
-    y: number,
+    pos: Position,
     dx: number
   ): void;
-  moveTileTo(x: number, y: number, newx: number, newy: number): void;
+  moveTileTo(pos: Position, new_pos: Position): void;
   moveVertical(
     player: Player,
-    x: number,
-    y: number,
+    pos: Position,
     dy: number
   ): void;
   moveHorizontal(
     player: Player,
-    x: number,
-    y: number,
+    pos: Position,
     dx: number
   ): void;
   draw(tr: TileRenderer): void;
-  getBlockOnTopState(x: number, y: number): Falling;
+  getBlockOnTopState(pos: Position): Falling;
   removeTile(tile: Tile): void;
 }
 
@@ -62,51 +60,49 @@ class LayerMid implements Layer {
     this.map.change_value(tile, new Air(new EmptyGround()));
   }
 
-  isAir(y: number, x: number) {
-    return this.map.getValue(x, y).isAir();
+  isAir(pos: Position) {
+    return this.map.getValue(pos.getX(), pos.getY()).isAir();
   }
 
   draw(tr: TileRenderer) {
-    this.map.appleToAllCels((v, x, y) => v.draw(tr, x, y));
+    this.map.appleToAllCels((v, x, y) => v.draw(tr, new Position(x, y)));
   }
 
-  getBlockOnTopState(x: number, y: number) {
-    return this.map.getValue(x, y).getBlockOnTopState();
+  getBlockOnTopState(pos: Position) {
+    return this.map.getValue(pos.getX(), pos.getY()).getBlockOnTopState();
   }
 
   moveHorizontal(
     player: Player,
-    x: number,
-    y: number,
+    pos: Position,
     dx: number
   ) {
-    this.map.getValue(x + dx, y).moveHorizontal(this, player, dx);
+    this.map.getValue(pos.getX() + dx, pos.getY()).moveHorizontal(this, player, dx);
   }
 
-  moveVertical(player: Player, x: number, y: number, dy: number) {
-    this.map.getValue(x, y + dy).moveVertical(this, player, dy);
+  moveVertical(player: Player, pos: Position, dy: number) {
+    this.map.getValue(pos.getX(), pos.getY() + dy).moveVertical(this, player, dy);
   }
 
-  moveTileTo(x: number, y: number, newx: number, newy: number) {
-    this.map.setValue(newx, newy, this.map.getValue(x, y));
-    this.map.setValue(x, y, new Air(new EmptyGround()));
+  moveTileTo(positiom: Position, new_position: Position) {
+    this.map.setValue(new_position.getX(), new_position.getY(), this.map.getValue(positiom.getX(), positiom.getY()));
+    this.map.setValue(positiom.getX(), positiom.getY(), new Air(new EmptyGround()));
   }
 
   pushHorisontal(
     player: Player,
     tile: Tile,
-    x: number,
-    y: number,
+    pos: Position,
     dx: number
   ) {
-    if (this.isAir(y, x + dx + dx) && !this.isAir(y + 1, x + dx)) {
-      this.map.setValue(x + dx + dx, y, tile);
-      player.moveToTile(this, x + dx, y);
+    if (this.isAir(new Position(pos.getX() + dx + dx,pos.getY())) && !this.isAir(new Position(pos.getX() + dx, pos.getY() + 1))) {
+      this.map.setValue(pos.getX() + dx + dx, pos.getY(), tile);
+      player.moveToTile(this, pos.getX() + dx, pos.getY());
     }
   }
 
   update(map: GameMap) {
-    this.map.appleToAllCels((v, x, y) => v.update(this, map, x, y));
+    this.map.appleToAllCels((v, x, y) => v.update(this, map, new Position(x, y)));
   }
 }
 
@@ -126,33 +122,30 @@ class LayerGround implements Layer {
   pushHorisontal(
     player: Player,
     tile: Tile,
-    x: number,
-    y: number,
+    pos: Position,
     dx: number
   ): void {}
-  moveTileTo(x: number, y: number, newx: number, newy: number): void {}
+  moveTileTo(pos: Position, new_pos: Position): void {}
   moveVertical(
     player: Player,
-    x: number,
-    y: number,
+    pos: Position,
     dy: number
   ): void {}
   moveHorizontal(
     player: Player,
-    x: number,
-    y: number,
+    pos: Position,
     dx: number
   ): void {}
 
   draw(tr: TileRenderer): void {
     for (let y = 0; y < this.size_y; y++) {
       for (let x = 0; x < this.size_x; x++) {
-        this.map.getValue(x, y).draw(tr, x, y);
+        this.map.getValue(x, y).draw(tr, new Position(x,y));
       }
     }
   }
 
-  getBlockOnTopState(x: number, y: number): Falling {
+  getBlockOnTopState(pos: Position): Falling {
     return new Resting();
   }
   removeTile(tile: Tile): void {}
@@ -172,16 +165,16 @@ export class GameMap {
     this.layer_mid.draw(tr);
   }
 
-  moveHorizontal(player: Player, x: number, y: number, dx: number) {
-    this.layer_mid.moveHorizontal(player, x, y, dx);
+  moveHorizontal(player: Player, pos: Position, dx: number) {
+    this.layer_mid.moveHorizontal(player, pos, dx);
   }
 
-  moveVertical(player: Player, x: number, y: number, dy: number) {
-    this.layer_mid.moveVertical(player, x, y, dy);
+  moveVertical(player: Player, pos: Position, dy: number) {
+    this.layer_mid.moveVertical(player, pos, dy);
   }
 
-  pushHorisontal(player: Player, tile: Tile, x: number, y: number, dx: number) {
-    this.layer_mid.pushHorisontal(player, tile, x, y, dx);
+  pushHorisontal(player: Player, tile: Tile, pos: Position, dx: number) {
+    this.layer_mid.pushHorisontal(player, tile, pos, dx);
   }
 
   update() {

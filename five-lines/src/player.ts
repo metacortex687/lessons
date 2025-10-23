@@ -7,18 +7,19 @@ import { Position } from "./position.js";
     constructor(private pos: Position) {}
 
     pushHorisontal(layer: Layer, tile: Tile, dx: number) {
-      layer.pushHorisontal(this, tile, this.pos.getX(), this.pos.getY(), dx);
+      layer.pushHorisontal(this, tile, this.pos, dx);
     }
+    
     draw(tr: TileRenderer) {
-      tr.drawRect(this.pos.getX(), this.pos.getY(), "#ff0000");
+      tr.drawRect(this.pos, "#ff0000");
     }
 
     moveHorizontal(map: GameMap, dx: number) {
-      map.moveHorizontal(this, this.pos.getX(), this.pos.getY(), dx);
+      map.moveHorizontal(this, this.pos, dx);
     }
 
     moveVertical(map: GameMap, dy: number) {
-      map.moveVertical(this, this.pos.getX(), this.pos.getY(), dy);
+      map.moveVertical(this, this.pos, dy);
     }
 
     move(layer: Layer, dx: number, dy: number) {
@@ -26,9 +27,9 @@ import { Position } from "./position.js";
     }
 
     moveToTile(layer: Layer, newx: number, newy: number) {
-      layer.moveTileTo(this.pos.getX(), this.pos.getY(), newx, newy);
-      this.pos = new Position(newx,newy);
-      // this.x = newx;
-      // this.y = newy;
+      let new_pos = new Position(newx,newy);
+      layer.moveTileTo(this.pos, new_pos);
+      this.pos = new_pos;
+
     }
   }

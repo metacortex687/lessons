@@ -1,15 +1,16 @@
 import { GameMap, type Layer } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { Player } from "./player.js";
+import { Position } from "./position.js";
 
 interface FallingState {
-  drop(layer: Layer, map: GameMap, y: number, x: number): void;
+  drop(layer: Layer, map: GameMap, pos: Position): void;
   moveHorizontal(player: Player, layer: Layer, tile: Tile, dx: number): void;
 }
 
 export class Falling implements FallingState {
-  drop(layer: Layer, map: GameMap, y: number, x: number): void {
-    layer.moveTileTo(x, y, x, y + 1);
+  drop(layer: Layer, map: GameMap, pos: Position): void {
+    layer.moveTileTo(pos, new Position(pos.getX(), pos.getY() + 1));
   }
   moveHorizontal(player: Player, layer: Layer, tile: Tile, dx: number): void {}
 }
@@ -24,19 +25,19 @@ class FallStrategy {
     this.falling = falling;
   }
 
-  update(layer: Layer, map: GameMap, x: number, y: number): void {
-    this.drop(layer, map, y, x);
+  update(layer: Layer, map: GameMap, pos: Position): void {
+    this.drop(layer, map, pos);
   }
 
-  private drop(layer: Layer, map: GameMap, y: number, x: number) {
-    this.falling = layer.getBlockOnTopState(x, y + 1);
+  private drop(layer: Layer, map: GameMap, pos: Position) {
+    this.falling = layer.getBlockOnTopState(new Position(pos.getX(), pos.getY() + 1));
 
-    this.falling.drop(layer, map, y, x);
+    this.falling.drop(layer, map, pos);
   }
 }
 
 export class Resting implements FallingState {
-  drop(layer: Layer, map: GameMap, y: number, x: number): void {}
+  drop(layer: Layer, map: GameMap, pos: Position): void {}
   moveHorizontal(player: Player, layer: Layer, tile: Tile, dx: number): void {
     player.pushHorisontal(layer, tile, dx);
   }
@@ -44,27 +45,27 @@ export class Resting implements FallingState {
 
 export interface Tile {
   getBlockOnTopState(): FallingState;
-  update(layer: Layer, map: GameMap, x: number, y: number): void;
+  update(layer: Layer, map: GameMap, pos: Position): void;
 
   moveVertical(layer: Layer, player: Player, dy: number): void;
   moveHorizontal(layer: Layer, player: Player, dx: number): void;
-  draw(tr: TileRenderer, x: number, y: number): void;
+  draw(tr: TileRenderer, pos: Position): void;
   isAir(): boolean;
   getGroundLayer(): GroundLayer;
   setGroundLayer(gl: GroundLayer): void;
 }
 
 interface GroundLayer {
-  draw(tr: TileRenderer, x: number, y: number): void;
+  draw(tr: TileRenderer, pos: Position): void;
 }
 
 export class EmptyGround implements GroundLayer {
-  draw(tr: TileRenderer, x: number, y: number): void {}
+  draw(tr: TileRenderer, pos: Position): void {}
 }
 
 export class Garden implements GroundLayer {
-  draw(tr: TileRenderer, x: number, y: number): void {
-    tr.drawRect(x, y, "#000000ff");
+  draw(tr: TileRenderer, pos: Position): void {
+    tr.drawRect(pos, "#000000ff");
   }
 }
 
@@ -79,7 +80,7 @@ export class Flux implements Tile {
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
-  update(layer: Layer, map: GameMap, x: number, y: number): void {}
+  update(layer: Layer, map: GameMap, pos: Position): void {}
 
   moveVertical(layer: Layer, player: Player, dy: number): void {
     player.move(layer, 0, dy);
@@ -88,8 +89,8 @@ export class Flux implements Tile {
     player.move(layer, dx, 0);
   }
 
-  draw(tr: TileRenderer, x: number, y: number): void {
-    tr.drawRect(x, y, "#ccffcc");
+  draw(tr: TileRenderer, pos: Position): void {
+    tr.drawRect(pos, "#ccffcc");
   }
 
   isAir(): boolean {
@@ -108,13 +109,13 @@ export class Unbreakable implements Tile {
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
-  update(layer: Layer, map: GameMap, x: number, y: number): void {}
+  update(layer: Layer, map: GameMap, pos: Position): void {}
 
   moveVertical(layer: Layer, player: Player, dy: number): void {}
   moveHorizontal(layer: Layer, player: Player, dx: number): void {}
 
-  draw(tr: TileRenderer, x: number, y: number): void {
-    tr.drawRect(x, y, "#999999");
+  draw(tr: TileRenderer, pos: Position): void {
+    tr.drawRect(pos, "#999999");
   }
 
   isAir(): boolean {
@@ -133,14 +134,14 @@ export class Door implements Tile {
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
-  update(layer: Layer, map: GameMap, x: number, y: number): void {}
+  update(layer: Layer, map: GameMap, pos: Position): void {}
 
   moveVertical(layer: Layer, player: Player, dy: number): void {}
   moveHorizontal(layer: Layer, player: Player, dx: number): void {}
 
-  draw(tr: TileRenderer, x: number, y: number): void {
+  draw(tr: TileRenderer, pos: Position): void {
     // tr.fillRect(x, y, "#999999");
-    tr.drawDoor(x, y);
+    tr.drawDoor(pos);
   }
 
   isAir(): boolean {
@@ -167,8 +168,8 @@ export class Water implements Tile {
   }
   private fallStrategy: FallStrategy;
 
-  update(layer: Layer, map: GameMap, x: number, y: number): void {
-    this.fallStrategy.update(layer, map, x, y);
+  update(layer: Layer, map: GameMap, pos: Position): void {
+    this.fallStrategy.update(layer, map, pos);
   }
 
   moveVertical(layer: Layer, player: Player, dy: number): void {}
@@ -176,8 +177,8 @@ export class Water implements Tile {
     this.falling.moveHorizontal(player, layer, this, dx);
   }
 
-  draw(tr: TileRenderer, x: number, y: number): void {
-    tr.drawRect(x, y, "#0000cc");
+  draw(tr: TileRenderer, pos: Position): void {
+    tr.drawRect(pos, "#0000cc");
   }
   isAir(): boolean {
     return false;
@@ -197,7 +198,7 @@ export class Air implements Tile {
   getBlockOnTopState(): FallingState {
     return new Falling();
   }
-  update(layer: Layer, map: GameMap, x: number, y: number): void {}
+  update(layer: Layer, map: GameMap, pos: Position): void {}
 
   moveVertical(layer: Layer, player: Player, dy: number): void {
     player.move(layer, 0, dy);
@@ -206,8 +207,8 @@ export class Air implements Tile {
     player.move(layer, dx, 0);
   }
 
-  draw(tr: TileRenderer, x: number, y: number): void {
-    this.ground.draw(tr, x, y);
+  draw(tr: TileRenderer, pos: Position): void {
+    this.ground.draw(tr, pos);
   }
 
   isAir(): boolean {
@@ -226,12 +227,12 @@ export class PlayerTile implements Tile {
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
-  update(layer: Layer, map: GameMap, x: number, y: number): void {}
+  update(layer: Layer, map: GameMap, pos: Position): void {}
 
   moveVertical(layer: Layer, player: Player, dy: number): void {}
   moveHorizontal(layer: Layer, player: Player, dx: number): void {}
 
-  draw(tr: TileRenderer, x: number, y: number): void {}
+  draw(tr: TileRenderer, pos: Position): void {}
 
   isAir(): boolean {
     return false;
@@ -251,8 +252,8 @@ export class Box implements Tile {
   }
   private fallStrategy: FallStrategy;
 
-  update(layer: Layer, map: GameMap, x: number, y: number): void {
-    this.fallStrategy.update(layer, map, x, y);
+  update(layer: Layer, map: GameMap, pos: Position): void {
+    this.fallStrategy.update(layer, map, pos);
   }
 
   constructor(falling: FallingState) {
@@ -263,8 +264,8 @@ export class Box implements Tile {
   moveHorizontal(layer: Layer, player: Player, dx: number): void {
     this.fallStrategy.moveHorizontal(player, layer, this, dx);
   }
-  draw(tr: TileRenderer, x: number, y: number): void {
-    tr.drawRect(x, y, "#8b4513");
+  draw(tr: TileRenderer, pos: Position): void {
+    tr.drawRect(pos, "#8b4513");
   }
 
   isAir(): boolean {
@@ -285,7 +286,7 @@ export class Key implements Tile {
   }
   constructor(private lock: LockTile, private color: string) {}
 
-  update(layer: Layer, map: GameMap, x: number, y: number): void {}
+  update(layer: Layer, map: GameMap, pos: Position): void {}
 
   moveVertical(layer: Layer, player: Player, dy: number): void {
     layer.removeTile(this.lock);
@@ -295,8 +296,8 @@ export class Key implements Tile {
     layer.removeTile(this.lock);
     player.move(layer, dx, 0);
   }
-  draw(tr: TileRenderer, x: number, y: number): void {
-    tr.drawRect(x, y, this.color);
+  draw(tr: TileRenderer, pos: Position): void {
+    tr.drawRect(pos, this.color);
   }
 
   isAir(): boolean {
@@ -334,11 +335,11 @@ export class LockTile implements Tile {
     return new Resting();
   }
   constructor(private color: string) {}
-  update(layer: Layer, map: GameMap, x: number, y: number): void {}
+  update(layer: Layer, map: GameMap, pos: Position): void {}
   moveVertical(layer: Layer, player: Player, dy: number): void {}
   moveHorizontal(layer: Layer, player: Player, dx: number): void {}
-  draw(tr: TileRenderer, x: number, y: number): void {
-    tr.drawRect(x, y, this.color);
+  draw(tr: TileRenderer, pos: Position): void {
+    tr.drawRect(pos, this.color);
   }
 
   isAir(): boolean {
