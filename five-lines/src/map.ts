@@ -4,7 +4,7 @@ import { Air, EmptyGround } from "./tiles.js";
 import { Player } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
 import { Array2d } from "./array2D.js";
-import { Position } from "./position.js";
+import { Position, type Move } from "./position.js";
 
 let rawMap: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
@@ -30,18 +30,18 @@ export interface Layer {
     player: Player,
     tile: Tile,
     pos: Position,
-    dx: number
+    move: Move
   ): void;
   moveTileTo(pos: Position, new_pos: Position): void;
   moveVertical(
     player: Player,
     pos: Position,
-    dy: number
+    move: Move
   ): void;
   moveHorizontal(
     player: Player,
     pos: Position,
-    dx: number
+    move: Move
   ): void;
   draw(tr: TileRenderer): void;
   getBlockOnTopState(pos: Position): Falling;
@@ -75,13 +75,15 @@ class LayerMid implements Layer {
   moveHorizontal(
     player: Player,
     pos: Position,
-    dx: number
+    move: Move
   ) {
-    this.map.getValue(pos.getX() + dx, pos.getY()).moveHorizontal(this, player, dx);
+    let newPos = move.translate(pos);
+    this.map.getValue(newPos.getX(), newPos.getY()).moveHorizontal(this, player, move);
   }
 
-  moveVertical(player: Player, pos: Position, dy: number) {
-    this.map.getValue(pos.getX(), pos.getY() + dy).moveVertical(this, player, dy);
+  moveVertical(player: Player, pos: Position, move: Move) {
+    let newPos = move.translate(pos);
+    this.map.getValue(newPos.getX(), newPos.getY()).moveVertical(this, player, move);
   }
 
   moveTileTo(positiom: Position, new_position: Position) {
@@ -93,11 +95,11 @@ class LayerMid implements Layer {
     player: Player,
     tile: Tile,
     pos: Position,
-    dx: number
+    move: Move
   ) {
-    if (this.isAir(new Position(pos.getX() + dx + dx,pos.getY())) && !this.isAir(new Position(pos.getX() + dx, pos.getY() + 1))) {
-      this.map.setValue(pos.getX() + dx + dx, pos.getY(), tile);
-      player.moveToTile(this, new Position(pos.getX() + dx, pos.getY()));
+    if (this.isAir(move.translate(move.translate(pos))) && !this.isAir(new Position(move.translate(pos).getX(), pos.getY() + 1))) {
+      this.map.setValue(move.translate(move.translate(pos)).getX(), pos.getY(), tile);
+      player.moveToTile(this, move.translate(pos));
     }
   }
 
@@ -123,18 +125,18 @@ class LayerGround implements Layer {
     player: Player,
     tile: Tile,
     pos: Position,
-    dx: number
+    move: Move
   ): void {}
   moveTileTo(pos: Position, new_pos: Position): void {}
   moveVertical(
     player: Player,
     pos: Position,
-    dy: number
+    move: Move
   ): void {}
   moveHorizontal(
     player: Player,
     pos: Position,
-    dx: number
+    move: Move
   ): void {}
 
   draw(tr: TileRenderer): void {
@@ -165,16 +167,16 @@ export class GameMap {
     this.layer_mid.draw(tr);
   }
 
-  moveHorizontal(player: Player, pos: Position, dx: number) {
-    this.layer_mid.moveHorizontal(player, pos, dx);
+  moveHorizontal(player: Player, pos: Position, move: Move) {
+    this.layer_mid.moveHorizontal(player, pos, move);
   }
 
-  moveVertical(player: Player, pos: Position, dy: number) {
-    this.layer_mid.moveVertical(player, pos, dy);
+  moveVertical(player: Player, pos: Position, move: Move) {
+    this.layer_mid.moveVertical(player, pos, move);
   }
 
-  pushHorisontal(player: Player, tile: Tile, pos: Position, dx: number) {
-    this.layer_mid.pushHorisontal(player, tile, pos, dx);
+  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move) {
+    this.layer_mid.pushHorisontal(player, tile, pos, move);
   }
 
   update() {
