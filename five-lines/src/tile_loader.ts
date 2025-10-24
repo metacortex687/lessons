@@ -3,7 +3,6 @@ import { Array2d } from "./array2D.js";
 
 import {
   Air,
-  EmptyGround,
   Garden,
   Flux,
   Unbreakable,
@@ -22,12 +21,12 @@ interface RawTileValue {
 }
 class AirValue implements RawTileValue {
   transform(): Tile {
-    return new Air(new EmptyGround());
+    return new Air();
   }
 }
 class GardenValue implements RawTileValue {
   transform(): Tile {
-    return new Air(new Garden());
+    return new Garden();
   }
 }
 
@@ -144,7 +143,7 @@ export class NumberToTileTransformer {
     let map = new Array2d<Tile>(size_x, size_y);
     for (let y = 0; y < size_y; y++) {
       for (let x = 0; x < size_x; x++) {
-        map.setValue(new Position(x,y), this.transform(rawMap[y][x]));
+        map.setValue(new Position(x, y), this.transform(rawMap[y][x]));
       }
     }
 

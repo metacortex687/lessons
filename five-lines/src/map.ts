@@ -1,6 +1,6 @@
 import { TileRenderer } from "./tile_renderer.js";
 import { Falling, Resting, type Tile } from "./tiles.js";
-import { Air, EmptyGround } from "./tiles.js";
+import { Air } from "./tiles.js";
 import { Player } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
 import { Array2d } from "./array2D.js";
@@ -44,7 +44,7 @@ class LayerMid implements Layer {
   }
 
   removeTile(tile: Tile) {
-    this.map.change_value(tile, new Air(new EmptyGround()));
+    this.map.change_value(tile, new Air());
   }
 
   isAir(pos: Position) {
@@ -69,7 +69,7 @@ class LayerMid implements Layer {
 
   moveTileTo(pos: Position, new_position: Position) {
     this.map.setValue(new_position, this.map.getValue(pos));
-    this.map.setValue(pos, new Air(new EmptyGround()));
+    this.map.setValue(pos, new Air());
   }
 
   pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move) {

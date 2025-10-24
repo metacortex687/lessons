@@ -30,7 +30,9 @@ class FallStrategy {
   }
 
   private drop(layer: Layer, map: GameMap, pos: Position) {
-    this.falling = layer.getBlockOnTopState(new Position(pos.getX(), pos.getY() + 1));
+    this.falling = layer.getBlockOnTopState(
+      new Position(pos.getX(), pos.getY() + 1)
+    );
 
     this.falling.drop(layer, map, pos);
   }
@@ -51,32 +53,25 @@ export interface Tile {
   moveHorizontal(layer: Layer, player: Player, move: Move): void;
   draw(tr: TileRenderer, pos: Position): void;
   isAir(): boolean;
-  getGroundLayer(): GroundLayer;
-  setGroundLayer(gl: GroundLayer): void;
 }
 
-interface GroundLayer {
-  draw(tr: TileRenderer, pos: Position): void;
-}
+export class Garden implements Tile {
+  getBlockOnTopState(): FallingState {
+    return new Resting();
+  }
+  update(layer: Layer, map: GameMap, pos: Position): void {}
+  moveVertical(layer: Layer, player: Player, move: Move): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Move): void {}
+  isAir(): boolean {
+    return false;
+  }
 
-export class EmptyGround implements GroundLayer {
-  draw(tr: TileRenderer, pos: Position): void {}
-}
-
-export class Garden implements GroundLayer {
   draw(tr: TileRenderer, pos: Position): void {
     tr.drawRect(pos, "#000000ff");
   }
 }
 
 export class Flux implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -99,13 +94,6 @@ export class Flux implements Tile {
 }
 
 export class Unbreakable implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -124,13 +112,6 @@ export class Unbreakable implements Tile {
 }
 
 export class Door implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -150,13 +131,6 @@ export class Door implements Tile {
 }
 
 export class Water implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   private falling: FallingState;
 
   constructor(falling: FallingState) {
@@ -189,14 +163,7 @@ export class Water implements Tile {
 }
 
 export class Air implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
-  constructor(private ground: GroundLayer) {}
+  constructor() {}
 
   getBlockOnTopState(): FallingState {
     return new Falling();
@@ -210,9 +177,7 @@ export class Air implements Tile {
     player.move(layer, move);
   }
 
-  draw(tr: TileRenderer, pos: Position): void {
-    this.ground.draw(tr, pos);
-  }
+  draw(tr: TileRenderer, pos: Position): void {}
 
   isAir(): boolean {
     return true;
@@ -220,13 +185,6 @@ export class Air implements Tile {
 }
 
 export class PlayerTile implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -243,13 +201,6 @@ export class PlayerTile implements Tile {
 }
 
 export class Box implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -277,13 +228,6 @@ export class Box implements Tile {
 }
 
 export class Key implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -327,13 +271,6 @@ export class KeyLockBundle {
 }
 
 export class LockTile implements Tile {
-  private grounLayer: GroundLayer = new EmptyGround();
-  getGroundLayer(): GroundLayer {
-    return this.grounLayer;
-  }
-  setGroundLayer(gl: GroundLayer): void {
-    this.grounLayer = gl;
-  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
