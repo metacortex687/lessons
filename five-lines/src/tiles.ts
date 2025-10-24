@@ -58,8 +58,6 @@ export interface Tile {
 
 export class Garden implements Tile {
   premove(player: Player): void {
-    console.log(player.dropWater());
-    
     player.dropWater();
   }
   getBlockOnTopState(): FallingState {
