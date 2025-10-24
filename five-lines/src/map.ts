@@ -61,46 +61,31 @@ class LayerMid implements Layer {
 
   moveHorizontal(player: Player, pos: Position, move: Move) {
     let newPos = move.translate(pos);
-    this.map
-      .getValue(newPos)
-      .moveHorizontal(this, player, move);
+    this.map.getValue(newPos).moveHorizontal(this, player, move);
   }
 
   moveVertical(player: Player, pos: Position, move: Move) {
     let newPos = move.translate(pos);
-    this.map
-      .getValue(newPos)
-      .moveVertical(this, player, move);
+    this.map.getValue(newPos).moveVertical(this, player, move);
   }
 
   moveTileTo(pos: Position, new_position: Position) {
-    this.map.setValue(
-      new_position,
-      this.map.getValue(pos)
-    );
-    this.map.setValue(
-      pos,
-      new Air(new EmptyGround())
-    );
+    this.map.setValue(new_position, this.map.getValue(pos));
+    this.map.setValue(pos, new Air(new EmptyGround()));
   }
 
   pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move) {
     if (
-      this.isAir(move.translate(move.translate(pos))) &&
-      !this.isAir(new Position(move.translate(pos).getX(), pos.getY() + 1))
+      this.isAir(pos.moved(move).moved(move)) &&
+      !this.isAir(pos.moved(move).down())
     ) {
-      this.map.setValue(
-        move.translate(move.translate(pos)),
-        tile
-      );
-      player.moveToTile(this, move.translate(pos));
+      this.map.setValue(pos.moved(move).moved(move), tile);
+      player.moveToTile(this, pos.moved(move));
     }
   }
 
   update(map: GameMap) {
-    this.map.appleToAllCels((v, p) =>
-      v.update(this, map, p)
-    );
+    this.map.appleToAllCels((v, p) => v.update(this, map, p));
   }
 }
 

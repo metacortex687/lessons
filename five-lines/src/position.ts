@@ -8,6 +8,32 @@ export class Position {
   getY() {
     return this.y;
   }
+
+  up() : Position
+  {
+     return new Position(this.x, this.y - 1); 
+  }
+
+  down() : Position
+  {
+     return new Position(this.x, this.y + 1); 
+  }
+
+  left() : Position
+  {
+    return new Position(this.x - 1, this.y);  
+  }
+
+  right() : Position
+  {
+    return new Position(this.x + 1, this.y);  
+  }
+
+  moved(m: Move)
+  {
+    return m.translate(this);
+  }
+
 }
 
 export interface Move {
@@ -16,24 +42,24 @@ export interface Move {
 
 export class MoveUp implements Move {
   translate(pos: Position): Position {
-    return new Position(pos.getX(), pos.getY() - 1);
+    return pos.up();    
   }
 }
 
 export class MoveDown implements Move {
   translate(pos: Position): Position {
-    return new Position(pos.getX(), pos.getY() + 1);
+    return pos.down();
   }
 }
 
 export class MoveLeft implements Move {
   translate(pos: Position): Position {
-    return new Position(pos.getX() - 1, pos.getY());
+    return pos.left();
   }
 }
 
 export class MoveRight implements Move {
   translate(pos: Position): Position {
-    return new Position(pos.getX() + 1, pos.getY());
+    return pos.right();
   }
 }
