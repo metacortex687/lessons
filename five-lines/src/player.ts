@@ -5,6 +5,9 @@ import { Position } from "./position.js";
 import { type Move } from "./position.js";
   
   export class Player {
+
+    private have_water: boolean = false;
+
     constructor(private pos: Position) {}
 
     pushHorisontal(layer: Layer, tile: Tile, move: Move) {
@@ -13,6 +16,15 @@ import { type Move } from "./position.js";
 
     draw(tr: TileRenderer) {
       tr.drawRect(this.pos, "#ff0000");
+
+      if (this.have_water)
+        tr.drawRect(new Position(8,0), "#0000cc");
+
+    }
+
+    setWater()
+    {
+      this.have_water = true;
     }
 
     moveHorizontal(map: GameMap, move: Move) {
@@ -20,17 +32,18 @@ import { type Move } from "./position.js";
     }
 
     moveVertical(map: GameMap, move: Move) {
+      console.log('player moveVertical');
+      
       map.moveVertical(this, this.pos, move);
     }
 
 
     move(layer: Layer, move: Move) {
-      this.moveToTile(layer, move.translate(this.pos));
+      this.moveToTile(layer, this.pos.moved(move));
     }
 
     moveToTile(layer: Layer, new_pos: Position) {
       layer.moveTileTo(this.pos, new_pos);
       this.pos = new_pos;
-
     }
   }

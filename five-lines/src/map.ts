@@ -60,13 +60,11 @@ class LayerMid implements Layer {
   }
 
   moveHorizontal(player: Player, pos: Position, move: Move) {
-    let newPos = move.translate(pos);
-    this.map.getValue(newPos).moveHorizontal(this, player, move);
+    this.map.getValue(pos.moved(move)).moveHorizontal(this, player, move);
   }
 
   moveVertical(player: Player, pos: Position, move: Move) {
-    let newPos = move.translate(pos);
-    this.map.getValue(newPos).moveVertical(this, player, move);
+    this.map.getValue(pos.moved(move)).moveVertical(this, player, move);
   }
 
   moveTileTo(pos: Position, new_position: Position) {

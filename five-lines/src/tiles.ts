@@ -172,8 +172,11 @@ export class Water implements Tile {
     this.fallStrategy.update(layer, map, pos);
   }
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
+  moveVertical(layer: Layer, player: Player, move: Move): void {
+    player.setWater();
+  }
   moveHorizontal(layer: Layer, player: Player, move: Move): void {
+    player.setWater();
     this.falling.moveHorizontal(player, layer, this, move);
   }
 
