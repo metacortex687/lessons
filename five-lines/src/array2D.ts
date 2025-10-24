@@ -1,3 +1,5 @@
+import { Position } from "./position.js";
+
 export class Array2d<T extends object> {
   private map: T[][];
   private pos: WeakMap<T, { x: number; y: number }>;
@@ -10,12 +12,16 @@ export class Array2d<T extends object> {
     }
   }
 
-  setValue(x: number, y: number, value: T): void {
+  setValue(p: Position, value: T): void {
+    let x = p.getX();
+    let y = p.getY();
     this.map[y][x] = value;
     this.pos.set(value, { x, y });
   }
 
-  getValue(x: number, y: number): T {
+  getValue(p: Position): T {
+    let x = p.getX();
+    let y = p.getY();    
     return this.map[y][x];
   }
 
@@ -26,9 +32,9 @@ export class Array2d<T extends object> {
     this.pos.delete(value);
   }
 
-  appleToAllCels(f: (value: T, x: number, y: number) => void): void {
+  appleToAllCels(f: (value: T, p: Position) => void): void {
     for (let y = 0; y < this.size_y; y++) {
-      for (let x = 0; x < this.size_x; x++) f(this.map[y][x], x, y);
+      for (let x = 0; x < this.size_x; x++) f(this.map[y][x], new Position(x,y));
     }
   }
 }

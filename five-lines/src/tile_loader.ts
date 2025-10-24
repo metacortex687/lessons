@@ -15,6 +15,7 @@ import {
   KeyLockBundle,
   Door,
 } from "./tiles.js";
+import { Position } from "./position.js";
 
 interface RawTileValue {
   transform(): Tile;
@@ -143,7 +144,7 @@ export class NumberToTileTransformer {
     let map = new Array2d<Tile>(size_x, size_y);
     for (let y = 0; y < size_y; y++) {
       for (let x = 0; x < size_x; x++) {
-        map.setValue(x, y, this.transform(rawMap[y][x]));
+        map.setValue(new Position(x,y), this.transform(rawMap[y][x]));
       }
     }
 

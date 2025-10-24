@@ -26,23 +26,10 @@ let rawMapGround: number[][] = [
 
 export interface Layer {
   update(map: GameMap): void;
-  pushHorisontal(
-    player: Player,
-    tile: Tile,
-    pos: Position,
-    move: Move
-  ): void;
+  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move): void;
   moveTileTo(pos: Position, new_pos: Position): void;
-  moveVertical(
-    player: Player,
-    pos: Position,
-    move: Move
-  ): void;
-  moveHorizontal(
-    player: Player,
-    pos: Position,
-    move: Move
-  ): void;
+  moveVertical(player: Player, pos: Position, move: Move): void;
+  moveHorizontal(player: Player, pos: Position, move: Move): void;
   draw(tr: TileRenderer): void;
   getBlockOnTopState(pos: Position): Falling;
   removeTile(tile: Tile): void;
@@ -61,50 +48,59 @@ class LayerMid implements Layer {
   }
 
   isAir(pos: Position) {
-    return this.map.getValue(pos.getX(), pos.getY()).isAir();
+    return this.map.getValue(pos).isAir();
   }
 
   draw(tr: TileRenderer) {
-    this.map.appleToAllCels((v, x, y) => v.draw(tr, new Position(x, y)));
+    this.map.appleToAllCels((v, p) => v.draw(tr, p));
   }
 
   getBlockOnTopState(pos: Position) {
-    return this.map.getValue(pos.getX(), pos.getY()).getBlockOnTopState();
+    return this.map.getValue(pos).getBlockOnTopState();
   }
 
-  moveHorizontal(
-    player: Player,
-    pos: Position,
-    move: Move
-  ) {
+  moveHorizontal(player: Player, pos: Position, move: Move) {
     let newPos = move.translate(pos);
-    this.map.getValue(newPos.getX(), newPos.getY()).moveHorizontal(this, player, move);
+    this.map
+      .getValue(newPos)
+      .moveHorizontal(this, player, move);
   }
 
   moveVertical(player: Player, pos: Position, move: Move) {
     let newPos = move.translate(pos);
-    this.map.getValue(newPos.getX(), newPos.getY()).moveVertical(this, player, move);
+    this.map
+      .getValue(newPos)
+      .moveVertical(this, player, move);
   }
 
-  moveTileTo(positiom: Position, new_position: Position) {
-    this.map.setValue(new_position.getX(), new_position.getY(), this.map.getValue(positiom.getX(), positiom.getY()));
-    this.map.setValue(positiom.getX(), positiom.getY(), new Air(new EmptyGround()));
+  moveTileTo(pos: Position, new_position: Position) {
+    this.map.setValue(
+      new_position,
+      this.map.getValue(pos)
+    );
+    this.map.setValue(
+      pos,
+      new Air(new EmptyGround())
+    );
   }
 
-  pushHorisontal(
-    player: Player,
-    tile: Tile,
-    pos: Position,
-    move: Move
-  ) {
-    if (this.isAir(move.translate(move.translate(pos))) && !this.isAir(new Position(move.translate(pos).getX(), pos.getY() + 1))) {
-      this.map.setValue(move.translate(move.translate(pos)).getX(), pos.getY(), tile);
+  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move) {
+    if (
+      this.isAir(move.translate(move.translate(pos))) &&
+      !this.isAir(new Position(move.translate(pos).getX(), pos.getY() + 1))
+    ) {
+      this.map.setValue(
+        move.translate(move.translate(pos)),
+        tile
+      );
       player.moveToTile(this, move.translate(pos));
     }
   }
 
   update(map: GameMap) {
-    this.map.appleToAllCels((v, x, y) => v.update(this, map, new Position(x, y)));
+    this.map.appleToAllCels((v, p) =>
+      v.update(this, map, p)
+    );
   }
 }
 
@@ -121,30 +117,13 @@ class LayerGround implements Layer {
   }
 
   update(map: GameMap): void {}
-  pushHorisontal(
-    player: Player,
-    tile: Tile,
-    pos: Position,
-    move: Move
-  ): void {}
+  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move): void {}
   moveTileTo(pos: Position, new_pos: Position): void {}
-  moveVertical(
-    player: Player,
-    pos: Position,
-    move: Move
-  ): void {}
-  moveHorizontal(
-    player: Player,
-    pos: Position,
-    move: Move
-  ): void {}
+  moveVertical(player: Player, pos: Position, move: Move): void {}
+  moveHorizontal(player: Player, pos: Position, move: Move): void {}
 
   draw(tr: TileRenderer): void {
-    for (let y = 0; y < this.size_y; y++) {
-      for (let x = 0; x < this.size_x; x++) {
-        this.map.getValue(x, y).draw(tr, new Position(x,y));
-      }
-    }
+    this.map.appleToAllCels((v, p) => v.draw(tr, p));
   }
 
   getBlockOnTopState(pos: Position): Falling {
