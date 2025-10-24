@@ -46,6 +46,7 @@ export class Resting implements FallingState {
 }
 
 export interface Tile {
+  premove(player: Player): void;
   getBlockOnTopState(): FallingState;
   update(layer: Layer, map: GameMap, pos: Position): void;
 
@@ -56,6 +57,11 @@ export interface Tile {
 }
 
 export class Garden implements Tile {
+  premove(player: Player): void {
+    console.log(player.dropWater());
+    
+    player.dropWater();
+  }
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -72,6 +78,7 @@ export class Garden implements Tile {
 }
 
 export class Flux implements Tile {
+  premove(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -94,6 +101,7 @@ export class Flux implements Tile {
 }
 
 export class Unbreakable implements Tile {
+  premove(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -112,6 +120,7 @@ export class Unbreakable implements Tile {
 }
 
 export class Door implements Tile {
+  premove(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -137,6 +146,11 @@ export class Water implements Tile {
     this.fallStrategy = new FallStrategy(falling);
     this.falling = falling;
   }
+
+  premove(player: Player): void {
+    player.setWater();
+  }
+
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -146,11 +160,8 @@ export class Water implements Tile {
     this.fallStrategy.update(layer, map, pos);
   }
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {
-    player.setWater();
-  }
+  moveVertical(layer: Layer, player: Player, move: Move): void {}
   moveHorizontal(layer: Layer, player: Player, move: Move): void {
-    player.setWater();
     this.falling.moveHorizontal(player, layer, this, move);
   }
 
@@ -163,6 +174,7 @@ export class Water implements Tile {
 }
 
 export class Air implements Tile {
+  premove(player: Player): void {}
   constructor() {}
 
   getBlockOnTopState(): FallingState {
@@ -185,6 +197,7 @@ export class Air implements Tile {
 }
 
 export class PlayerTile implements Tile {
+  premove(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -201,6 +214,7 @@ export class PlayerTile implements Tile {
 }
 
 export class Box implements Tile {
+  premove(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -228,6 +242,7 @@ export class Box implements Tile {
 }
 
 export class Key implements Tile {
+  premove(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -271,6 +286,7 @@ export class KeyLockBundle {
 }
 
 export class LockTile implements Tile {
+  premove(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }

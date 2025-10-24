@@ -60,10 +60,12 @@ class LayerMid implements Layer {
   }
 
   moveHorizontal(player: Player, pos: Position, move: Move) {
+    this.map.getValue(pos.moved(move)).premove(player);
     this.map.getValue(pos.moved(move)).moveHorizontal(this, player, move);
   }
 
   moveVertical(player: Player, pos: Position, move: Move) {
+    this.map.getValue(pos.moved(move)).premove(player);
     this.map.getValue(pos.moved(move)).moveVertical(this, player, move);
   }
 
@@ -102,8 +104,14 @@ class LayerGround implements Layer {
   update(map: GameMap): void {}
   pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move): void {}
   moveTileTo(pos: Position, new_pos: Position): void {}
-  moveVertical(player: Player, pos: Position, move: Move): void {}
-  moveHorizontal(player: Player, pos: Position, move: Move): void {}
+
+  moveHorizontal(player: Player, pos: Position, move: Move) {
+    this.map.getValue(pos.moved(move)).premove(player);
+  }
+
+  moveVertical(player: Player, pos: Position, move: Move) {
+    this.map.getValue(pos.moved(move)).premove(player);
+  }
 
   draw(tr: TileRenderer): void {
     this.map.appleToAllCels((v, p) => v.draw(tr, p));
@@ -131,10 +139,12 @@ export class GameMap {
 
   moveHorizontal(player: Player, pos: Position, move: Move) {
     this.layer_mid.moveHorizontal(player, pos, move);
+    this.layer_ground.moveHorizontal(player, pos, move);
   }
 
   moveVertical(player: Player, pos: Position, move: Move) {
     this.layer_mid.moveVertical(player, pos, move);
+    this.layer_ground.moveVertical(player, pos, move);
   }
 
   pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move) {
