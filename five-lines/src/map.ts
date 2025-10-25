@@ -40,7 +40,12 @@ class LayerMid implements Layer {
   private map: Array2d<Tile>;
 
   constructor(private size_x: number, private size_y: number) {
-    this.map = this.tile_loader.load_tile_array_2D(size_x, size_y, rawMap);
+    this.map = new NumberToTileTransformer().load_tile_array_2D(
+      size_x,
+      size_y,
+      rawMap
+    );
+    this.gravity = new Gravity(this);
   }
 
   removeTile(tile: Tile) {
