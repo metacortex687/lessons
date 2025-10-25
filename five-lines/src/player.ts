@@ -74,17 +74,11 @@ export class Player {
     this.slot_for_water = new EmptySlot();
   }
 
-  // moveHorizontal(map: GameMap, move: Move) {
-  //   map.moveHorizontal(this, this.pos, move);
-  // }
-
-  // moveVertical(map: GameMap, move: Move) {
-  //   map.moveVertical(this, this.pos, move);
-  // }
-
-  move1_FromInputs(map: GameMap, move: MovePlayer) //Уже есть другой move
-  {
-    move.move(this,this.pos,map);
+  movePlayer(
+    map: GameMap,
+    m: MovePlayer //Уже есть другой move
+  ) {
+    m.move(this, this.pos, map);
   }
 
   move(layer: Layer, move: Move) {
