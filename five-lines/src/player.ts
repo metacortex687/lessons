@@ -3,9 +3,22 @@ import { TileRenderer } from "./tile_renderer.js";
 import { type Tile } from "./tiles.js";
 import { Position } from "./position.js";
 import { type Move } from "./position.js";
+interface Slot {
+  draw(tr: TileRenderer): void;
+}
+
+class EmptySlot implements Slot {
+  draw(tr: TileRenderer): void {}
+}
+
+class WaterSlot implements Slot {
+  draw(tr: TileRenderer): void {
+    tr.drawRect(new Position(8, 0), "#0000cc");
+  }
+}
 
 export class Player {
-  private have_water: boolean = false;
+  private slot_for_water = new EmptySlot();
 
   constructor(private pos: Position) {}
 
@@ -14,17 +27,21 @@ export class Player {
   }
 
   draw(tr: TileRenderer) {
-    tr.drawRect(this.pos, "#ff0000");
+    this.draw_player(tr);
 
-    if (this.have_water) tr.drawRect(new Position(8, 0), "#0000cc");
+    this.slot_for_water.draw(tr);
+  }
+
+  private draw_player(tr: TileRenderer) {
+    tr.drawRect(this.pos, "#ff0000");
   }
 
   setWater() {
-    this.have_water = true;
+    this.slot_for_water = new WaterSlot();
   }
 
   dropWater() {
-    this.have_water = false;
+    this.slot_for_water = new EmptySlot();
   }
 
   moveHorizontal(map: GameMap, move: Move) {
