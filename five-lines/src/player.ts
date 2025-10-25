@@ -3,6 +3,8 @@ import { TileRenderer } from "./tile_renderer.js";
 import { type Tile } from "./tiles.js";
 import { Position } from "./position.js";
 import { type Move } from "./position.js";
+import { MoveUp, MoveDown, MoveLeft, MoveRight } from "./position.js";
+
 interface Slot {
   draw(tr: TileRenderer): void;
 }
@@ -14,6 +16,34 @@ class EmptySlot implements Slot {
 class WaterSlot implements Slot {
   draw(tr: TileRenderer): void {
     tr.drawRect(new Position(8, 0), "#0000cc");
+  }
+}
+
+export interface MovePlayer {
+  move(player: Player, pos: Position, map: GameMap): void;
+}
+
+export class PlayerMoveUp implements MovePlayer {
+  move(player: Player, pos: Position, map: GameMap): void {
+    map.moveVertical(player, pos, new MoveUp());
+  }
+}
+
+export class PlayerMoveDown implements MovePlayer {
+  move(player: Player, pos: Position, map: GameMap): void {
+    map.moveVertical(player, pos, new MoveDown());
+  }
+}
+
+export class PlayerMoveLeft implements MovePlayer {
+  move(player: Player, pos: Position, map: GameMap): void {
+    map.moveHorizontal(player, pos, new MoveLeft());
+  }
+}
+
+export class PlayerMoveRight implements MovePlayer {
+  move(player: Player, pos: Position, map: GameMap): void {
+    map.moveHorizontal(player, pos, new MoveRight());
   }
 }
 
@@ -44,12 +74,17 @@ export class Player {
     this.slot_for_water = new EmptySlot();
   }
 
-  moveHorizontal(map: GameMap, move: Move) {
-    map.moveHorizontal(this, this.pos, move);
-  }
+  // moveHorizontal(map: GameMap, move: Move) {
+  //   map.moveHorizontal(this, this.pos, move);
+  // }
 
-  moveVertical(map: GameMap, move: Move) {
-    map.moveVertical(this, this.pos, move);
+  // moveVertical(map: GameMap, move: Move) {
+  //   map.moveVertical(this, this.pos, move);
+  // }
+
+  move1_FromInputs(map: GameMap, move: MovePlayer) //Уже есть другой move
+  {
+    move.move(this,this.pos,map);
   }
 
   move(layer: Layer, move: Move) {
