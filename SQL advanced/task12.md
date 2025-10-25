@@ -1,5 +1,4 @@
 
-
 ``` SQL
 
 WITH squad_batle_dates AS (
@@ -8,8 +7,8 @@ WITH squad_batle_dates AS (
 		date
 	FROM
 		SQUAD_BATTLES	
-)
-WITH join_on_batle_date AS (
+),
+join_on_batle_date AS (
 	SELECT DISTINCT
 		sbd.squad_id,
 		sbd.date,
@@ -22,8 +21,8 @@ WITH join_on_batle_date AS (
 		sbd.squad_id = sm.squad_id
 		AND sm.join_date < sbd.date	
 	GROUP BY sbd.squad_id,sbd.date		
-)
-WITH exit_on_batle_date AS (
+),
+exit_on_batle_date AS (
 	SELECT DISTINCT
 		sbd.squad_id,
 		sbd.date,
@@ -36,11 +35,11 @@ WITH exit_on_batle_date AS (
 		sbd.squad_id = sm.squad_id
 		AND sm.exit_date < sbd.date
 	GROUP BY sbd.squad_id,sbd.date	
-)
-WITH count_members_on_batle AS
+),
+count_members_on_batle AS
 (
 	SELECT 
-		sb.squad_id as squad_id
+		sb.squad_id as squad_id,
 		sb.report_id as report_id,
 		jn.count_join AS join_count,
 		COALESCE(ex.count_exit,0) AS exit_count
@@ -64,10 +63,9 @@ SELECT
 	ldrs.name AS leader_name,
 	sb.total_battles AS total_battles,
 	sb.victories AS victories,
-	ROUND(sb.victories/IFNULL(sb.total_battles,0),2) AS victory_percentage,
+	ROUND(sb.victories/NULLIF(sb.total_battles,0)*100,2) AS victory_percentage,
 	ROUND(sb.casualties/sb.count_on_statr_batle*100,2) AS casualty_rate,
 	ROUND(sb.enemy_casualties/sb.casualties,2) AS casualty_exchange_ratio,
-current_members,
 	sm.total_members_join AS total_members_ever,
 	sm.total_members_join - sm.total_members_exit AS current_members,
 	ROUND((sm.total_members_join - sm.total_members_exit)/NULLIF(sm.total_members_join,0)*100,2) AS retention_rate,
@@ -77,7 +75,7 @@ current_members,
 	CORR(st.count_training_sessions, sb.victories ) AS training_battle_correlation,
 	sti.count_improv_combat_skill/sm.total_members_join AS avg_combat_skill_improvement
 	ROUND(
-        (es.victories::DECIMAL / es.total_members) * 0.3 +
+        (sb.victories::DECIMAL / sm.total_members) * 0.3 +
         (sb.enemy_casualties/sb.casualties * 0.15), 3 
     ) AS overall_effectiveness_score	
 JSON_BUILD_OBJECT (
@@ -124,6 +122,7 @@ LEFT JOIN
 				ELSE 0
 			END) AS victories,
 			SUM(_sb.casualties) AS casualties,
+            SUM(_sb.enemy_casualties) AS enemy_casualties,
 			SUM(c_on_btl.join_count - c_on_btl.exit_count) AS count_on_start_batle			
 		FROM
 			SQUAD_BATTLES _sb
@@ -140,6 +139,7 @@ ON
 LEFT JOIN
 	(
 		SELECT
+            squad_id,
 			COUNT(DISTINCT (dwarf_id, join_date)) AS total_members_join
 			COUNT(DISTINCT (dwarf_id, exit_date)) AS total_members_exit	
 		FROM
