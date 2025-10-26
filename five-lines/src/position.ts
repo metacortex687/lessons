@@ -25,8 +25,8 @@ export class Position {
     return new Position(this.x + 1, this.y);
   }
 
-  moved(m: Direction) {
-    return m.move(this);
+  moved(d: Direction) {
+    return d.move(this);
   }
 }
 
