@@ -3,7 +3,6 @@ import { TileRenderer } from "./tile_renderer.js";
 import { type Tile } from "./tiles.js";
 import { Position } from "./position.js";
 import { type Move } from "./position.js";
-import { MoveUp, MoveDown, MoveLeft, MoveRight } from "./position.js";
 
 interface Slot {
   draw(tr: TileRenderer): void;
@@ -22,7 +21,6 @@ class WaterSlot implements Slot {
 export interface MovePlayer {
   movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void;
   next_pos(pos: Position): Position;
-  move(player: Player, pos: Position, map: GameMap): void;
 }
 
 export class PlayerMoveVertical implements MovePlayer {
@@ -32,10 +30,6 @@ export class PlayerMoveVertical implements MovePlayer {
   }
   next_pos(pos: Position): Position {
     return pos.moved(this.direction);
-  }
-
-  move(player: Player, pos: Position, map: GameMap): void {
-    // map.moveVertical(player, pos, this.direction);
   }
 }
 
@@ -47,10 +41,6 @@ export class PlayerMoveHorizontal implements MovePlayer {
 
   next_pos(pos: Position): Position {
     return pos.moved(this.direction);
-  }
-
-  move(player: Player, pos: Position, map: GameMap): void {
-    // map.moveHorizontal(player, pos, this.direction);
   }
 }
 
@@ -81,10 +71,7 @@ export class Player {
     this.slot_for_water = new EmptySlot();
   }
 
-  movePlayer(
-    map: GameMap,
-    m: MovePlayer
-  ) {
+  movePlayer(map: GameMap, m: MovePlayer) {
     map.movePlayer(this, this.pos, m);
   }
 
