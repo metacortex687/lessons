@@ -45,7 +45,7 @@ class LayerMid implements Layer {
       size_y,
       rawMap
     );
-    this.gravity = new Gravity(this);
+    //this.gravity = new Gravity(this);
   }
 
   removeTile(tile: Tile) {
