@@ -20,30 +20,37 @@ class WaterSlot implements Slot {
 }
 
 export interface MovePlayer {
+  movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void;
+  next_pos(pos: Position): Position;
   move(player: Player, pos: Position, map: GameMap): void;
 }
 
-export class PlayerMoveUp implements MovePlayer {
+export class PlayerMoveVertical implements MovePlayer {
+  constructor(private direction: Move) {}
+  movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void {
+    om_moved_tile.moveVertical(layer, player, this.direction);
+  }
+  next_pos(pos: Position): Position {
+    return pos.moved(this.direction);
+  }
+
   move(player: Player, pos: Position, map: GameMap): void {
-    map.moveVertical(player, pos, new MoveUp());
+    // map.moveVertical(player, pos, this.direction);
   }
 }
 
-export class PlayerMoveDown implements MovePlayer {
-  move(player: Player, pos: Position, map: GameMap): void {
-    map.moveVertical(player, pos, new MoveDown());
+export class PlayerMoveHorizontal implements MovePlayer {
+  constructor(private direction: Move) {}
+  movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void {
+    om_moved_tile.moveHorizontal(layer, player, this.direction);
   }
-}
 
-export class PlayerMoveLeft implements MovePlayer {
-  move(player: Player, pos: Position, map: GameMap): void {
-    map.moveHorizontal(player, pos, new MoveLeft());
+  next_pos(pos: Position): Position {
+    return pos.moved(this.direction);
   }
-}
 
-export class PlayerMoveRight implements MovePlayer {
   move(player: Player, pos: Position, map: GameMap): void {
-    map.moveHorizontal(player, pos, new MoveRight());
+    // map.moveHorizontal(player, pos, this.direction);
   }
 }
 
@@ -76,9 +83,9 @@ export class Player {
 
   movePlayer(
     map: GameMap,
-    m: MovePlayer //Уже есть другой move
+    m: MovePlayer
   ) {
-    m.move(this, this.pos, map);
+    map.movePlayer(this, this.pos, m);
   }
 
   move(layer: Layer, move: Move) {
