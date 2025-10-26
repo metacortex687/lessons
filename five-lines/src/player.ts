@@ -18,34 +18,37 @@ class WaterSlot implements Slot {
   }
 }
 
-export interface MovePlayer {
-  movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void;
-  next_pos(pos: Position): Position;
+export interface PlayerMover {
+  dispatchEnter(tile: Tile, layer: Layer, player: Player): void;
+  nextPosition(pos: Position): Position;
 }
 
-export class PlayerMoveVertical implements MovePlayer {
+export class PlayerMoverVertical implements PlayerMover {
   constructor(private direction: Direction) {}
-  movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void {
-    om_moved_tile.moveVertical(layer, player, this.direction);
+
+  dispatchEnter(tile: Tile, layer: Layer, player: Player): void {
+    tile.onEnterVertical(layer, player, this.direction);
   }
-  next_pos(pos: Position): Position {
+
+  nextPosition(pos: Position): Position {
     return pos.moved(this.direction);
   }
 }
 
-export class PlayerMoveHorizontal implements MovePlayer {
+export class PlayerMoverHorizontal implements PlayerMover {
   constructor(private direction: Direction) {}
-  movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void {
-    om_moved_tile.moveHorizontal(layer, player, this.direction);
+
+  dispatchEnter(tile: Tile, layer: Layer, player: Player): void {
+    tile.onEnterHorizontal(layer, player, this.direction);
   }
 
-  next_pos(pos: Position): Position {
+  nextPosition(pos: Position): Position {
     return pos.moved(this.direction);
   }
 }
 
 export class Player {
-  private slot_for_water = new EmptySlot();
+  private slotForWater = new EmptySlot();
 
   constructor(private pos: Position) {}
 
@@ -54,24 +57,24 @@ export class Player {
   }
 
   draw(tr: TileRenderer) {
-    this.draw_player(tr);
+    this.drawPlayer(tr);
 
-    this.slot_for_water.draw(tr);
+    this.slotForWater.draw(tr);
   }
 
-  private draw_player(tr: TileRenderer) {
+  private drawPlayer(tr: TileRenderer) {
     tr.drawRect(this.pos, "#ff0000");
   }
 
   setWater() {
-    this.slot_for_water = new WaterSlot();
+    this.slotForWater = new WaterSlot();
   }
 
   dropWater() {
-    this.slot_for_water = new EmptySlot();
+    this.slotForWater = new EmptySlot();
   }
 
-  movePlayer(map: GameMap, m: MovePlayer) {
+  movePlayer(map: GameMap, m: PlayerMover) {
     map.movePlayer(this, this.pos, m);
   }
 

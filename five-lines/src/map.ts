@@ -1,7 +1,7 @@
 import { TileRenderer } from "./tile_renderer.js";
 import { Falling, Resting, type Tile } from "./tiles.js";
 import { Air } from "./tiles.js";
-import { Player, type MovePlayer } from "./player.js";
+import { Player, type PlayerMover } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
 import { Array2d } from "./array2D.js";
 import { Position, type Direction } from "./position.js";
@@ -25,7 +25,7 @@ let rawMapGround: number[][] = [
 ];
 
 export interface Layer {
-  movePlayer(player: Player, pos: Position, m: MovePlayer): void;
+  movePlayer(player: Player, pos: Position, m: PlayerMover): void;
   update(map: GameMap): void;
   pushHorisontal(
     player: Player,
@@ -68,11 +68,11 @@ class LayerMid implements Layer {
     return this.map2D.getValue(pos).getBlockOnTopState();
   }
 
-  movePlayer(player: Player, pos: Position, m: MovePlayer): void {
-    let next_pos = m.next_pos(pos);
+  movePlayer(player: Player, pos: Position, m: PlayerMover): void {
+    let next_pos = m.nextPosition(pos);
     let om_moved_tile = this.map2D.getValue(next_pos);
     om_moved_tile.premove(player);
-    m.movePlayerOnTile(om_moved_tile, this, player);
+    m.dispatchEnter(om_moved_tile, this, player);
   }
 
   moveTileTo(pos: Position, new_position: Position) {
@@ -116,8 +116,8 @@ class LayerGround implements Layer {
   ): void {}
   moveTileTo(pos: Position, new_pos: Position): void {}
 
-  movePlayer(player: Player, pos: Position, m: MovePlayer): void {
-    let next_pos = m.next_pos(pos);
+  movePlayer(player: Player, pos: Position, m: PlayerMover): void {
+    let next_pos = m.nextPosition(pos);
     let om_moved_tile = this.map2D.getValue(next_pos);
     om_moved_tile.premove(player);
   }
@@ -146,7 +146,7 @@ export class GameMap {
     this.layer_mid.draw(tr);
   }
 
-  movePlayer(player: Player, pos: Position, m: MovePlayer) {
+  movePlayer(player: Player, pos: Position, m: PlayerMover) {
     this.layer_mid.movePlayer(player, pos, m);
     this.layer_ground.movePlayer(player, pos, m);
   }
