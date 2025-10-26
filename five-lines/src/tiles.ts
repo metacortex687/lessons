@@ -1,22 +1,32 @@
 import { GameMap, type Layer } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { Player } from "./player.js";
-import { Position, type Move } from "./position.js";
+import { Position, type Direction } from "./position.js";
 
 interface FallingState {
   drop(layer: Layer, map: GameMap, pos: Position): void;
-  moveHorizontal(player: Player, layer: Layer, tile: Tile, move: Move): void;
+  moveHorizontal(
+    player: Player,
+    layer: Layer,
+    tile: Tile,
+    move: Direction
+  ): void;
 }
 
 export class Falling implements FallingState {
   drop(layer: Layer, map: GameMap, pos: Position): void {
     layer.moveTileTo(pos, new Position(pos.getX(), pos.getY() + 1));
   }
-  moveHorizontal(player: Player, layer: Layer, tile: Tile, move: Move): void {}
+  moveHorizontal(
+    player: Player,
+    layer: Layer,
+    tile: Tile,
+    move: Direction
+  ): void {}
 }
 
 class FallStrategy {
-  moveHorizontal(player: Player, layer: Layer, tile: Tile, move: Move) {
+  moveHorizontal(player: Player, layer: Layer, tile: Tile, move: Direction) {
     this.falling.moveHorizontal(player, layer, tile, move);
   }
   private falling: FallingState;
@@ -40,7 +50,12 @@ class FallStrategy {
 
 export class Resting implements FallingState {
   drop(layer: Layer, map: GameMap, pos: Position): void {}
-  moveHorizontal(player: Player, layer: Layer, tile: Tile, move: Move): void {
+  moveHorizontal(
+    player: Player,
+    layer: Layer,
+    tile: Tile,
+    move: Direction
+  ): void {
     player.pushHorisontal(layer, tile, move);
   }
 }
@@ -50,8 +65,8 @@ export interface Tile {
   getBlockOnTopState(): FallingState;
   update(layer: Layer, map: GameMap, pos: Position): void;
 
-  moveVertical(layer: Layer, player: Player, move: Move): void;
-  moveHorizontal(layer: Layer, player: Player, move: Move): void;
+  moveVertical(layer: Layer, player: Player, move: Direction): void;
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void;
   draw(tr: TileRenderer, pos: Position): void;
   isAir(): boolean;
 }
@@ -64,8 +79,8 @@ export class Garden implements Tile {
     return new Resting();
   }
   update(layer: Layer, map: GameMap, pos: Position): void {}
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {}
+  moveVertical(layer: Layer, player: Player, move: Direction): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {}
   isAir(): boolean {
     return false;
   }
@@ -82,10 +97,10 @@ export class Flux implements Tile {
   }
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {
+  moveVertical(layer: Layer, player: Player, move: Direction): void {
     player.move(layer, move);
   }
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {
     player.move(layer, move);
   }
 
@@ -105,8 +120,8 @@ export class Unbreakable implements Tile {
   }
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {}
+  moveVertical(layer: Layer, player: Player, move: Direction): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {}
 
   draw(tr: TileRenderer, pos: Position): void {
     tr.drawRect(pos, "#999999");
@@ -124,8 +139,8 @@ export class Door implements Tile {
   }
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {}
+  moveVertical(layer: Layer, player: Player, move: Direction): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {}
 
   draw(tr: TileRenderer, pos: Position): void {
     // tr.fillRect(x, y, "#999999");
@@ -158,8 +173,8 @@ export class Water implements Tile {
     this.fallStrategy.update(layer, map, pos);
   }
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {
+  moveVertical(layer: Layer, player: Player, move: Direction): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {
     this.falling.moveHorizontal(player, layer, this, move);
   }
 
@@ -180,10 +195,10 @@ export class Air implements Tile {
   }
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {
+  moveVertical(layer: Layer, player: Player, move: Direction): void {
     player.move(layer, move);
   }
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {
     player.move(layer, move);
   }
 
@@ -201,8 +216,8 @@ export class PlayerTile implements Tile {
   }
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {}
+  moveVertical(layer: Layer, player: Player, move: Direction): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {}
 
   draw(tr: TileRenderer, pos: Position): void {}
 
@@ -226,8 +241,8 @@ export class Box implements Tile {
     this.fallStrategy = new FallStrategy(falling);
   }
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {
+  moveVertical(layer: Layer, player: Player, move: Direction): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {
     this.fallStrategy.moveHorizontal(player, layer, this, move);
   }
   draw(tr: TileRenderer, pos: Position): void {
@@ -248,11 +263,11 @@ export class Key implements Tile {
 
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
-  moveVertical(layer: Layer, player: Player, move: Move): void {
+  moveVertical(layer: Layer, player: Player, move: Direction): void {
     layer.removeTile(this.lock);
     player.move(layer, move);
   }
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {
     layer.removeTile(this.lock);
     player.move(layer, move);
   }
@@ -290,8 +305,8 @@ export class LockTile implements Tile {
   }
   constructor(private color: string) {}
   update(layer: Layer, map: GameMap, pos: Position): void {}
-  moveVertical(layer: Layer, player: Player, move: Move): void {}
-  moveHorizontal(layer: Layer, player: Player, move: Move): void {}
+  moveVertical(layer: Layer, player: Player, move: Direction): void {}
+  moveHorizontal(layer: Layer, player: Player, move: Direction): void {}
   draw(tr: TileRenderer, pos: Position): void {
     tr.drawRect(pos, this.color);
   }

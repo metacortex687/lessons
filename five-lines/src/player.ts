@@ -2,7 +2,7 @@ import { GameMap, type Layer } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { type Tile } from "./tiles.js";
 import { Position } from "./position.js";
-import { type Move } from "./position.js";
+import { type Direction } from "./position.js";
 
 interface Slot {
   draw(tr: TileRenderer): void;
@@ -24,7 +24,7 @@ export interface MovePlayer {
 }
 
 export class PlayerMoveVertical implements MovePlayer {
-  constructor(private direction: Move) {}
+  constructor(private direction: Direction) {}
   movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void {
     om_moved_tile.moveVertical(layer, player, this.direction);
   }
@@ -34,7 +34,7 @@ export class PlayerMoveVertical implements MovePlayer {
 }
 
 export class PlayerMoveHorizontal implements MovePlayer {
-  constructor(private direction: Move) {}
+  constructor(private direction: Direction) {}
   movePlayerOnTile(om_moved_tile: Tile, layer: Layer, player: Player): void {
     om_moved_tile.moveHorizontal(layer, player, this.direction);
   }
@@ -49,7 +49,7 @@ export class Player {
 
   constructor(private pos: Position) {}
 
-  pushHorisontal(layer: Layer, tile: Tile, move: Move) {
+  pushHorisontal(layer: Layer, tile: Tile, move: Direction) {
     layer.pushHorisontal(this, tile, this.pos, move);
   }
 
@@ -75,7 +75,7 @@ export class Player {
     map.movePlayer(this, this.pos, m);
   }
 
-  move(layer: Layer, move: Move) {
+  move(layer: Layer, move: Direction) {
     this.moveToTile(layer, this.pos.moved(move));
   }
 

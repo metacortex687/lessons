@@ -4,7 +4,7 @@ import { Air } from "./tiles.js";
 import { Player, type MovePlayer } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
 import { Array2d } from "./array2D.js";
-import { Position, type Move } from "./position.js";
+import { Position, type Direction } from "./position.js";
 
 let rawMap: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
@@ -27,7 +27,12 @@ let rawMapGround: number[][] = [
 export interface Layer {
   movePlayer(player: Player, pos: Position, m: MovePlayer): void;
   update(map: GameMap): void;
-  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move): void;
+  pushHorisontal(
+    player: Player,
+    tile: Tile,
+    pos: Position,
+    move: Direction
+  ): void;
   moveTileTo(pos: Position, new_pos: Position): void;
   draw(tr: TileRenderer): void;
   getBlockOnTopState(pos: Position): Falling;
@@ -75,7 +80,7 @@ class LayerMid implements Layer {
     this.map2D.setValue(pos, new Air());
   }
 
-  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move) {
+  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Direction) {
     if (
       this.isAir(pos.moved(move).moved(move)) &&
       !this.isAir(pos.moved(move).down())
@@ -103,7 +108,12 @@ class LayerGround implements Layer {
   }
 
   update(map: GameMap): void {}
-  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move): void {}
+  pushHorisontal(
+    player: Player,
+    tile: Tile,
+    pos: Position,
+    move: Direction
+  ): void {}
   moveTileTo(pos: Position, new_pos: Position): void {}
 
   movePlayer(player: Player, pos: Position, m: MovePlayer): void {
@@ -141,7 +151,7 @@ export class GameMap {
     this.layer_ground.movePlayer(player, pos, m);
   }
 
-  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Move) {
+  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Direction) {
     this.layer_mid.pushHorisontal(player, tile, pos, move);
   }
 
