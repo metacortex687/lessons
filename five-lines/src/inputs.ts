@@ -1,7 +1,12 @@
 import { GameMap } from "./map.js";
 import { Player } from "./player.js";
 import { PlayerMoverVertical, PlayerMoverHorizontal } from "./player.js";
-import { MoveDown, MoveUp, MoveLeft, MoveRight } from "./position.js";
+import {
+  DirectionDown,
+  DirectionUp,
+  DirectionLeft,
+  DirectionRight,
+} from "./position.js";
 
 interface Input {
   handle(player: Player, map: GameMap): void;
@@ -9,25 +14,25 @@ interface Input {
 
 class Right implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverHorizontal(new MoveRight()));
+    player.movePlayer(map, new PlayerMoverHorizontal(new DirectionRight()));
   }
 }
 
 class Left implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverHorizontal(new MoveLeft()));
+    player.movePlayer(map, new PlayerMoverHorizontal(new DirectionLeft()));
   }
 }
 
 class Up implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverVertical(new MoveUp()));
+    player.movePlayer(map, new PlayerMoverVertical(new DirectionUp()));
   }
 }
 
 class Down implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverVertical(new MoveDown()));
+    player.movePlayer(map, new PlayerMoverVertical(new DirectionDown()));
   }
 }
 

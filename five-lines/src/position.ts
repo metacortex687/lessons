@@ -34,25 +34,25 @@ export interface Direction {
   move(pos: Position): Position;
 }
 
-export class MoveUp implements Direction {
+export class DirectionUp implements Direction {
   move(pos: Position): Position {
     return pos.up();
   }
 }
 
-export class MoveDown implements Direction {
+export class DirectionDown implements Direction {
   move(pos: Position): Position {
     return pos.down();
   }
 }
 
-export class MoveLeft implements Direction {
+export class DirectionLeft implements Direction {
   move(pos: Position): Position {
     return pos.left();
   }
 }
 
-export class MoveRight implements Direction {
+export class DirectionRight implements Direction {
   move(pos: Position): Position {
     return pos.right();
   }
