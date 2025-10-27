@@ -73,7 +73,7 @@ export interface Tile {
 
 export class Garden implements Tile {
   premove(player: Player): void {
-    player.dropWater();
+    player.pourWater();
   }
   getBlockOnTopState(): FallingState {
     return new Resting();
@@ -161,7 +161,7 @@ export class Water implements Tile {
   }
 
   premove(player: Player): void {
-    player.setWater();
+    player.collectWater();
   }
 
   getBlockOnTopState(): FallingState {

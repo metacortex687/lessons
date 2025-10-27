@@ -48,7 +48,7 @@ export class PlayerMoverHorizontal implements PlayerMover {
 }
 
 export class Player {
-  private slotForWater = new EmptySlot();
+  private waterContainer = new EmptySlot();
 
   constructor(private pos: Position) {}
 
@@ -59,19 +59,19 @@ export class Player {
   draw(tr: TileRenderer) {
     this.drawPlayer(tr);
 
-    this.slotForWater.draw(tr);
+    this.waterContainer.draw(tr);
   }
 
   private drawPlayer(tr: TileRenderer) {
     tr.drawRect(this.pos, "#ff0000");
   }
 
-  setWater() {
-    this.slotForWater = new WaterSlot();
+  collectWater() {
+    this.waterContainer = new WaterSlot();
   }
 
-  dropWater() {
-    this.slotForWater = new EmptySlot();
+  pourWater() {
+    this.waterContainer = new EmptySlot();
   }
 
   tryEnterTile(map: GameMap, m: PlayerMover) {
