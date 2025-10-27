@@ -33,7 +33,7 @@ export interface Layer {
     pos: Position,
     move: Direction
   ): void;
-  moveTileTo(pos: Position, new_pos: Position): void;
+  moveTileTo(pos: Position, new_pos: Position, groundTile: Tile): void;
   draw(tr: TileRenderer): void;
   getBlockOnTopState(pos: Position): Falling;
   removeTile(tile: Tile): void;
@@ -86,7 +86,7 @@ class LayerMid implements Layer {
       !this.isAir(pos.moved(move).down())
     ) {
       this.map2D.setValue(pos.moved(move).moved(move), tile);
-      player.occupyTile(this, pos.moved(move));
+      player.occupyTile(this, pos.moved(move), new Air());
     }
   }
 

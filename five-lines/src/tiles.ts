@@ -3,6 +3,7 @@ import { TileRenderer } from "./tile_renderer.js";
 import { Player } from "./player.js";
 import { Position, type Direction } from "./position.js";
 
+
 interface FallingState {
   drop(layer: Layer, map: GameMap, pos: Position): void;
   moveHorizontal(
@@ -15,7 +16,7 @@ interface FallingState {
 
 export class Falling implements FallingState {
   drop(layer: Layer, map: GameMap, pos: Position): void {
-    layer.moveTileTo(pos, new Position(pos.getX(), pos.getY() + 1));
+    layer.moveTileTo(pos, new Position(pos.getX(), pos.getY() + 1), new Air());
   }
   moveHorizontal(
     player: Player,
@@ -71,6 +72,39 @@ export interface Tile {
   isAir(): boolean;
 }
 
+// export class StackTile implements Tile {
+//   private tiles: Tile[] = []
+
+//   add(t: Tile): void
+//   {
+//     this.tiles.
+//   }
+
+//   premove(player: Player): void {
+
+//   }
+
+//   getBlockOnTopState(): FallingState {
+//     throw new Error("Method not implemented.");
+//   }
+//   update(layer: Layer, map: GameMap, pos: Position): void {
+//     throw new Error("Method not implemented.");
+//   }
+//   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
+//     throw new Error("Method not implemented.");
+//   }
+//   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
+//     throw new Error("Method not implemented.");
+//   }
+//   draw(tr: TileRenderer, pos: Position): void {
+//     throw new Error("Method not implemented.");
+//   }
+//   isAir(): boolean {
+//     throw new Error("Method not implemented.");
+//   }
+
+// }
+
 export class Garden implements Tile {
   premove(player: Player): void {
     player.pourWater();
@@ -98,10 +132,10 @@ export class Flux implements Tile {
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
-    player.comitEnterTile(layer, move);
+    player.comitEnterTile(layer, move, this);
   }
   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
-    player.comitEnterTile(layer, move);
+    player.comitEnterTile(layer, move, this);
   }
 
   draw(tr: TileRenderer, pos: Position): void {
@@ -196,10 +230,10 @@ export class Air implements Tile {
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
-    player.comitEnterTile(layer, move);
+    player.comitEnterTile(layer, move, this);
   }
   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
-    player.comitEnterTile(layer, move);
+    player.comitEnterTile(layer, move, this);
   }
 
   draw(tr: TileRenderer, pos: Position): void {}
@@ -265,11 +299,11 @@ export class Key implements Tile {
 
   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
     layer.removeTile(this.lock);
-    player.comitEnterTile(layer, move);
+    player.comitEnterTile(layer, move, new Air);
   }
   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
     layer.removeTile(this.lock);
-    player.comitEnterTile(layer, move);
+    player.comitEnterTile(layer, move, new Air);
   }
   draw(tr: TileRenderer, pos: Position): void {
     tr.drawRect(pos, this.color);

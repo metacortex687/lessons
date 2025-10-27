@@ -1,6 +1,6 @@
 import { GameMap, type Layer } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
-import { type Tile } from "./tiles.js";
+import { Air, type Tile } from "./tiles.js";
 import { Position } from "./position.js";
 import { type Direction } from "./position.js";
 
@@ -49,6 +49,7 @@ export class PlayerMoverHorizontal implements PlayerMover {
 
 export class Player {
   private waterContainer = new EmptySlot();
+  private groundTile: Tile = new Air();
 
   constructor(private pos: Position) {}
 
@@ -78,12 +79,13 @@ export class Player {
     map.tryEnterTile(this, this.pos, m);
   }
 
-  comitEnterTile(layer: Layer, move: Direction) {
-    this.occupyTile(layer, this.pos.moved(move));
+  comitEnterTile(layer: Layer, move: Direction, groundTile: Tile) {
+    this.occupyTile(layer, this.pos.moved(move), this.groundTile);
+    this.groundTile = groundTile;
   }
 
-  occupyTile(layer: Layer, new_pos: Position) {
-    layer.moveTileTo(this.pos, new_pos);
+  occupyTile(layer: Layer, new_pos: Position, groundTile: Tile) {
+    layer.moveTileTo(this.pos, new_pos, groundTile);
     this.pos = new_pos;
   }
 }
