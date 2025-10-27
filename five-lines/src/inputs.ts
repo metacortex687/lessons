@@ -14,25 +14,25 @@ interface Input {
 
 class Right implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverHorizontal(new DirectionRight()));
+    player.tryEnterTile(map, new PlayerMoverHorizontal(new DirectionRight()));
   }
 }
 
 class Left implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverHorizontal(new DirectionLeft()));
+    player.tryEnterTile(map, new PlayerMoverHorizontal(new DirectionLeft()));
   }
 }
 
 class Up implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverVertical(new DirectionUp()));
+    player.tryEnterTile(map, new PlayerMoverVertical(new DirectionUp()));
   }
 }
 
 class Down implements Input {
   handle(player: Player, map: GameMap) {
-    player.movePlayer(map, new PlayerMoverVertical(new DirectionDown()));
+    player.tryEnterTile(map, new PlayerMoverVertical(new DirectionDown()));
   }
 }
 

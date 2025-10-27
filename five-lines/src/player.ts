@@ -74,15 +74,15 @@ export class Player {
     this.slotForWater = new EmptySlot();
   }
 
-  movePlayer(map: GameMap, m: PlayerMover) {
-    map.movePlayer(this, this.pos, m);
+  tryEnterTile(map: GameMap, m: PlayerMover) {
+    map.tryEnterTile(this, this.pos, m);
   }
 
-  move(layer: Layer, move: Direction) {
-    this.moveToTile(layer, this.pos.moved(move));
+  comitEnterTile(layer: Layer, move: Direction) {
+    this.occupyTile(layer, this.pos.moved(move));
   }
 
-  moveToTile(layer: Layer, new_pos: Position) {
+  occupyTile(layer: Layer, new_pos: Position) {
     layer.moveTileTo(this.pos, new_pos);
     this.pos = new_pos;
   }

@@ -98,10 +98,10 @@ export class Flux implements Tile {
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
-    player.move(layer, move);
+    player.comitEnterTile(layer, move);
   }
   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
-    player.move(layer, move);
+    player.comitEnterTile(layer, move);
   }
 
   draw(tr: TileRenderer, pos: Position): void {
@@ -196,10 +196,10 @@ export class Air implements Tile {
   update(layer: Layer, map: GameMap, pos: Position): void {}
 
   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
-    player.move(layer, move);
+    player.comitEnterTile(layer, move);
   }
   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
-    player.move(layer, move);
+    player.comitEnterTile(layer, move);
   }
 
   draw(tr: TileRenderer, pos: Position): void {}
@@ -265,11 +265,11 @@ export class Key implements Tile {
 
   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
     layer.removeTile(this.lock);
-    player.move(layer, move);
+    player.comitEnterTile(layer, move);
   }
   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
     layer.removeTile(this.lock);
-    player.move(layer, move);
+    player.comitEnterTile(layer, move);
   }
   draw(tr: TileRenderer, pos: Position): void {
     tr.drawRect(pos, this.color);

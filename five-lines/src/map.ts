@@ -86,7 +86,7 @@ class LayerMid implements Layer {
       !this.isAir(pos.moved(move).down())
     ) {
       this.map2D.setValue(pos.moved(move).moved(move), tile);
-      player.moveToTile(this, pos.moved(move));
+      player.occupyTile(this, pos.moved(move));
     }
   }
 
@@ -146,7 +146,7 @@ export class GameMap {
     this.layer_mid.draw(tr);
   }
 
-  movePlayer(player: Player, pos: Position, m: PlayerMover) {
+  tryEnterTile(player: Player, pos: Position, m: PlayerMover) {
     this.layer_mid.movePlayer(player, pos, m);
     this.layer_ground.movePlayer(player, pos, m);
   }
