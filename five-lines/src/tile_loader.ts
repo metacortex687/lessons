@@ -1,5 +1,6 @@
 import { type Tile } from "./tiles.js";
-import { Array2d } from "./array2D.js";
+// import { Array2d } from "./array2D.js";
+import { Cell } from "./map.js";
 
 import {
   Air,
@@ -139,14 +140,25 @@ export class NumberToTileTransformer {
     return RAW_TILES[i].transform();
   }
 
+  private init_array(size_x: number, size_y: number) {
+      let map = new Array<Cell[]>(size_y);
+      for (let y = 0; y < size_y; y++) {
+        map[y] = new Array<Cell>(size_x);
+      }
+      return map;
+    }
+
   load_tile_array_2D(size_x: number, size_y: number, rawMap: number[][]) {
-    let map = new Array2d<Tile>(size_x, size_y);
+    let map = this.init_array(size_x,size_y);
+
     for (let y = 0; y < size_y; y++) {
       for (let x = 0; x < size_x; x++) {
-        map.setValue(new Position(x, y), this.transform(rawMap[y][x]));
+        map[y][x] = new Cell();
+        map[y][x].add(this.transform(rawMap[y][x]))
       }
     }
 
     return map;
+
   }
 }

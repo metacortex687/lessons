@@ -72,38 +72,7 @@ export interface Tile {
   isAir(): boolean;
 }
 
-// export class StackTile implements Tile {
-//   private tiles: Tile[] = []
 
-//   add(t: Tile): void
-//   {
-//     this.tiles.
-//   }
-
-//   premove(player: Player): void {
-
-//   }
-
-//   getBlockOnTopState(): FallingState {
-//     throw new Error("Method not implemented.");
-//   }
-//   update(layer: Layer, map: GameMap, pos: Position): void {
-//     throw new Error("Method not implemented.");
-//   }
-//   onEnterVertical(layer: Layer, player: Player, move: Direction): void {
-//     throw new Error("Method not implemented.");
-//   }
-//   onEnterHorizontal(layer: Layer, player: Player, move: Direction): void {
-//     throw new Error("Method not implemented.");
-//   }
-//   draw(tr: TileRenderer, pos: Position): void {
-//     throw new Error("Method not implemented.");
-//   }
-//   isAir(): boolean {
-//     throw new Error("Method not implemented.");
-//   }
-
-// }
 
 export class Garden implements Tile {
   premove(player: Player): void {
