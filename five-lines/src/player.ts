@@ -1,4 +1,4 @@
-import { GameMap, type Layer } from "./map.js";
+import { GameMap} from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { Air, type Tile } from "./tiles.js";
 import { Position } from "./position.js";
@@ -19,15 +19,15 @@ class WaterSlot implements Slot {
 }
 
 export interface PlayerMover {
-  dispatchEnter(tile: Tile, layer: Layer, player: Player): void;
+  dispatchEnter(tile: Tile, map: GameMap, player: Player): void;
   nextPosition(pos: Position): Position;
 }
 
 export class PlayerMoverVertical implements PlayerMover {
   constructor(private direction: Direction) {}
 
-  dispatchEnter(tile: Tile, layer: Layer, player: Player): void {
-    tile.onEnterVertical(layer, player, this.direction);
+  dispatchEnter(tile: Tile, map: GameMap, player: Player): void {
+    tile.onEnterVertical(map, player, this.direction);
   }
 
   nextPosition(pos: Position): Position {
@@ -38,8 +38,8 @@ export class PlayerMoverVertical implements PlayerMover {
 export class PlayerMoverHorizontal implements PlayerMover {
   constructor(private direction: Direction) {}
 
-  dispatchEnter(tile: Tile, layer: Layer, player: Player): void {
-    tile.onEnterHorizontal(layer, player, this.direction);
+  dispatchEnter(tile: Tile, map: GameMap, player: Player): void {
+    tile.onEnterHorizontal(map, player, this.direction);
   }
 
   nextPosition(pos: Position): Position {
@@ -49,12 +49,11 @@ export class PlayerMoverHorizontal implements PlayerMover {
 
 export class Player {
   private waterContainer = new EmptySlot();
-  private groundTile: Tile = new Air();
 
   constructor(private pos: Position) {}
 
-  pushHorisontal(layer: Layer, tile: Tile, move: Direction) {
-    layer.pushHorisontal(this, tile, this.pos, move);
+  pushHorisontal(map: GameMap, tile: Tile, move: Direction) {
+    map.pushHorisontal(this, tile, this.pos, move);
   }
 
   draw(tr: TileRenderer) {
@@ -79,13 +78,12 @@ export class Player {
     map.tryEnterTile(this, this.pos, m);
   }
 
-  comitEnterTile(layer: Layer, move: Direction, groundTile: Tile) {
-    this.occupyTile(layer, this.pos.moved(move), this.groundTile);
-    this.groundTile = groundTile;
+  comitEnterTile(map: GameMap, move: Direction) {
+    this.occupyTile(map, this.pos.moved(move));
   }
 
-  occupyTile(layer: Layer, new_pos: Position, groundTile: Tile) {
-    layer.moveTileTo(this.pos, new_pos, groundTile);
+  occupyTile(map: GameMap, new_pos: Position) {
+    map.moveTileTo(this.pos, new_pos);
     this.pos = new_pos;
   }
 }

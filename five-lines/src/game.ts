@@ -9,7 +9,7 @@ import { Position } from "./position.js";
     private map: GameMap;
 
     constructor() {
-      this.map = new GameMap();
+      this.map = new GameMap(8,6);
       this.player = new Player(new Position(1, 1));
     }
 

@@ -24,7 +24,7 @@ let rawMapGround: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-export interface Layer {
+export interface Layer2 {
   movePlayer(player: Player, pos: Position, m: PlayerMover): void;
   update(map: GameMap): void;
   pushHorisontal(
@@ -40,8 +40,8 @@ export interface Layer {
 }
 
 export class Cell {
-  update(layer: Layer, map: GameMap, p: Position): void {
-    this.tile.update(layer, map, p);
+  update(map: GameMap, p: Position): void {
+    this.tile.update(map, p);
   }
 
   push(t: Tile) {
@@ -80,85 +80,85 @@ export class Cell {
   }
 }
 
-class LayerMid implements Layer {
-  private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
-  private map2D: Cell[][];
+// class LayerMid2 implements Layer2 {
+//   private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
+//   private map2D: Cell[][];
 
-  constructor(private size_x: number, private size_y: number) {
-    this.map2D = new NumberToTileTransformer().load_tile_array_2D(
-      size_x,
-      size_y,
-      rawMap
-    );
-    //this.gravity = new Gravity(this);
-  }
+//   constructor(private size_x: number, private size_y: number) {
+//     this.map2D = new NumberToTileTransformer().load_tile_array_2D(
+//       size_x,
+//       size_y,
+//       rawMap
+//     );
+//     //this.gravity = new Gravity(this);
+//   }
 
-  removeTile(tile: Tile) {
-    for (let y = 0; y < this.size_y; y++)
-      for (let x = 0; x < this.size_x; x++)
-        if (this.map2D[y][x].peek() == tile) this.map2D[y][x].pop();
-    // this.map2D.change_value(tile, new Air());
-  }
+//   removeTile(tile: Tile) {
+//     for (let y = 0; y < this.size_y; y++)
+//       for (let x = 0; x < this.size_x; x++)
+//         if (this.map2D[y][x].peek() == tile) this.map2D[y][x].pop();
+//     // this.map2D.change_value(tile, new Air());
+//   }
 
-  isAir(pos: Position) {
-    return this.map2D[pos.getY()][pos.getX()].peek().isAir();
-  }
+//   isAir(pos: Position) {
+//     return this.map2D[pos.getY()][pos.getX()].peek().isAir();
+//   }
 
-  draw(tr: TileRenderer) {
-    for (let y = 0; y < this.size_y; y++)
-      for (let x = 0; x < this.size_x; x++)
-        this.map2D[y][x].draw(tr, new Position(x, y));
+//   draw(tr: TileRenderer) {
+//     for (let y = 0; y < this.size_y; y++)
+//       for (let x = 0; x < this.size_x; x++)
+//         this.map2D[y][x].draw(tr, new Position(x, y));
 
-    // this.map2D.appleToAllCels((v, p) => v.draw(tr, p));
-  }
+//     // this.map2D.appleToAllCels((v, p) => v.draw(tr, p));
+//   }
 
-  getBlockOnTopState(pos: Position) {
-    return this.map2D[pos.getY()][pos.getX()].getBlockOnTopState();
-  }
+//   getBlockOnTopState(pos: Position) {
+//     return this.map2D[pos.getY()][pos.getX()].getBlockOnTopState();
+//   }
 
-  movePlayer(player: Player, pos: Position, m: PlayerMover): void {
-    let next_pos = m.nextPosition(pos);
-    let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].peek();
-    om_moved_tile.premove(player);
-    m.dispatchEnter(om_moved_tile, this, player);
-  }
+//   movePlayer(player: Player, pos: Position, m: PlayerMover): void {
+//     let next_pos = m.nextPosition(pos);
+//     let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].peek();
+//     om_moved_tile.premove(player);
+//     m.dispatchEnter(om_moved_tile, this, player);
+//   }
 
-  private getCell(p: Position) {
-    return this.map2D[p.getY()][p.getX()];
-  }
+//   private getCell(p: Position) {
+//     return this.map2D[p.getY()][p.getX()];
+//   }
 
-  moveTileTo(pos: Position, new_position: Position) {
-    let cell = this.getCell(pos);
-    let new_cell = this.getCell(new_position);
-    new_cell.push(cell.pop());
-    // cell.popValue();
+//   moveTileTo(pos: Position, new_position: Position) {
+//     let cell = this.getCell(pos);
+//     let new_cell = this.getCell(new_position);
+//     new_cell.push(cell.pop());
+//     // cell.popValue();
 
-    // this.map2D.setValue(new_position, this.map2D.getValue(pos));
-    // this.map2D.setValue(pos, new Air());
-  }
+//     // this.map2D.setValue(new_position, this.map2D.getValue(pos));
+//     // this.map2D.setValue(pos, new Air());
+//   }
 
-  pushHorisontal(player: Player, tile: Tile, pos: Position, move: Direction) {
-    if (
-      this.isAir(pos.moved(move).moved(move)) &&
-      !this.isAir(pos.moved(move).down())
-    ) {
-      this.getCell(pos.moved(move).moved(move)).push(tile);
-      // this.map2D.setValue(pos.moved(move).moved(move), tile);
-      player.occupyTile(this, pos.moved(move), new Air());
-    }
-  }
+//   pushHorisontal(player: Player, tile: Tile, pos: Position, move: Direction) {
+//     if (
+//       this.isAir(pos.moved(move).moved(move)) &&
+//       !this.isAir(pos.moved(move).down())
+//     ) {
+//       this.getCell(pos.moved(move).moved(move)).push(tile);
+//       // this.map2D.setValue(pos.moved(move).moved(move), tile);
+//       player.occupyTile(this, pos.moved(move), new Air());
+//     }
+//   }
 
-  update(map: GameMap) {
-    this.appleToAllCels((v, p) => v.update(this, map, p));
-  }
+//   update(map: GameMap) {
+//     this.appleToAllCels((v, p) => v.update(this, map, p));
+//   }
 
-  private appleToAllCels(f: (value: Cell, p: Position) => void): void {
-    for (let y = 0; y < this.size_y; y++) {
-      for (let x = 0; x < this.size_x; x++)
-        f(this.map2D[y][x], new Position(x, y));
-    }
-  }
-}
+//   private appleToAllCels(f: (value: Cell, p: Position) => void): void {
+//     for (let y = 0; y < this.size_y; y++) {
+//       for (let x = 0; x < this.size_x; x++)
+//         f(this.map2D[y][x], new Position(x, y));
+//     }
+//   }
+// }
 
 // class LayerGround implements Layer {
 //   private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
@@ -198,29 +198,80 @@ class LayerMid implements Layer {
 // }
 
 export class GameMap {
-  private layer_mid: Layer;
-  // private layer_ground: Layer;
+  private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
+  private map2D: Cell[][];
 
-  constructor() {
-    this.layer_mid = new LayerMid(8, 6);
+  constructor(private size_x: number, private size_y: number) {
+    this.map2D = new NumberToTileTransformer().load_tile_array_2D(
+      size_x,
+      size_y,
+      rawMap
+    );
+    // this.layer_mid = new LayerMid(8, 6);
     // this.layer_ground = new LayerGround(8, 6);
   }
 
   draw(tr: TileRenderer) {
-    // this.layer_ground.draw(tr);
-    this.layer_mid.draw(tr);
+    for (let y = 0; y < this.size_y; y++)
+      for (let x = 0; x < this.size_x; x++)
+        this.map2D[y][x].draw(tr, new Position(x, y));
   }
 
   tryEnterTile(player: Player, pos: Position, m: PlayerMover) {
-    this.layer_mid.movePlayer(player, pos, m);
-    // this.layer_ground.movePlayer(player, pos, m);
+    let next_pos = m.nextPosition(pos);
+    let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].peek();
+    om_moved_tile.premove(player);
+    m.dispatchEnter(om_moved_tile, this, player);
+  }
+
+  moveTileTo(pos: Position, new_position: Position) {
+    let cell = this.getCell(pos);
+    let new_cell = this.getCell(new_position);
+    new_cell.push(cell.pop());
+    // cell.popValue();
+
+    // this.map2D.setValue(new_position, this.map2D.getValue(pos));
+    // this.map2D.setValue(pos, new Air());
+  }
+
+  private getCell(p: Position) {
+    return this.map2D[p.getY()][p.getX()];
   }
 
   pushHorisontal(player: Player, tile: Tile, pos: Position, move: Direction) {
-    this.layer_mid.pushHorisontal(player, tile, pos, move);
+    if (
+      this.isAir(pos.moved(move).moved(move)) &&
+      !this.isAir(pos.moved(move).down())
+    ) {
+      this.getCell(pos.moved(move).moved(move)).push(tile);
+      // this.map2D.setValue(pos.moved(move).moved(move), tile);
+      player.occupyTile(this, pos.moved(move));
+    }
+  }
+
+  isAir(pos: Position) {
+    return this.map2D[pos.getY()][pos.getX()].peek().isAir();
   }
 
   update() {
-    this.layer_mid.update(this);
+    this.appleToAllCels((v, p) => v.update(this, p));
+  }
+
+  private appleToAllCels(f: (value: Cell, p: Position) => void): void {
+    for (let y = 0; y < this.size_y; y++) {
+      for (let x = 0; x < this.size_x; x++)
+        f(this.map2D[y][x], new Position(x, y));
+    }
+  }
+
+  getBlockOnTopState(pos: Position) {
+    return this.map2D[pos.getY()][pos.getX()].getBlockOnTopState();
+  }
+
+  removeTile(tile: Tile) {
+    for (let y = 0; y < this.size_y; y++)
+      for (let x = 0; x < this.size_x; x++)
+        if (this.map2D[y][x].peek() == tile) this.map2D[y][x].pop();
+    // this.map2D.change_value(tile, new Air());
   }
 }
