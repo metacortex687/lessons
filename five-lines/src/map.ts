@@ -80,8 +80,7 @@ export class Cell {
   }
 
   pop(): Tile {
-    if (this.count == 0)
-      return new Air();
+    if (this.count == 0) return new Air();
 
     this.count--;
     let result = this.tiles[this.count];
@@ -94,16 +93,17 @@ export class Cell {
   }
 
   peek(): Tile {
-    if (this.count == 0)
-      return new Air();
+    if (this.count == 0) return new Air();
 
     return this.tiles[this.count - 1];
   }
 
   toString(): string {
-
-    const body_result = this.tiles.filter((_,i) => i < this.count).map(x => x.constructor?.name).join(',');
-    return `Cell[${body_result}]`;
+    const result_body = this.tiles
+      .filter((_, i) => i < this.count)
+      .map((x) => x.constructor?.name)
+      .join(",");
+    return `Cell[${result_body}]`;
   }
 }
 
@@ -269,7 +269,7 @@ export class GameMap {
     console.log(om_moved_tile);
     // om_moved_tile.premove(player);
     console.log(`tryEnterTile om_moved_tile=${om_moved_tile.constructor.name}`);
-    
+
     m.dispatchEnter(om_moved_tile, this, player);
   }
 
