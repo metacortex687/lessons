@@ -6,7 +6,7 @@ import { NumberToTileTransformer } from "./tile_loader.js";
 // import { Array2dCell } from "./array2D.js";
 import { Position, type Direction } from "./position.js";
 
-let rawMap: number[][] = [
+let rawMapMidle: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
   [2, 3, 0, 1, 1, 2, 0, 2],
   [2, 4, 2, 6, 1, 2, 0, 2],
@@ -41,42 +41,69 @@ export interface Layer2 {
 
 export class Cell {
   update(map: GameMap, p: Position): void {
-    this.tile.update(map, p);
+    for (let i = 0; i < this.count; i++) this.tiles[i].update(map, p);
   }
 
   push(t: Tile) {
-    this.tile = t;
+    this.tiles[this.count] = t;
+    this.count++;
   }
 
-  premove(player: Player) {
-    throw new Error("Method not implemented.");
-  }
-  private tile: Tile = new Air();
+  // premove(player: Player) {
+  //   throw new Error("Method not implemented.");
+  // }
+  private tiles: [Tile, Tile] = [new Air(), new Air()];
+  private count: number = 0;
 
-  add(t: Tile): void {
-    this.tile = t;
-  }
+  // add(t: Tile): void {
+  //   this.tile = t;
+  // }
 
   isAir(): boolean {
-    return this.tile.isAir();
+    return this.peek().isAir();
   }
 
   draw(tr: TileRenderer, p: Position): void {
-    this.tile.draw(tr, p);
+    if (this.count == 0) return;
+
+    if (this.count == 1) {
+      this.tiles[0].draw(tr, p);
+      return;
+    }
+
+    this.tiles[0].draw(tr, p);
+    this.tiles[1].draw(tr, p);
   }
 
   getBlockOnTopState() {
-    return this.tile.getBlockOnTopState();
+    return this.peek().getBlockOnTopState();
   }
 
   pop(): Tile {
-    let res = this.tile;
-    this.tile = new Air();
-    return res;
+    if (this.count == 0)
+      return new Air();
+
+    this.count--;
+    let result = this.tiles[this.count];
+    // if (this.count == 0) {
+    //   this.count++;
+    //   this.tiles[this.count] = new Air();
+    // }
+
+    return result;
   }
 
   peek(): Tile {
-    return this.tile;
+    if (this.count == 0)
+      return new Air();
+
+    return this.tiles[this.count - 1];
+  }
+
+  toString(): string {
+
+    const body_result = this.tiles.filter((_,i) => i < this.count).map(x => x.constructor?.name).join(',');
+    return `Cell[${body_result}]`;
   }
 }
 
@@ -202,13 +229,32 @@ export class GameMap {
   private map2D: Cell[][];
 
   constructor(private size_x: number, private size_y: number) {
-    this.map2D = new NumberToTileTransformer().load_tile_array_2D(
-      size_x,
-      size_y,
-      rawMap
-    );
+    this.map2D = this.init_array(size_x, size_y);
+    this.load_layer(rawMapMidle);
+
+    // this.map2D = new NumberToTileTransformer().load_tile_array_2D(
+    //   size_x,
+    //   size_y,
+    //   rawMapMidle
+    // );
     // this.layer_mid = new LayerMid(8, 6);
     // this.layer_ground = new LayerGround(8, 6);
+  }
+
+  private load_layer(rawMap: number[][]) {
+    let ntt = new NumberToTileTransformer();
+    for (let y = 0; y < this.size_y; y++)
+      for (let x = 0; x < this.size_x; x++)
+        this.map2D[y][x].push(ntt.transform(rawMap[y][x]));
+  }
+
+  private init_array(size_x: number, size_y: number) {
+    let map = new Array<Cell[]>(size_y);
+    for (let y = 0; y < size_y; y++) {
+      map[y] = new Array<Cell>(size_x);
+      for (let x = 0; x < this.size_x; x++) map[y][x] = new Cell();
+    }
+    return map;
   }
 
   draw(tr: TileRenderer) {
@@ -220,14 +266,23 @@ export class GameMap {
   tryEnterTile(player: Player, pos: Position, m: PlayerMover) {
     let next_pos = m.nextPosition(pos);
     let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].peek();
-    om_moved_tile.premove(player);
+    console.log(om_moved_tile);
+    // om_moved_tile.premove(player);
+    console.log(`tryEnterTile om_moved_tile=${om_moved_tile.constructor.name}`);
+    
     m.dispatchEnter(om_moved_tile, this, player);
   }
 
   moveTileTo(pos: Position, new_position: Position) {
     let cell = this.getCell(pos);
     let new_cell = this.getCell(new_position);
+    console.log(`cell до : ${cell}`);
+    new_cell.pop();
     new_cell.push(cell.pop());
+    cell.pop();
+    cell.pop();
+    console.log(`cell после : ${cell}`);
+
     // cell.popValue();
 
     // this.map2D.setValue(new_position, this.map2D.getValue(pos));
