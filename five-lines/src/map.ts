@@ -247,9 +247,6 @@ export class GameMap {
   tryEnterTile(player: Player, pos: Position, m: PlayerMover) {
     let next_pos = m.nextPosition(pos);
     let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].topTile();
-    console.log(om_moved_tile);
-    // om_moved_tile.premove(player);
-    console.log(`tryEnterTile om_moved_tile=${om_moved_tile.constructor.name}`);
 
     m.dispatchEnter(om_moved_tile, this, player);
   }
@@ -259,17 +256,6 @@ export class GameMap {
     let new_cell = this.getCell(new_position);
     new_cell.deleteTile();
     cell.moveTile(new_cell);
-    // console.log(`cell до : ${cell}`);
-    // new_cell.pop();
-    // new_cell.pushTile(cell.pop());
-    // cell.pop();
-    // cell.pop();
-    // console.log(`cell после : ${cell}`);
-
-    // cell.popValue();
-
-    // this.map2D.setValue(new_position, this.map2D.getValue(pos));
-    // this.map2D.setValue(pos, new Air());
   }
 
   private getCell(p: Position) {
@@ -282,7 +268,6 @@ export class GameMap {
       !this.isAir(pos.moved(move).down())
     ) {
       this.getCell(pos.moved(move).moved(move)).pushTile(tile);
-      // this.map2D.setValue(pos.moved(move).moved(move), tile);
       player.occupyTile(this, pos.moved(move));
     }
   }
