@@ -58,4 +58,4 @@ http://localhost:5173/five-lines/
 
 11. Убрать класс Layer полностью
 
-12. Ghb gj
+12. В Cell сделать только объекты вроде moveTile(to: Cell). B Stack с передаваемым конструктором пустого элемента.

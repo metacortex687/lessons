@@ -5,6 +5,7 @@ import { Player, type PlayerMover } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
 // import { Array2dCell } from "./array2D.js";
 import { Position, type Direction } from "./position.js";
+import { Stack } from "./stack.js";
 
 let rawMapMidle: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
@@ -24,87 +25,67 @@ let rawMapGround: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-export interface Layer2 {
-  movePlayer(player: Player, pos: Position, m: PlayerMover): void;
-  update(map: GameMap): void;
-  pushHorisontal(
-    player: Player,
-    tile: Tile,
-    pos: Position,
-    move: Direction
-  ): void;
-  moveTileTo(pos: Position, new_pos: Position, groundTile: Tile): void;
-  draw(tr: TileRenderer): void;
-  getBlockOnTopState(pos: Position): Falling;
-  removeTile(tile: Tile): void;
-}
+// export interface Layer2 {
+//   movePlayer(player: Player, pos: Position, m: PlayerMover): void;
+//   update(map: GameMap): void;
+//   pushHorisontal(
+//     player: Player,
+//     tile: Tile,
+//     pos: Position,
+//     move: Direction
+//   ): void;
+//   moveTileTo(pos: Position, new_pos: Position, groundTile: Tile): void;
+//   draw(tr: TileRenderer): void;
+//   getBlockOnTopState(pos: Position): Falling;
+//   removeTile(tile: Tile): void;
+// }
 
 export class Cell {
+  private data: Stack<Tile> = new Stack<Tile>(() => new Air());
+
   update(map: GameMap, p: Position): void {
-    for (let i = 0; i < this.count; i++) this.tiles[i].update(map, p);
+    this.data.apply_function(t => t.update(map, p));
   }
 
-  push(t: Tile) {
-    this.tiles[this.count] = t;
-    this.count++;
+  pushTile(t: Tile) {
+    this.data.push(t);
   }
-
-  // premove(player: Player) {
-  //   throw new Error("Method not implemented.");
-  // }
-  private tiles: [Tile, Tile] = [new Air(), new Air()];
-  private count: number = 0;
-
-  // add(t: Tile): void {
-  //   this.tile = t;
-  // }
 
   isAir(): boolean {
-    return this.peek().isAir();
+    return this.topTile().isAir();
   }
 
   draw(tr: TileRenderer, p: Position): void {
-    if (this.count == 0) return;
-
-    if (this.count == 1) {
-      this.tiles[0].draw(tr, p);
-      return;
-    }
-
-    this.tiles[0].draw(tr, p);
-    this.tiles[1].draw(tr, p);
+    this.data.apply_function(t => t.draw(tr, p));
   }
 
   getBlockOnTopState() {
-    return this.peek().getBlockOnTopState();
+    return this.topTile().getBlockOnTopState();
   }
 
-  pop(): Tile {
-    if (this.count == 0) return new Air();
+  // pop2(): Tile {
+  //   return this.data.pop();
+  // }
 
-    this.count--;
-    let result = this.tiles[this.count];
-    // if (this.count == 0) {
-    //   this.count++;
-    //   this.tiles[this.count] = new Air();
-    // }
-
-    return result;
+  deleteTile(): void {
+    this.data.pop();  
   }
 
-  peek(): Tile {
-    if (this.count == 0) return new Air();
-
-    return this.tiles[this.count - 1];
+  topTile(): Tile {
+    return this.data.peek();
   }
 
-  toString(): string {
-    const result_body = this.tiles
-      .filter((_, i) => i < this.count)
-      .map((x) => x.constructor?.name)
-      .join(",");
-    return `Cell[${result_body}]`;
+  moveTile(to: Cell) {
+    to.data.push(this.data.pop());
   }
+
+  // toString(): string {
+  //   const result_body = this.tiles
+  //     .filter((_, i) => i < this.count)
+  //     .map((x) => x.constructor?.name)
+  //     .join(",");
+  //   return `Cell[${result_body}]`;
+  // }
 }
 
 // class LayerMid2 implements Layer2 {
@@ -245,7 +226,7 @@ export class GameMap {
     let ntt = new NumberToTileTransformer();
     for (let y = 0; y < this.size_y; y++)
       for (let x = 0; x < this.size_x; x++)
-        this.map2D[y][x].push(ntt.transform(rawMap[y][x]));
+        this.map2D[y][x].pushTile(ntt.transform(rawMap[y][x]));
   }
 
   private init_array(size_x: number, size_y: number) {
@@ -265,7 +246,7 @@ export class GameMap {
 
   tryEnterTile(player: Player, pos: Position, m: PlayerMover) {
     let next_pos = m.nextPosition(pos);
-    let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].peek();
+    let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].topTile();
     console.log(om_moved_tile);
     // om_moved_tile.premove(player);
     console.log(`tryEnterTile om_moved_tile=${om_moved_tile.constructor.name}`);
@@ -276,12 +257,14 @@ export class GameMap {
   moveTileTo(pos: Position, new_position: Position) {
     let cell = this.getCell(pos);
     let new_cell = this.getCell(new_position);
-    console.log(`cell до : ${cell}`);
-    new_cell.pop();
-    new_cell.push(cell.pop());
-    cell.pop();
-    cell.pop();
-    console.log(`cell после : ${cell}`);
+    new_cell.deleteTile();
+    cell.moveTile(new_cell);
+    // console.log(`cell до : ${cell}`);
+    // new_cell.pop();
+    // new_cell.pushTile(cell.pop());
+    // cell.pop();
+    // cell.pop();
+    // console.log(`cell после : ${cell}`);
 
     // cell.popValue();
 
@@ -298,14 +281,14 @@ export class GameMap {
       this.isAir(pos.moved(move).moved(move)) &&
       !this.isAir(pos.moved(move).down())
     ) {
-      this.getCell(pos.moved(move).moved(move)).push(tile);
+      this.getCell(pos.moved(move).moved(move)).pushTile(tile);
       // this.map2D.setValue(pos.moved(move).moved(move), tile);
       player.occupyTile(this, pos.moved(move));
     }
   }
 
   isAir(pos: Position) {
-    return this.map2D[pos.getY()][pos.getX()].peek().isAir();
+    return this.map2D[pos.getY()][pos.getX()].topTile().isAir();
   }
 
   update() {
@@ -326,7 +309,7 @@ export class GameMap {
   removeTile(tile: Tile) {
     for (let y = 0; y < this.size_y; y++)
       for (let x = 0; x < this.size_x; x++)
-        if (this.map2D[y][x].peek() == tile) this.map2D[y][x].pop();
+        if (this.map2D[y][x].topTile() == tile) this.map2D[y][x].deleteTile();
     // this.map2D.change_value(tile, new Air());
   }
 }
