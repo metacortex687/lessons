@@ -6,6 +6,7 @@ import { NumberToTileTransformer } from "./tile_loader.js";
 // import { Array2dCell } from "./array2D.js";
 import { Position, type Direction } from "./position.js";
 import { Stack } from "./stack.js";
+import { Array2d } from "./array2D.js";
 
 let rawMapMidle: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
@@ -44,7 +45,7 @@ export class Cell {
   private data: Stack<Tile> = new Stack<Tile>(() => new Air());
 
   update(map: GameMap, p: Position): void {
-    this.data.apply_function(t => t.update(map, p));
+    this.data.apply_function((t) => t.update(map, p));
   }
 
   pushTile(t: Tile) {
@@ -56,7 +57,7 @@ export class Cell {
   }
 
   draw(tr: TileRenderer, p: Position): void {
-    this.data.apply_function(t => t.draw(tr, p));
+    this.data.apply_function((t) => t.draw(tr, p));
   }
 
   getBlockOnTopState() {
@@ -68,7 +69,7 @@ export class Cell {
   // }
 
   deleteTile(): void {
-    this.data.pop();  
+    this.data.pop();
   }
 
   topTile(): Tile {
@@ -207,10 +208,14 @@ export class Cell {
 
 export class GameMap {
   private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
-  private map2D: Cell[][];
+  private map2D: Array2d<Cell>;
 
   constructor(private size_x: number, private size_y: number) {
-    this.map2D = this.init_array(size_x, size_y);
+    this.map2D = new Array2d<Cell>(size_x, size_y, () => new Cell());
+
+
+
+    // = this.init_array(size_x, size_y);
     this.load_layer(rawMapMidle);
 
     // this.map2D = new NumberToTileTransformer().load_tile_array_2D(
@@ -224,29 +229,27 @@ export class GameMap {
 
   private load_layer(rawMap: number[][]) {
     let ntt = new NumberToTileTransformer();
-    for (let y = 0; y < this.size_y; y++)
-      for (let x = 0; x < this.size_x; x++)
-        this.map2D[y][x].pushTile(ntt.transform(rawMap[y][x]));
+    this.map2D.applyFn((x,y,cell)=> cell.pushTile(ntt.transform(rawMap[y][x])))
   }
 
-  private init_array(size_x: number, size_y: number) {
-    let map = new Array<Cell[]>(size_y);
-    for (let y = 0; y < size_y; y++) {
-      map[y] = new Array<Cell>(size_x);
-      for (let x = 0; x < this.size_x; x++) map[y][x] = new Cell();
-    }
-    return map;
-  }
+  // private init_array(size_x: number, size_y: number) {
+  //   let map = new Array<Cell[]>(size_y);
+  //   for (let y = 0; y < size_y; y++) {
+  //     map[y] = new Array<Cell>(size_x);
+  //     for (let x = 0; x < this.size_x; x++) map[y][x] = new Cell();
+  //   }
+  //   return map;
+  // }
 
   draw(tr: TileRenderer) {
     for (let y = 0; y < this.size_y; y++)
       for (let x = 0; x < this.size_x; x++)
-        this.map2D[y][x].draw(tr, new Position(x, y));
+        this.map2D.getValue_xy(x,y).draw(tr, new Position(x, y));
   }
 
   tryEnterTile(player: Player, pos: Position, m: PlayerMover) {
     let next_pos = m.nextPosition(pos);
-    let om_moved_tile = this.map2D[next_pos.getY()][next_pos.getX()].topTile();
+    let om_moved_tile = this.map2D.getValue_p(next_pos).topTile();
 
     m.dispatchEnter(om_moved_tile, this, player);
   }
@@ -259,7 +262,7 @@ export class GameMap {
   }
 
   private getCell(p: Position) {
-    return this.map2D[p.getY()][p.getX()];
+    return this.map2D.getValue_p(p);
   }
 
   pushHorisontal(player: Player, tile: Tile, pos: Position, move: Direction) {
@@ -273,7 +276,7 @@ export class GameMap {
   }
 
   isAir(pos: Position) {
-    return this.map2D[pos.getY()][pos.getX()].topTile().isAir();
+    return this.getCell(pos).topTile().isAir();
   }
 
   update() {
@@ -283,18 +286,18 @@ export class GameMap {
   private appleToAllCels(f: (value: Cell, p: Position) => void): void {
     for (let y = 0; y < this.size_y; y++) {
       for (let x = 0; x < this.size_x; x++)
-        f(this.map2D[y][x], new Position(x, y));
+        f(this.map2D.getValue_xy(x,y), new Position(x, y));
     }
   }
 
   getBlockOnTopState(pos: Position) {
-    return this.map2D[pos.getY()][pos.getX()].getBlockOnTopState();
+    return this.getCell(pos).getBlockOnTopState();
   }
 
   removeTile(tile: Tile) {
     for (let y = 0; y < this.size_y; y++)
       for (let x = 0; x < this.size_x; x++)
-        if (this.map2D[y][x].topTile() == tile) this.map2D[y][x].deleteTile();
+        if (this.map2D.getValue_xy(x,y).topTile() == tile) this.map2D.getValue_xy(x,y).deleteTile();
     // this.map2D.change_value(tile, new Air());
   }
 }
