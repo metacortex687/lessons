@@ -19,7 +19,7 @@ let rawMapMidle: number[][] = [
 
 let rawMapGround: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 13, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 13, 0, 0],
@@ -211,6 +211,7 @@ export class GameMap {
 
   constructor(private size_x: number, private size_y: number) {
     this.map2D = new Array2d<Cell>(size_x, size_y, () => new Cell());
+    this.load_layer(rawMapGround);
     this.load_layer(rawMapMidle);
   }
 
