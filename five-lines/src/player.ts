@@ -27,6 +27,7 @@ export class PlayerMoverVertical implements PlayerMover {
   constructor(private direction: Direction) {}
 
   dispatchEnter(tile: Tile, map: GameMap, player: Player): void {
+    tile.onEnter(player);
     tile.onEnterVertical(map, player, this.direction);
   }
 
@@ -39,6 +40,7 @@ export class PlayerMoverHorizontal implements PlayerMover {
   constructor(private direction: Direction) {}
 
   dispatchEnter(tile: Tile, map: GameMap, player: Player): void {
+    tile.onEnter(player);
     tile.onEnterHorizontal(map, player, this.direction);
   }
 

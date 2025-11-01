@@ -62,10 +62,11 @@ export class Resting implements FallingState {
 }
 
 export interface Tile {
-  premove(player: Player): void;
+  
   getBlockOnTopState(): FallingState;
   update(map: GameMap, pos: Position): void;
-
+  
+  onEnter(player: Player): void;
   onEnterVertical(map: GameMap, player: Player, move: Direction): void;
   onEnterHorizontal(map: GameMap, player: Player, move: Direction): void;
   draw(tr: TileRenderer, pos: Position): void;
@@ -75,7 +76,7 @@ export interface Tile {
 
 
 export class Garden implements Tile {
-  premove(player: Player): void {
+  onEnter(player: Player): void {
     player.pourWater();
   }
   getBlockOnTopState(): FallingState {
@@ -94,7 +95,7 @@ export class Garden implements Tile {
 }
 
 export class Flux implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -117,7 +118,7 @@ export class Flux implements Tile {
 }
 
 export class Unbreakable implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -136,7 +137,7 @@ export class Unbreakable implements Tile {
 }
 
 export class Door implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -163,7 +164,7 @@ export class Water implements Tile {
     this.falling = falling;
   }
 
-  premove(player: Player): void {
+  onEnter(player: Player): void {
     player.collectWater();
   }
 
@@ -190,7 +191,7 @@ export class Water implements Tile {
 }
 
 export class Air implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   constructor() {}
 
   getBlockOnTopState(): FallingState {
@@ -213,7 +214,7 @@ export class Air implements Tile {
 }
 
 export class PlayerTile implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -230,7 +231,7 @@ export class PlayerTile implements Tile {
 }
 
 export class Box implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -258,7 +259,7 @@ export class Box implements Tile {
 }
 
 export class Key implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
@@ -302,7 +303,7 @@ export class KeyLockBundle {
 }
 
 export class LockTile implements Tile {
-  premove(player: Player): void {}
+  onEnter(player: Player): void {}
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
