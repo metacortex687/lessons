@@ -79,7 +79,10 @@ GROUP_BY(year,quarter)
 | trade_balance          | export_value-import_value                                                                                        | export_value-import_value                                                                                                            | +                                                                                                                                                                           |
 | trade_relationship     | export_value>import_value THEN Favorable<br>export_value<import_value THEN Unfavorable                           | DIPLOMATIC_EVENTS.trade_relationship                                                                                                 | -                                                                                                                                                                           |
 | diplomatic_correlation | CORR(<br>            DIPLOMATIC_EVENTS.relationship_change,<br>            TRADE_TRANSACTIONS.value<br>        ) | ```CORR(            DIPLOMATIC_EVENTS.relationship_change,            CARAVAN_GOODS.value*CARAVAN_GOODS.quantity        )``` | +/-<br>только я предполагал что relationship_change хранить строковое значение, поэтому приводил к 1 или 0.<br><br>Так же считал что value это цена                         |
-|                        |                                                                                                                  |                                                                                                                                      |               4. В эталонном решении используется 'FROM (SELECT 1) AS dummy;'
+|                        |                                                                                                                  |                                                                                                                                      |               
+
+
+4. В эталонном решении используется 'FROM (SELECT 1) AS dummy;'
 У меня нет этого решения.
 
 
