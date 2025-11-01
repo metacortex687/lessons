@@ -207,7 +207,6 @@ export class Cell {
 // }
 
 export class GameMap {
-  private tile_loader: NumberToTileTransformer = new NumberToTileTransformer();
   private map2D: Array2d<Cell>;
 
   constructor(private size_x: number, private size_y: number) {
