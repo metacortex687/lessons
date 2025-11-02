@@ -14,7 +14,7 @@ WITH THREAT_STATS AS
     JOIN
         (
             SELECT
-                max(date),
+                max(date) AS date,
                 creature_id
             FROM
                 CREATURE_SIGHTINGS
@@ -62,6 +62,8 @@ ZONE_STATS AS
     ) ca
     ON
         l.location_id  = ca.location_id
+    GROUP BY
+        l.zone_id, l.name    
 ),
 SECURITY_EVOLUTION_STATS AS
 (
