@@ -1,4 +1,4 @@
---https://www.hackerrank.com/challenges/binary-search-tree-1/problem?isFullScreen=true
+--https://www.hackerrank.com/challenges/occupations/problem?isFullScreen=true
 WITH D AS
 (
         SELECT
