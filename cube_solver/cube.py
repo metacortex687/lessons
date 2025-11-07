@@ -21,6 +21,9 @@ class Face:
     def __str__(self):
         return f"[{self.data[0]},{self.data[1]},{self.data[2]},{self.data[3]}]"
 
+    def copy(self):
+        return Face(self.data)
+
 
 class Cube:
 
@@ -41,6 +44,9 @@ class Cube:
             and self.l == v.l
             and self.r == v.r
         )
+
+    def __hash__(self):
+        return self.__str__().__hash__()
 
     def __str__(self):
         return f"top{str(self.t)}back{str(self.b)}down{str(self.d)}front{str(self.f)}left{str(self.l)}right{str(self.r)}"
@@ -69,11 +75,53 @@ class Cube:
             Face(lst[20:24]),
         )
 
+    @staticmethod
+    def init_standart() -> "Cube":
+        return Cube(
+            Face("1111"),
+            Face("2222"),
+            Face("3333"),
+            Face("4444"),
+            Face("5555"),
+            Face("6666"),
+        )
+
+    def copy(self) -> "Cube":
+        return Cube(
+            t=self.t.copy(),
+            b=self.b.copy(),
+            d=self.d.copy(),
+            f=self.f.copy(),
+            l=self.l.copy(),
+            r=self.r.copy(),
+        )
+
     def rotate_z(self) -> "Cube":
-        pass
+        return Cube(
+            f=self.f.copy(),
+            b=self.b.copy(),
+            r=self.t.copy(),
+            d=self.r.copy(),
+            l=self.d.copy(),
+            t=self.l.copy(),
+        )
 
     def rotate_y(self) -> "Cube":
-        pass
+        return Cube(
+            t=self.t.copy(),
+            d=self.d.copy(),
+            f=self.r.copy(),
+            l=self.f.copy(),
+            b=self.l.copy(),
+            r=self.b.copy(),
+        )
 
     def rotate_x(self) -> "Cube":
-        pass
+        return Cube(
+            t=self.f.copy(),
+            b=self.t.copy(),
+            d=self.b.copy(),
+            f=self.d.copy(),
+            l=self.l.copy(),
+            r=self.r.copy(),
+        )

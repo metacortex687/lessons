@@ -43,6 +43,14 @@ class TestFace(unittest.TestCase):
         f2 = Face([3, 0, 1, 2])
         self.assertTrue(f1.eq_rt() == f2)
 
+    def test_copy(self):
+        f = Face([0, 1, 2, 3])
+        copy = f.copy()
+
+        self.assertFalse(f is copy)
+        self.assertTrue(f == copy)
+        self.assertFalse(f.data is copy.data)
+
 
 class TestCube(unittest.TestCase):
     def test_eq(self):
@@ -90,13 +98,64 @@ class TestCube(unittest.TestCase):
         random3 = Cube.init_random()
         self.assertTrue(random1 == random3)
 
+    def test_copy(self):
+        random.seed(42)
+        cube = Cube.init_random()
+        copy = cube.copy()
+
+        self.assertFalse(cube is copy)
+        self.assertTrue(cube == copy)
+
     def test_eq_rotate_empty(self):
         empty = Cube.init_empty()
 
-        rotate_f = empty.rotate_z()
-        rotate_f = empty.rotate_y()
-        rotate_f = empty.rotate_x()
+        self.assertTrue(empty == empty.rotate_x())
+        self.assertTrue(empty == empty.rotate_y())
+        self.assertTrue(empty == empty.rotate_z())
 
+    def test_add_cube_in_set(self):
+        cube1 = Cube.init_empty()
+        cube1.t = Face("bbbb")
+
+        s = set()
+        s.add(cube1)
+
+        self.assertTrue(cube1 in s)
+
+        cube2 = Cube.init_empty()
+        self.assertFalse(cube2 in s)
+
+        cube2.t = Face("bbbb") 
+        self.assertTrue(cube2 in s) 
+
+        self.assertEqual(1,len(s))
+
+        s.add(cube2)
+        self.assertEqual(1,len(s))
+
+        s.add(Cube.init_empty())
+        self.assertEqual(2,len(s))
+
+    def test_rotate_x_standart(self):
+        cube = Cube.init_standart()
+        self.assertFalse(cube == cube.rotate_x())
+        self.assertFalse(cube == cube.rotate_x().rotate_x())
+        self.assertFalse(cube == cube.rotate_x().rotate_x().rotate_x())
+        self.assertTrue(cube == cube.rotate_x().rotate_x().rotate_x().rotate_x())
+
+    def test_rotate_y_standart(self):
+        cube = Cube.init_standart()
+        self.assertFalse(cube == cube.rotate_y())
+        self.assertFalse(cube == cube.rotate_y().rotate_y())
+        self.assertFalse(cube == cube.rotate_y().rotate_y().rotate_y())
+        self.assertTrue(cube == cube.rotate_y().rotate_y().rotate_y().rotate_y())
+
+    def test_rotate_z_standart(self):
+        cube = Cube.init_standart()
+        self.assertFalse(cube == cube.rotate_z())
+        self.assertFalse(cube == cube.rotate_z().rotate_z())
+        self.assertFalse(cube == cube.rotate_z().rotate_z().rotate_z())
+        self.assertTrue(cube == cube.rotate_z().rotate_z().rotate_z().rotate_z())
 
 if __name__ == "__main__":
     unittest.main()
