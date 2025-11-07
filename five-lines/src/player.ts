@@ -1,4 +1,4 @@
-import { GameMap} from "./map.js";
+import { GameMap } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { Air, type Tile } from "./tiles.js";
 import { Position } from "./position.js";
@@ -18,12 +18,12 @@ class WaterSlot implements Slot {
   }
 }
 
-export interface PlayerMover {
+export interface PlayerMove {
   dispatchEnter(tile: Tile, map: GameMap, player: Player): void;
   nextPosition(pos: Position): Position;
 }
 
-export class PlayerMoverVertical implements PlayerMover {
+export class PlayerMoveVertical implements PlayerMove {
   constructor(private direction: Direction) {}
 
   dispatchEnter(tile: Tile, map: GameMap, player: Player): void {
@@ -36,7 +36,7 @@ export class PlayerMoverVertical implements PlayerMover {
   }
 }
 
-export class PlayerMoverHorizontal implements PlayerMover {
+export class PlayerMoveHorizontal implements PlayerMove {
   constructor(private direction: Direction) {}
 
   dispatchEnter(tile: Tile, map: GameMap, player: Player): void {
@@ -76,7 +76,7 @@ export class Player {
     this.waterContainer = new EmptySlot();
   }
 
-  tryEnterTile(map: GameMap, m: PlayerMover) {
+  tryEnterTile(map: GameMap, m: PlayerMove) {
     map.tryEnterTile(this, this.pos, m);
   }
 

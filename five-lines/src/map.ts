@@ -1,7 +1,7 @@
 import { TileRenderer } from "./tile_renderer.js";
 import { Falling, Resting, type Tile } from "./tiles.js";
 import { Air } from "./tiles.js";
-import { Player, type PlayerMover } from "./player.js";
+import { Player, type PlayerMove } from "./player.js";
 import { NumberToTileTransformer } from "./tile_loader.js";
 // import { Array2dCell } from "./array2D.js";
 import { Position, type Direction } from "./position.js";
@@ -226,7 +226,7 @@ export class GameMap {
     this.map2D.applyFn((x, y, cell) => cell.draw(tr, new Position(x, y)));
   }
 
-  tryEnterTile(player: Player, pos: Position, m: PlayerMover) {
+  tryEnterTile(player: Player, pos: Position, m: PlayerMove) {
     let next_pos = m.nextPosition(pos);
     let om_moved_tile = this.map2D.getValue_p(next_pos).topTile();
 
@@ -263,15 +263,16 @@ export class GameMap {
   }
 
   private appleToAllCels(f: (value: Cell, p: Position) => void): void {
-    this.map2D.applyFn((x, y, cell) => f(cell,new Position(x,y)));
+    this.map2D.applyFn((x, y, cell) => f(cell, new Position(x, y)));
   }
 
   getBlockOnTopState(pos: Position) {
     return this.getCell(pos).getBlockOnTopState();
   }
 
-  removeTile(tile: Tile)
-  {
-    this.map2D.applyFn((x, y, cell) => {if (cell.topTile() === tile) cell.deleteTile()});
+  removeTile(tile: Tile) {
+    this.map2D.applyFn((x, y, cell) => {
+      if (cell.topTile() === tile) cell.deleteTile();
+    });
   }
 }

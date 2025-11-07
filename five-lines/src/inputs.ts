@@ -1,6 +1,6 @@
 import { GameMap } from "./map.js";
 import { Player } from "./player.js";
-import { PlayerMoverVertical, PlayerMoverHorizontal } from "./player.js";
+import { PlayerMoveVertical, PlayerMoveHorizontal } from "./player.js";
 import {
   DirectionDown,
   DirectionUp,
@@ -14,25 +14,25 @@ interface Input {
 
 class Right implements Input {
   handle(player: Player, map: GameMap) {
-    player.tryEnterTile(map, new PlayerMoverHorizontal(new DirectionRight()));
+    player.tryEnterTile(map, new PlayerMoveHorizontal(new DirectionRight()));
   }
 }
 
 class Left implements Input {
   handle(player: Player, map: GameMap) {
-    player.tryEnterTile(map, new PlayerMoverHorizontal(new DirectionLeft()));
+    player.tryEnterTile(map, new PlayerMoveHorizontal(new DirectionLeft()));
   }
 }
 
 class Up implements Input {
   handle(player: Player, map: GameMap) {
-    player.tryEnterTile(map, new PlayerMoverVertical(new DirectionUp()));
+    player.tryEnterTile(map, new PlayerMoveVertical(new DirectionUp()));
   }
 }
 
 class Down implements Input {
   handle(player: Player, map: GameMap) {
-    player.tryEnterTile(map, new PlayerMoverVertical(new DirectionDown()));
+    player.tryEnterTile(map, new PlayerMoveVertical(new DirectionDown()));
   }
 }
 
