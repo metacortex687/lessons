@@ -2,7 +2,8 @@ import { GameMap } from "./map.js";
 import { TileRenderer } from "./tile_renderer.js";
 import { Player } from "./player.js";
 import { Position, type Direction } from "./position.js";
-
+import { Cell } from "./map.js";
+import { MoveOnTile, EatTile } from "./map.js";
 
 interface FallingState {
   drop(map: GameMap, pos: Position): void;
@@ -16,7 +17,7 @@ interface FallingState {
 
 export class Falling implements FallingState {
   drop(map: GameMap, pos: Position): void {
-    map.moveTileTo(pos, new Position(pos.getX(), pos.getY() + 1));
+    map.moveTileTo(pos, new Position(pos.getX(), pos.getY() + 1), new MoveOnTile);
   }
   moveHorizontal(
     player: Player,
@@ -62,10 +63,9 @@ export class Resting implements FallingState {
 }
 
 export interface Tile {
-  
   getBlockOnTopState(): FallingState;
   update(map: GameMap, pos: Position): void;
-  
+
   onEnter(player: Player): void;
   onEnterVertical(map: GameMap, player: Player, move: Direction): void;
   onEnterHorizontal(map: GameMap, player: Player, move: Direction): void;
@@ -82,9 +82,16 @@ export class Garden implements Tile {
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
+  
   update(map: GameMap, pos: Position): void {}
-  onEnterVertical(map: GameMap, player: Player, move: Direction): void {}
-  onEnterHorizontal(map: GameMap, player: Player, move: Direction): void {}
+  onEnterVertical(map: GameMap, player: Player, move: Direction): void {
+    player.comitEnterTile(map, move, new MoveOnTile);
+  }
+
+  onEnterHorizontal(map: GameMap, player: Player, move: Direction): void {
+    player.comitEnterTile(map, move, new MoveOnTile);
+  }
+
   isAir(): boolean {
     return false;
   }
@@ -99,13 +106,13 @@ export class Flux implements Tile {
   getBlockOnTopState(): FallingState {
     return new Resting();
   }
-  update( map: GameMap, pos: Position): void {}
+  update(map: GameMap, pos: Position): void {}
 
   onEnterVertical(map: GameMap, player: Player, move: Direction): void {
-    player.comitEnterTile(map, move);
+    player.comitEnterTile(map, move, new EatTile);
   }
   onEnterHorizontal(map: GameMap, player: Player, move: Direction): void {
-    player.comitEnterTile(map, move);
+    player.comitEnterTile(map, move, new EatTile);
   }
 
   draw(tr: TileRenderer, pos: Position): void {
@@ -173,7 +180,7 @@ export class Water implements Tile {
   }
   private fallStrategy: FallStrategy;
 
-  update( map: GameMap, pos: Position): void {
+  update(map: GameMap, pos: Position): void {
     this.fallStrategy.update(map, pos);
   }
 
@@ -197,13 +204,13 @@ export class Air implements Tile {
   getBlockOnTopState(): FallingState {
     return new Falling();
   }
-  update( map: GameMap, pos: Position): void {}
+  update(map: GameMap, pos: Position): void {}
 
   onEnterVertical(map: GameMap, player: Player, move: Direction): void {
-    player.comitEnterTile(map, move);
+    player.comitEnterTile(map, move, new EatTile);
   }
   onEnterHorizontal(map: GameMap, player: Player, move: Direction): void {
-    player.comitEnterTile(map, move);
+    player.comitEnterTile(map, move, new EatTile);
   }
 
   draw(tr: TileRenderer, pos: Position): void {}
@@ -237,7 +244,7 @@ export class Box implements Tile {
   }
   private fallStrategy: FallStrategy;
 
-  update( map: GameMap, pos: Position): void {
+  update(map: GameMap, pos: Position): void {
     this.fallStrategy.update(map, pos);
   }
 
@@ -269,11 +276,11 @@ export class Key implements Tile {
 
   onEnterVertical(map: GameMap, player: Player, move: Direction): void {
     map.removeTile(this.lock);
-    player.comitEnterTile(map, move);
+    player.comitEnterTile(map, move,new EatTile);
   }
   onEnterHorizontal(map: GameMap, player: Player, move: Direction): void {
     map.removeTile(this.lock);
-    player.comitEnterTile(map, move);
+    player.comitEnterTile(map, move, new EatTile);
   }
   draw(tr: TileRenderer, pos: Position): void {
     tr.drawRect(pos, this.color);

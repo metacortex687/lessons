@@ -3,6 +3,7 @@ import { TileRenderer } from "./tile_renderer.js";
 import { Air, type Tile } from "./tiles.js";
 import { Position } from "./position.js";
 import { type Direction } from "./position.js";
+import { type MoveOnTileStrategy } from "./map.js";
 
 interface Slot {
   draw(tr: TileRenderer): void;
@@ -80,12 +81,20 @@ export class Player {
     map.tryEnterTile(this, this.pos, m);
   }
 
-  comitEnterTile(map: GameMap, move: Direction) {
-    this.occupyTile(map, this.pos.moved(move));
+  comitEnterTile(
+    map: GameMap,
+    move: Direction,
+    moveStrategy: MoveOnTileStrategy
+  ) {
+    this.occupyTile(map, this.pos.moved(move), moveStrategy);
   }
 
-  occupyTile(map: GameMap, new_pos: Position) {
-    map.moveTileTo(this.pos, new_pos);
+  occupyTile(
+    map: GameMap,
+    new_pos: Position,
+    moveStrategy: MoveOnTileStrategy
+  ) {
+    map.moveTileTo(this.pos, new_pos, moveStrategy);
     this.pos = new_pos;
   }
 }

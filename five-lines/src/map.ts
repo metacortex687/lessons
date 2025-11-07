@@ -8,6 +8,7 @@ import { Position, type Direction } from "./position.js";
 import { Stack } from "./stack.js";
 import { Array2d } from "./array2D.js";
 
+
 let rawMapMidle: number[][] = [
   [2, 2, 2, 2, 2, 2, 12, 2],
   [2, 3, 0, 1, 1, 2, 0, 2],
@@ -206,6 +207,29 @@ export class Cell {
 //   removeTile(tile: Tile): void {}
 // }
 
+export interface MoveOnTileStrategy {
+  moveTileTo(cell: Cell, new_cell: Cell): void;
+}
+
+export class MoveOnTile implements MoveOnTileStrategy {
+  moveTileTo(cell: Cell, new_cell: Cell): void {
+    cell.moveTile(new_cell);
+  }
+}
+
+export class EatTile implements MoveOnTileStrategy {
+  moveTileTo(cell: Cell, new_cell: Cell): void {
+    new_cell.deleteTile();
+    cell.moveTile(new_cell);
+  }
+}
+
+// export class BlockByTile implements MoveOnTileStrategy {
+//   moveTileTo(cell: Cell, new_cell: Cell): void {
+//   }
+// }
+
+
 export class GameMap {
   private map2D: Array2d<Cell>;
 
@@ -233,11 +257,12 @@ export class GameMap {
     m.dispatchEnter(om_moved_tile, this, player);
   }
 
-  moveTileTo(pos: Position, new_position: Position) {
+  moveTileTo(pos: Position, new_position: Position, moveStrategy: MoveOnTileStrategy) {
     let cell = this.getCell(pos);
     let new_cell = this.getCell(new_position);
-    new_cell.deleteTile();
-    cell.moveTile(new_cell);
+    moveStrategy.moveTileTo(cell, new_cell);
+    // new_cell.deleteTile();
+    // cell.moveTile(new_cell);
   }
 
   private getCell(p: Position) {
@@ -250,7 +275,7 @@ export class GameMap {
       !this.isAir(pos.moved(move).down())
     ) {
       this.getCell(pos.moved(move).moved(move)).pushTile(tile);
-      player.occupyTile(this, pos.moved(move));
+      player.occupyTile(this, pos.moved(move), new EatTile());
     }
   }
 
