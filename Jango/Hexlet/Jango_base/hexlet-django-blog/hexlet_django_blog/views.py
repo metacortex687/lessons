@@ -8,3 +8,10 @@ def index(request):
             "who": "World",
         }
     )
+
+
+def about(reques):
+    return render(
+        reques,
+        "about.html"
+    )
