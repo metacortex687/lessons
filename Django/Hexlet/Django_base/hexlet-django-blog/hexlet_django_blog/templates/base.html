@@ -1,0 +1,23 @@
+<!-- hexlet_django_blog/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}Django на Hexlete{% endblock %}       
+    </title>
+</head>
+<body>
+<div id="sidebar">
+    {% block sidebar %}
+        <ul>
+            <li><a href="/"></a></li>
+            <li><a href="/articles/">Статьи (base)</a></li>
+        </ul> 
+    {% endblock sidebar %}
+</div>
+<div id="content">
+    {% block content %}{% endblock  %}
+</div>
+</body>
+</html>
