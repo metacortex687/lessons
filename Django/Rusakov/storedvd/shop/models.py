@@ -6,9 +6,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Section(models.Model):
     title = models.CharField(
         max_length=70,
-        help_text='Тут надо ввести название раздела',
+        help_text="Тут надо ввести название раздела",
         unique=True,
-        verbose_name='Название раздела',
+        verbose_name="Название раздела",
     )
 
     class Meta:
@@ -48,23 +48,61 @@ class Product(models.Model):
     date = models.DateField(auto_now_add=True, verbose_name="Дата добавления")
 
     class Meta:
-        ordering = ['title','-year']
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
+        ordering = ["title", "-year"]
+        verbose_name = "Товар"
+        verbose_name_plural = "Товары"
 
     def __str__(self):
-        return f'{self.title} ({self.section.title})'
-    
+        return f"{self.title} ({self.section.title})"
+
 
 class Discount(models.Model):
-    code = models.CharField(max_length=10, verbose_name='Код купона')
-    value = models.ImageField(validators=[MinValueValidator(1),MaxValueValidator(100)], verbose_name='Размер скидки', help_text='В процентах')
-
+    code = models.CharField(max_length=10, verbose_name="Код купона")
+    value = models.ImageField(
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
+        verbose_name="Размер скидки",
+        help_text="В процентах",
+    )
 
     class Meta:
-        ordering = ['-value']
-        verbose_name = 'Скидка'
-        verbose_name_plural = 'Скидки'
+        ordering = ["-value"]
+        verbose_name = "Скидка"
+        verbose_name_plural = "Скидки"
 
     def __str__(self):
-        return f'{self.code} ({self.value}%)'
+        return f"{self.code} ({self.value}%)"
+
+
+class Order(models.Model):
+    need_delivery = models.BooleanField(verbose_name="Необходимая доставка")
+    discount = models.ForeignKey(
+        Discount, verbose_name="Скидка", on_delete=models.SET_NULL, null=True
+    )
+    name = models.CharField(max_length=70, verbose_name="Имя")
+    phone = models.CharField(max_length=70, verbose_name="Телефон")
+    email = models.EmailField()
+    adress = models.TextField(verbose_name="Адрес", blank=True)
+    notice = models.TextField(verbose_name="Примечание к заказу", blank=True)
+    date_order = models.DateTimeField(auto_now=True)
+    date_send = models.DateTimeField(
+        null=True, blank=True, verbose_name="Дата отправки"
+    )
+
+    STATUSES = [
+        ("NEW", "Новый заказ"),
+        ("APR", "Подтвержден"),
+        ("PAY", "Оплачен"),
+        ("CNL", "Отменен"),
+    ]
+
+    status = models.CharField(
+        choices=STATUSES, max_length=3, default="NEW", verbose_name="Статус"
+    )
+
+    class Meta:
+        ordering = ["-date_order"]
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+    def __str__(self):
+        return f"ID : {self.id}"
