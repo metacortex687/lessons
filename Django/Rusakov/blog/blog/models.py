@@ -11,6 +11,10 @@ class Author(
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        verbose_name = "Автор"
+        verbose_name_plural = "Авторы"
+
 
 class Article(models.Model):
     title = models.CharField(
