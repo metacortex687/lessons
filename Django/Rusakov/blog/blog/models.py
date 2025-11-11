@@ -42,7 +42,7 @@ class Article(models.Model):
 
     photos = models.ManyToManyField(
         Photo, through="ArticlePhoto", through_fields=("article", "photo")
-    )
+    ) #хочу сделать так, что бы фотография могла быть только в одной статье или быть просто загруженной, тогда и автор не нужен
 
     content = models.TextField()
     date = models.TimeField()
