@@ -29,7 +29,7 @@ class Article(models.Model):
     date = models.TimeField()    
 
 
-class Image(models.Model):
+class Photo(models.Model):
     describe = models.CharField(max_length=150)
     path = models.CharField(max_length=150) #в иидеале должно генерироваться возможно UUIDField и под ним сохранять
     author = models.OneToOneField('Author',on_delete=models.CASCADE) #Решил явно указать кто грузит. Что бы только свои картинки могли использовать
