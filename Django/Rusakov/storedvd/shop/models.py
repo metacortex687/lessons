@@ -34,7 +34,7 @@ class Product(models.Model):
         ],
         verbose_name="Год",
     )
-    country = models.CharField(max_length=70, verbose_name="Название")
+    country = models.CharField(max_length=70, verbose_name="Страна")
     director = models.CharField(max_length=70, verbose_name="Режисер")
     play = models.IntegerField(
         validators=[MinValueValidator(1)],
@@ -58,7 +58,7 @@ class Product(models.Model):
 
 class Discount(models.Model):
     code = models.CharField(max_length=10, verbose_name="Код купона")
-    value = models.ImageField(
+    value = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)],
         verbose_name="Размер скидки",
         help_text="В процентах",
@@ -76,7 +76,11 @@ class Discount(models.Model):
 class Order(models.Model):
     need_delivery = models.BooleanField(verbose_name="Необходимая доставка")
     discount = models.ForeignKey(
-        Discount, verbose_name="Скидка", on_delete=models.SET_NULL, null=True
+        Discount,
+        verbose_name="Скидка",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     name = models.CharField(max_length=70, verbose_name="Имя")
     phone = models.CharField(max_length=70, verbose_name="Телефон")
