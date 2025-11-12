@@ -23,3 +23,5 @@ __pycache__/
 *.js
 *.sh
 .vscode
+Django/Rusakov/storedvd/images/scary-movie-2.png
+Django/Rusakov/storedvd/images/scary-movie.png
