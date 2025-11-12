@@ -1,0 +1,13 @@
+SELECT CEIL(
+  AVG(
+    salary - CAST(COALESCE(NULLIF(REPLACE(CAST(salary AS CHAR), '0', ''), ''), '0') AS UNSIGNED)
+  )
+)
+FROM EMPLOYEES;
+
+--Вариант 2
+
+SELECT CEIL(
+  AVG(salary - CAST(REGEXP_REPLACE(CAST(salary AS CHAR), '0', '') AS UNSIGNED))
+)
+FROM EMPLOYEES;
