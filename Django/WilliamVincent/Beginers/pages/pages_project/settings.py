@@ -56,13 +56,19 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR/'templates'],
-        'APP_DIRS': True,
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'loaders':[
+                # 1. Сначала шаблоны в приложениях:
+                'django.template.loaders.app_directories.Loader',
+                # 2. Потом проектная папка:
+                'django.template.loaders.filesystem.Loader',               
+            ]
         },
     },
 ]
