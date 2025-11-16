@@ -6,7 +6,8 @@ class HomePageView(TemplateView):
     template_name = "index.html"
 
     def get(self, request):
-        return redirect(reverse('article',args=['python',42]))
+        return redirect(reverse('article',kwargs={'tags': 'python 2', 'article_id': 42}))
+        #return redirect(reverse('article',args=['python',42]))
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
