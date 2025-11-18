@@ -1,6 +1,6 @@
 -- https://www.codewars.com/kata/686e88bcedcbf29af056f499/train/sql
 -- SQL for Marketing – Episode 1: Measuring Engagement Fatigue
--- 5 kyu (уменьшу сложность до 6 kyu, времени много уходит, иногда на эту лсожность буду заглядывать)
+-- 5 kyu (уменьшу сложность до 6 kyu, времени много уходит, иногда на задачи этой сложности буду заглядывать)
 
 WITH PRIOR_7D_TOUCHES AS (
   SELECT
