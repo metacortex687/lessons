@@ -70,15 +70,12 @@ class Discount(models.Model):
         verbose_name_plural = "Скидки"
 
     def value_percent(self):
-        return f'{self.value}%'
-
+        return f"{self.value}%"
 
     def __str__(self):
         return f"{self.code} ({self.value}%)"
-    
-    value_percent.short_description = 'Размер скидки'
-    
-    
+
+    value_percent.short_description = "Размер скидки"
 
 
 class Order(models.Model):
@@ -115,6 +112,14 @@ class Order(models.Model):
         ordering = ["-date_order"]
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
+
+    def display_products(self):
+        return " ".join(
+            f"{order_line.product.title}:{order_line.count};"
+            for order_line in self.orderline_set.all()
+        )
+
+    display_products.short_description = "Состав заказа"
 
     def __str__(self):
         return f"ID : {self.id}"

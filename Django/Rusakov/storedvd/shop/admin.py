@@ -19,6 +19,7 @@ class DiscountAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
         "id",
+        "display_products",
         "name",
         "discount",
         "phone",
@@ -38,4 +39,3 @@ class OrderLineAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProdactAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(OrderLine, OrderLineAdmin)
-
