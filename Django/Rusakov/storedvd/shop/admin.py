@@ -4,9 +4,46 @@ from shop.models import Section, Product, Discount, Order, OrderLine
 admin.site.register(Section)
 
 
+class PriceFilter(admin.SimpleListFilter):
+    title = "Цена"
+    parameter_name = "price"
+    round_value = 100
+
+    def lookups(self, request, model_admin):
+        """
+         return (
+            ('100', '0-100'),
+            ('200', '100-200'),
+            ('300', '200-300'),
+            ('400', '300-400'),
+            ('500', '400-500'),
+            ('600', '500-600'),
+            ('700', '600-700'),
+
+        )
+        """
+        filters = []
+        product = Product.objects.order_by("price").last()
+        if product:
+            max_price = round(product.price / self.round_value) * self.round_value + self.round_value
+            price = self.round_value
+            while price <= max_price:
+                start = price
+                end = f"{price-self.round_value} - {price}"
+                filters.append((start, end))
+                price += self.round_value
+        return filters
+
+    def queryset(self, request, queryset):
+        if not self.value():
+            return queryset
+        value = int(self.value())
+        return queryset.filter(price__gte=(value - 100), price__lte=value)
+
+
 class ProdactAdmin(admin.ModelAdmin):
     list_display = ("title", "section", "imagr", "price", "date")
-    list_filter = ("section", "price")
+    list_filter = ("section", PriceFilter)
     actions_on_bottom = True
     list_per_page = 10
     search_fields = ("title", "cast")
@@ -62,14 +99,14 @@ class OrderAdmin(admin.ModelAdmin):
         ("Доставка и оплата", {"fields": ("date_send", "status")}),
     )
 
-    list_filter = ('status','date_order')
+    list_filter = ("status", "date_order")
 
     date_hierarchy = "date_order"
 
 
 class OrderLineAdmin(admin.ModelAdmin):
     list_display = ("order", "product", "price", "count")
-    list_filter = ("order",'product')
+    list_filter = ("order", "product")
 
 
 admin.site.register(Product, ProdactAdmin)
