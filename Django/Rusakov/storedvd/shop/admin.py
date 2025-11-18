@@ -14,6 +14,18 @@ class ProdactAdmin(admin.ModelAdmin):
 class DiscountAdmin(admin.ModelAdmin):
     list_display = ("code", "value_percent")
 
+    def save_model(self, request, obj, form, change):
+        print("Request ", request)
+        print("Obj ", obj)
+        print("Form ", form)
+        print("Change ", change)
+        super().save_model(request, obj, form, change)
+        #return super().save_model(request, obj, form, change)
+        print("Request ", request)
+        print("Obj ", obj)
+        print("Form ", form)
+        print("Change ", change)        
+
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -49,7 +61,7 @@ class OrderAdmin(admin.ModelAdmin):
         ("Доставка и оплата", {"fields": ("date_send", "status")}),
     )
 
-    date_hierarchy = 'date_order'
+    date_hierarchy = "date_order"
 
 
 class OrderLineAdmin(admin.ModelAdmin):
