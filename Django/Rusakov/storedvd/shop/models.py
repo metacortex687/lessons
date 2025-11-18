@@ -121,6 +121,19 @@ class Order(models.Model):
 
     display_products.short_description = "Состав заказа"
 
+    def display_amount(self):
+        amount = sum(
+            order_line.price * order_line.count
+            for order_line in self.orderline_set.all()
+        )
+
+        if self.discount:
+            amount = float(amount)*(1-(self.discount.value)/100)
+        
+        return amount
+
+    display_amount.short_description = "Сумма"
+
     def __str__(self):
         return f"ID : {self.id}"
 

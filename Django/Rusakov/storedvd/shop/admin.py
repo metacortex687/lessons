@@ -20,6 +20,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "display_products",
+        "display_amount",
         "name",
         "discount",
         "phone",
