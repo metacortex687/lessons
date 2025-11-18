@@ -32,6 +32,23 @@ class OrderAdmin(admin.ModelAdmin):
         "status",
     )
 
+    fieldsets = (
+        ("Информация о заказе", {"fields": ("need_delivery", "discount")}),
+        (
+            "Информация о клиенте",
+            {
+                "fields": (
+                    "name",
+                    "phone",
+                    "email",
+                    "adress",
+                ),
+                "description": "Контактная информация",
+            },
+        ),
+        ("Доставка и оплата", {"fields": ("date_send", "status")}),
+    )
+
 
 class OrderLineAdmin(admin.ModelAdmin):
     list_display = ("order", "product", "price", "count")
