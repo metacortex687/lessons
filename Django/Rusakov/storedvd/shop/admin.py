@@ -49,6 +49,8 @@ class OrderAdmin(admin.ModelAdmin):
         ("Доставка и оплата", {"fields": ("date_send", "status")}),
     )
 
+    date_hierarchy = 'date_order'
+
 
 class OrderLineAdmin(admin.ModelAdmin):
     list_display = ("order", "product", "price", "count")
