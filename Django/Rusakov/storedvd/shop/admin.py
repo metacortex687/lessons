@@ -12,7 +12,7 @@ class ProdactAdmin(admin.ModelAdmin):
     search_fields = ('title','cast')
 
 class DiscountAdmin(admin.ModelAdmin):
-    list_display = ('code','value')
+    list_display = ('code','value_percent')
 
 admin.site.register(Product,ProdactAdmin)
 admin.site.register(Discount,DiscountAdmin)

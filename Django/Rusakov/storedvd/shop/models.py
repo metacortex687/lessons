@@ -69,8 +69,16 @@ class Discount(models.Model):
         verbose_name = "Скидка"
         verbose_name_plural = "Скидки"
 
+    def value_percent(self):
+        return f'{self.value}%'
+
+
     def __str__(self):
         return f"{self.code} ({self.value}%)"
+    
+    value_percent.short_description = 'Размер скидки'
+    
+    
 
 
 class Order(models.Model):
