@@ -15,6 +15,7 @@ class DiscountAdmin(admin.ModelAdmin):
     list_display = ("code", "value_percent")
 
 
+@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -37,4 +38,4 @@ class OrderLineAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProdactAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(OrderLine, OrderLineAdmin)
-admin.site.register(Order, OrderAdmin)
+
