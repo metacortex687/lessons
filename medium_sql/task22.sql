@@ -48,3 +48,45 @@ ORDER BY
   PT.prior_touches    
 
 
+-- попросил с использованием оконных функций
+
+WITH sends AS (
+  SELECT
+    cs.id,
+    cs.user_id,
+    cs.campaign_id,
+    cs.sent_at,
+
+    -- кол-во предыдущих касаний за 7 дней (без текущего)
+    COUNT(*) OVER (
+      PARTITION BY cs.user_id
+      ORDER BY cs.sent_at
+      RANGE BETWEEN INTERVAL '7 day' PRECEDING AND CURRENT ROW
+    ) - 1 AS prior_touches,
+
+    -- было ли вовлечение в течение 24 часов
+    EXISTS (
+      SELECT 1
+      FROM engagement_events ee
+      WHERE ee.user_id     = cs.user_id
+        AND ee.campaign_id = cs.campaign_id
+        AND ee.event_time >= cs.sent_at
+        AND ee.event_time <  cs.sent_at + INTERVAL '1 day'
+    )::int AS engagement
+  FROM
+    campaign_sends cs
+)
+SELECT
+  prior_touches,
+  COUNT(*)                      AS sends,
+  SUM(engagement)               AS engagements,
+  TO_CHAR(
+    SUM(engagement) * 100.0 / COUNT(*),
+    'FM990.00'
+  )                             AS engagement_rate_pct
+FROM
+  sends
+GROUP BY
+  prior_touches
+ORDER BY
+  prior_touches;
