@@ -66,7 +66,7 @@ class Article(models.Model):
         Image, on_delete=models.SET_NULL, null=True, verbose_name="Заглавная картинка"
     )
 
-    date = models.TimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.id} {self.title}"
