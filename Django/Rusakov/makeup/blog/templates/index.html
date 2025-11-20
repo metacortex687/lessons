@@ -1,3 +1,63 @@
 {% extends "base.html" %}
 
-{% block content %} <p>1232132131243534</p> {% endblock content %} <p>1232132131243534</p> 
+{% load static %}
+
+{% block content %} 
+<!-- gallery -->
+	<div class="gallery">
+		<!-- container -->
+		<div class="container">
+			<div class="gallery-info">
+				<h3>Наша галерея</h3>
+				<p>Мы вынуждены отталкиваться от того, что убеждённость некоторых оппонентов влечет за собой процесс внедрения и модернизации позиций, занимаемых участниками в отношении поставленных задач.</p>
+			</div>
+			<div class="portfolio-mian">
+					<div class="portfolio-top">
+                            {% for image in images %}
+                            {% cycle '<div class="col-md-3 port-1-left">' '' '' '' '<div class="col-md-3 port-1-right">' '' '' '' '<div class="col-md-3 portfolio-right">' '' '' '' '<div class="col-md-3 port-1-right portfolio-last">' '' '' ''%}
+                            <div class="portfolio app mix_all" data-cat="app" style="display: inline-block; opacity: 1;">
+                                <div class="portfolio-wrapper ">		
+                                    <a href={{image.file.url}} class="b-link-stripe b-animate-go  swipebox" title="">
+                                        <img src={{image.file.url}}><div class="b-wrapper"><h2 class="b-animate b-from-left prt-1  b-delay03 ">Фотография 1</h2>
+                                        </div></a>
+                                </div>
+                            </div>   
+                            {% if forloop.last %}
+                                </div>
+                            {% else %}
+                                {% cycle '' '' '' '</div>' '' '' '' '</div>' '' '' '' '</div>' '' '' '' '</div>' %}   
+                            {% endif %}                             
+                            {% endfor %}									
+                        <div class="clearfix"></div>
+					</div>
+				<link rel="stylesheet" href= {% static "css/swipebox.css" %} >
+				<script src={% static "js/jquery.swipebox.min.js" %}></script> 
+			    <script type="text/javascript">
+					jQuery(function($) {
+						$(".swipebox").swipebox();
+					});
+				</script>
+		</div>
+		<!-- //container -->
+	</div>
+	<!-- //gallery -->
+{% endblock content %}  
+
+{% block comments %}
+    <div class="col-md-3 comments">
+        <h3>Комментарии</h3>
+        {% for comment in trim_comments %}
+            <p><a href="single.html">{{comment}}</a></p>
+        {% endfor %}
+    </div>
+{% endblock comments %}
+
+
+{% block articles %}
+    {% for article in articles %}
+    <div class="post-info">
+        <a href="single.html">{{article.title}}</a>
+        <p>{{article.date}}</p>
+    </div>
+    {% endfor %}
+{% endblock articles %}

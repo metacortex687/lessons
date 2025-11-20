@@ -79,25 +79,10 @@
 				</div>
 				<div class="col-md-3 posts">
 					<h3>Последние статьи</h3>
-					<div class="post-info">
-						<a href="single.html">Статья 3</a>
-						<p>25 апреля 2025</p>
-					</div>
-					<div class="post-info">
-						<a href="single.html">Статья 2</a>
-						<p>15 марта 2025</p>
-					</div>
-					<div class="post-info">
-						<a href="single.html">Статья 1</a>
-						<p>25 февраля 2025</p>
-					</div>
+					{% block articles %}
+					{% endblock articles %}
 				</div>
-				<div class="col-md-3 comments">
-					<h3>Комментарии</h3>
-					<p><a href="single.html">Сторонники информации в науке будут рассмотрены исключительно...</a></p>
-					<p><a href="single.html">Очень интересно!</a></p>
-					<p><a href="single.html">Стремящиеся вытеснить традиционное производство, нанотехнологии...</a></p>
-				</div>
+				{% block comments %}{% endblock comments %}
 				<div class="col-md-3 address">
 					<h3>Адрес</h4>
 					<ul>
