@@ -5,10 +5,9 @@ from .models import Section, Product
 
 
 def index(request):
-    section = Section.objects.all().order_by("title")
     products = Product.objects.all().order_by(get_order_by_price(request))[:8]
     return render(
-        request, "index.html", context={"sections": section, "products": products}
+        request, "index.html", context={"products": products}
     )
 
 def get_order_by_price(request):
@@ -24,3 +23,6 @@ def get_order_by_price(request):
         order_by = '-date'    
 
     return order_by
+
+def delivery(request):
+    return render(request,'delivery.html')
