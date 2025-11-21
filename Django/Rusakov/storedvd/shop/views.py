@@ -23,5 +23,10 @@ def get_order_by_price(request):
 
     return order_by
 
+
 def delivery(request):
-    return render(request,'delivery.html')
+    return render(request, 'delivery.html')
+
+
+def contacts(request):
+    return render(request, 'contacts.html')
