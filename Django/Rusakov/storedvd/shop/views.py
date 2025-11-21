@@ -6,9 +6,8 @@ from .models import Section, Product
 
 def index(request):
     products = Product.objects.all().order_by(get_order_by_price(request))[:8]
-    return render(
-        request, "index.html", context={"products": products}
-    )
+    return render(request, 'index.html', context={'products': products})
+
 
 def get_order_by_price(request):
     order_by = ''
@@ -18,9 +17,9 @@ def get_order_by_price(request):
         if sort == 'price' or sort == 'title':
             if up == '0':
                 order_by = '-'
-            order_by += sort 
+            order_by += sort
     if not order_by:
-        order_by = '-date'    
+        order_by = '-date'
 
     return order_by
 
