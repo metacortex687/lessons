@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 from .models import Section, Product
@@ -30,3 +30,13 @@ def delivery(request):
 
 def contacts(request):
     return render(request, 'contacts.html')
+
+
+def section(request, id):
+    obj = get_object_or_404(Section, pk=id)
+    products = Product.objects.filter(section__exact=obj).order_by(
+        get_order_by_price(request)
+    )
+    return render(
+        request, 'section.html', context={'section': obj, 'products': products}
+    )
