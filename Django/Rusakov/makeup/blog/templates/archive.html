@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+	<!-- blog -->
+	<div class="blog">
+		<!-- container -->
+		<div class="container">
+			<div class="col-md-9 blog-grids">
+                {% for article in articles %}
+				<div class="blog-left single-left">
+					<a href="single.html">{{article.title}}</a>
+					<p class="likes">Размещено {{article.date}} (автор {{article.author}}) / {{article.comment_count}} {% if  article.comment_count == 1 %} комментарий {% else %} комментария {% endif %} </p>
+					<a href="single.html" class="b-img"><img src={{article.image.file.url}} alt="" /></a>
+					<p>{{article.preview}}</p>
+					<a href="single.html" class="more">Читать далее...</a>
+				</div>                
+                {% endfor %}
+			</div>
+			<div class="col-md-3 sidebar">
+				<h5>Поиск по блогу</h5>
+				<div class="search">
+				  <form>
+					<input type="text" value="Введите строку поиска..." onfocus="this.value='';" onblur="if (this.value == '') {this.value ='';}">
+					<input type="submit" value="">
+				  </form>
+				</div>
+				<div class="sidebar-bottom">
+					<h5>Архив</h5>
+					<ul>
+                        {% for archive_date in  archive_dates %}
+                        {% if  archive_date == current_archive_date %}
+                        <strong><li><a href={% url "archive" archive_date|date:"Y" archive_date|date:"m" %}>{{archive_date|date:"F Y"}}</a></li></strong>
+                        {% else %}
+                        <li><a href={% url "archive" archive_date|date:"Y" archive_date|date:"m" %}>{{archive_date|date:"F Y"}}</a></li>                        
+                        {% endif %}                        
+                        {% endfor %}						
+					</ul>
+				</div>
+				<div class="sidebar-last">
+					<h5>Галерея</h5>
+                    {% for image in images %}
+                    {% cycle '<ul>' '' '' %}
+                    <li><a href= {{image.file.url}} ><img src={{image.file.url}} alt="" ></a></li>
+                      
+                    
+                    {% cycle '' '' '</ul>' %}
+                    {% endfor %}
+				</div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+		<!-- //container -->
+	</div>
+	<!-- //blog -->
+{% endblock content %}
+

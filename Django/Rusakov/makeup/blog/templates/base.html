@@ -29,10 +29,10 @@
 					</div>
 					<div class="top-nav">
 							<ul class="cl-effect-1">
-								<li><a href="index.html">Главная</a></li>                                             
-								<li><a href="about.html">О нас</a></li>
-								<li><a href="blog.html">Блог</a></li> 
-								<li><a href="contact.html">Контакты</a></li>   
+								<li><a href= {% url "index" %} >Главная</a></li>                                             
+								<li><a href= {% url "about" %}>О нас</a></li>
+								<li><a href= {% url "articles" %}>Блог</a></li> 
+								<li><a href={% url "contact" %}>Контакты</a></li>   
 							</ul>
 					</div>
 				</div>
@@ -55,6 +55,7 @@
 
     {% block content %}{% endblock content %}
 
+	
 	<!-- footer -->
 	<div class="footer">
 		<!-- container -->
@@ -103,5 +104,6 @@
 		<!-- //container -->
 	</div>
 	<!-- //footer -->
+	
 </body>
 </html>
