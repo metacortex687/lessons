@@ -1,5 +1,7 @@
+from typing import Any
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.views import generic
 
 from .models import Section, Product
 
@@ -40,3 +42,15 @@ def section(request, id):
     return render(
         request, 'section.html', context={'section': obj, 'products': products}
     )
+
+
+class ProdactDetailView(generic.DetailView):
+    model = Product
+    template_name = 'product_detail.html'
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['products'] = Product.objects.filter(
+            section__exact=self.get_object().section
+        ).exclude(id=self.get_object().id)
+        return context

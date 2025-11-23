@@ -25,23 +25,11 @@
 			</table>
 		</td>
 	</tr>
-</table><table class="products">
+</table>
+<table class="products">
     {% for product in products %}
         {% cycle '<tr>' '' '' '' %}
-        <td>
-            <div class="intro_product">
-                <p class="img">
-                    <img src={{MEDIA_URL}}{{product.imagr.url}} alt={{product.title}} />
-                </p>
-                <p class="title">
-                    <a href="https://storedvd.ru/product?id=16">Кто я?</a>
-                </p>
-                <p class="price">{{product.price}}</p>
-                <p>
-                    <a class="link_cart" href="https://storedvd.ru/functions.php?func=add_cart&amp;id=16"></a>
-                </p>
-            </div>
-        </td>
+        {% include "product.html" %}
         {% if forloop.last %}
             </tr>
         {% else %}
@@ -49,4 +37,5 @@
         {% endif %}
 
     {% endfor %}
+</table>
 {% endblock content %}

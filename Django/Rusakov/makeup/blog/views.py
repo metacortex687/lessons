@@ -1,10 +1,11 @@
-from typing import Set
+from typing import Any
 from django.shortcuts import render
 from django.db.models import Count
+from django.views import generic
 
 from .models import Image, Comment, Article
 import datetime
-import random
+
 
 
 def index(request):
@@ -81,3 +82,18 @@ def archive(request, year, month):
             'images': images,
         },
     )
+
+
+class SingleArticleView(generic.DetailView):
+    model = Article
+    template_name = 'single.html'    
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        articles_all = Article.objects.all()
+
+        context = super().get_context_data(**kwargs)
+        context["comments"] = self.get_object().comment_set.all()
+        context["archive_dates"] = sorted_list_archeve_dates(articles_all)
+        context["images"] = Image.objects.all()[:9]
+        return context
+    

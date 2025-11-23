@@ -1,0 +1,11 @@
+			<div class="col-md-9 blog-grids">
+                {% for article in articles %}
+				<div class="blog-left single-left">
+					<a href="{% url "single"  article.pk %}">{{article.title}}</a>
+					<p class="likes">Размещено {{article.date}} (автор {{article.author}}) / {{article.comment_count}} {% if  article.comment_count == 1 %} комментарий {% else %} комментария {% endif %} </p>
+					<a href="{% url "single"  article.pk %}" class="b-img"><img src={{article.image.file.url}} alt="" /></a>
+					<p>{{article.preview}}</p>
+					<a href="{% url "single"  article.pk %}" class="more">Читать далее...</a>
+				</div>                
+                {% endfor %}
+			</div>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="blog">
+    <!-- container -->
+    <div class="container">
+        <div class="col-md-9 blog-grids">
+            <div class="blog-left single-left">
+                <h4>{{article.title}}</h4>
+                <img src="{{article.image.file.url}}" alt="" />
+                <h5>{{article.subtitle}}</h5>
+                <p class="likes">Размещено {{article.date}} (автор {{article.author}}) / 200 комментария</p>
+                {{article.content|linebreaksbr}}
+              </div>
+            <div class="single-grids">
+                <h2>Комментарии ({{comments|length}})</h2>
+                {% for comment in comments %}
+                <div class="single-comment">
+                    <div class="col-md-10 single-comment-right">
+                        <h6><b>{{comment.date}} / {{comment.author}}</b></h6>
+                        {{comment.content|linebreaksbr}}
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>                
+                {% endfor %}  
+            </div>
+        </div>
+        {% include "article_right_sidebar.html" %}
+    
+        <div class="clearfix"> </div>
+    </div>
+    <!-- //container -->
+</div>
+{% endblock content %}
+
+
+
+
