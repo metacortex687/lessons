@@ -22,6 +22,13 @@ class WomenSerializer(serializers.Serializer):
     is_published = serializers.BooleanField(default = True)
     cat_id = serializers.IntegerField()
 
+    def create(self, validated_data):
+        return Women.objects.create(**validated_data)
+
+
+
+
+
 
 # def encode():
 #     model = WomenModel('Angelina Joly', 'Content: Angelina Joly')

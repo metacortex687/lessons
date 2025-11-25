@@ -20,13 +20,9 @@ class WomenAPIView(APIView):
     def post(self, request):
         serializer = WomenSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
-        
-        post_new = Women.objects.create(
-            title=request.data['title'],
-            content=request.data['content'],
-            cat_id=request.data['cat_id']
-        )
-        return Response({'post': WomenSerializer(post_new).data})
+        serializer.save()
+
+        return Response({'post': serializer.data})
     
     def delete(self, request):
         woman = get_object_or_404(Women, id=request.data['id'])
