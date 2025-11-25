@@ -15,7 +15,7 @@ from .models import Women
 class WomenAPIView(APIView):
     def get(self, request):
         lst = Women.objects.all().values()
-        return Response({'posts': list(lst)})
+        return Response({'posts': WomenSerializer(lst, many=True).data})
     
     def post(self, request):
         post_new = Women.objects.create(
@@ -23,7 +23,7 @@ class WomenAPIView(APIView):
             content=request.data['content'],
             cat_id=request.data['cat_id']
         )
-        return Response({'post': model_to_dict(post_new)})
+        return Response({'post': WomenSerializer(post_new).data})
     
     def delete(self, request):
         woman = get_object_or_404(Women, id=request.data['id'])

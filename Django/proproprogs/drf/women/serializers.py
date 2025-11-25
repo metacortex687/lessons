@@ -17,20 +17,24 @@ class WomenModel:
 class WomenSerializer(serializers.Serializer):
     title = serializers.CharField(max_length = 255)
     content = serializers.CharField()
+    time_created = serializers.DateTimeField()
+    time_update = serializers.DateTimeField()
+    is_published = serializers.BooleanField(default = True)
+    cat_id = serializers.IntegerField()
 
 
-def encode():
-    model = WomenModel('Angelina Joly', 'Content: Angelina Joly')
-    model_sr = WomenSerializer(model)
-    print(model_sr.data, type(model_sr.data), sep='\n')
-    json = JSONRenderer().render(model_sr.data)
-    print(json, type(json), sep='\n')
+# def encode():
+#     model = WomenModel('Angelina Joly', 'Content: Angelina Joly')
+#     model_sr = WomenSerializer(model)
+#     print(model_sr.data, type(model_sr.data), sep='\n')
+#     json = JSONRenderer().render(model_sr.data)
+#     print(json, type(json), sep='\n')
 
-def decode():
-    stream = io.BytesIO(b'{"title":"Angelina Joly","content":"Content!: Angelina Joly"}')
-    data = JSONParser().parse(stream)
-    serializer = WomenSerializer(data=data)
-    serializer.is_valid()
-    print(serializer._validated_data)
+# def decode():
+#     stream = io.BytesIO(b'{"title":"Angelina Joly","content":"Content!: Angelina Joly"}')
+#     data = JSONParser().parse(stream)
+#     serializer = WomenSerializer(data=data)
+#     serializer.is_valid()
+#     print(serializer._validated_data)
 
     
