@@ -45,3 +45,7 @@ class WomenAPIView(APIView):
         serializer.save()
 
         return Response({'post': serializer.data})
+
+class WomenAPIList(generics.ListCreateAPIView):
+    queryset = Women.objects.all()
+    serializer_class = WomenSerializer
