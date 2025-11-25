@@ -17,8 +17,8 @@ class WomenModel:
 class WomenSerializer(serializers.Serializer):
     title = serializers.CharField(max_length = 255)
     content = serializers.CharField()
-    time_created = serializers.DateTimeField()
-    time_update = serializers.DateTimeField()
+    time_created = serializers.DateTimeField(read_only=True)
+    time_update = serializers.DateTimeField(read_only=True)
     is_published = serializers.BooleanField(default = True)
     cat_id = serializers.IntegerField()
 
@@ -35,6 +35,6 @@ class WomenSerializer(serializers.Serializer):
 #     data = JSONParser().parse(stream)
 #     serializer = WomenSerializer(data=data)
 #     serializer.is_valid()
-#     print(serializer._validated_data)
+#     print(serializer.validated_data)
 
     

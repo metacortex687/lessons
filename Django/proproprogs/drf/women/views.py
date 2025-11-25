@@ -18,6 +18,9 @@ class WomenAPIView(APIView):
         return Response({'posts': WomenSerializer(lst, many=True).data})
     
     def post(self, request):
+        serializer = WomenSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        
         post_new = Women.objects.create(
             title=request.data['title'],
             content=request.data['content'],
