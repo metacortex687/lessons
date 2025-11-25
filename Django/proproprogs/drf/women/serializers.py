@@ -8,7 +8,7 @@ import io
 class WomenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Women
-        fields = ('id', 'title', 'content', 'cat_id')
+        fields = ('id', 'title', 'content', 'cat_id', 'cat')
 
 
 # class WomenModel:
