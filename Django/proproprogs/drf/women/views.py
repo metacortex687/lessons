@@ -4,6 +4,7 @@ from django.forms.models import model_to_dict
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets
 
 from .serializers import WomenSerializer
 from .models import Women
@@ -57,3 +58,7 @@ class WomenAPIUpdate(generics.UpdateAPIView):
 class WomenAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer       
+
+class WomenViewSet(viewsets.ModelViewSet):
+    queryset = Women.objects.all()
+    serializer_class = WomenSerializer        
