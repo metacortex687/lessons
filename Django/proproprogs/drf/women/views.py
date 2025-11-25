@@ -5,7 +5,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializer import WomenSerializer
+from .serializers import WomenSerializer
 from .models import Women
 
 # class WomenAPIView(generics.ListAPIView):
