@@ -5,6 +5,7 @@
     <h1>Список статей</h1>
     {% for article in articles %}
     <a href="{% url "article" article.id %}"><H2>{{ article.name }}</H2></a>    
+    <a href="{% url "articles_update" article.id %}">Редактировать</a>  
     <div>{{ article.body|slice:':200' }}</div>
     {% endfor %}
 {% endblock content %}
