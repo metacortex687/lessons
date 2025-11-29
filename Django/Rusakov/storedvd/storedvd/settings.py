@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9ll)0joe(b=gr8n+&^2#1q1061n1(!1zwdwb%22-5b@9mf%+)('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1','storedvd.ru','www.storedvd.ru']
 
