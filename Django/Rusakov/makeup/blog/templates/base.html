@@ -81,9 +81,22 @@
 				<div class="col-md-3 posts">
 					<h3>Последние статьи</h3>
 					{% block articles %}
+						{% for article in last_articles %}
+						<div class="post-info">
+							<a href="{% url "single"  article.pk %}">{{article.title}}</a>
+							<p>{{article.date}}</p>
+						</div>
+						{% endfor %}
 					{% endblock articles %}
 				</div>
-				{% block comments %}{% endblock comments %}
+					{% block comments %}
+					<div class="col-md-3 comments">
+						<h3>Комментарии</h3>
+						{% for comment in last_comments %}
+							<p><a href="{% url "single"  comment.article.pk %}">{{comment}}</a></p>
+						{% endfor %}
+					</div>
+					{% endblock comments %}
 				<div class="col-md-3 address">
 					<h3>Адрес</h4>
 					<ul>

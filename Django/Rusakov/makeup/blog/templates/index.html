@@ -43,21 +43,7 @@
 	<!-- //gallery -->
 {% endblock content %}  
 
-{% block comments %}
-    <div class="col-md-3 comments">
-        <h3>Комментарии</h3>
-        {% for comment in trim_comments %}
-            <p><a href="single.html">{{comment}}</a></p>
-        {% endfor %}
-    </div>
-{% endblock comments %}
 
 
-{% block articles %}
-    {% for article in articles %}
-    <div class="post-info">
-        <a href="single.html">{{article.title}}</a>
-        <p>{{article.date}}</p>
-    </div>
-    {% endfor %}
-{% endblock articles %}
+
+
