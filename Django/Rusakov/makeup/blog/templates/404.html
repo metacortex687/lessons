@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+	{% block title %}<title>Страница не найдена. -404</title>{% endblock title %}	
+
+	{% block description %}
+		<meta name="description" content="Зпрошенная страница не сущществует." />
+	{% endblock description %}
+	{% block keywords %}
+		<meta name="keywords" content="страница не найдена, страница не существует" />
+	{% endblock keywords %}	
+
+
+    {% block content %}
+        <h2>Страница не существует</h2>
+    <p>Возможно, Вы ошиблись при вводе адреса. <br> Вернутся на <a href="{% url "index" %}">главную</a></p>
+    {% endblock %}
