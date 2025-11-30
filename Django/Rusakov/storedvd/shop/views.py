@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.views import generic
 
 from .models import Section, Product
+from .forms import SearchForm
+from django.db.models import Q
 
 
 def index(request):
@@ -54,3 +56,18 @@ class ProdactDetailView(generic.DetailView):
             section__exact=self.get_object().section
         ).exclude(id=self.get_object().id)
         return context
+
+
+def search(request):
+    search_form = SearchForm(request.GET)
+    if search_form.is_valid():
+        q = search_form.cleaned_data['q']
+        products = Product.objects.filter(
+            Q(title__icontains=q)
+            | Q(country__icontains=q)
+            | Q(director__icontains=q)
+            | Q(cast__icontains=q)
+            | Q(description__icontains=q)
+        )
+
+    return render(request, 'search.html', {'products': products, 'q': q})

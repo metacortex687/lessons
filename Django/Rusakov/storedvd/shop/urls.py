@@ -8,4 +8,5 @@ urlpatterns = [
     path('contacts', views.contacts, name='contacts'),
     path('section/<int:id>', views.section, name='section'),
     path('product/<int:pk>', views.ProdactDetailView.as_view(), name='product'),
+    path('search', views.search, name='search'),
 ]

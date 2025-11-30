@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block title %}<title>"Поиск: {{q}}." </title>{% endblock title %}	
+
+{% block description %}
+    <meta name="description" content="Поиск: {{q|lower}}." />
+{% endblock description %}
+{% block keywords %}
+    <meta name="keywords" content="{{q}}" />
+{% endblock keywords %}	
+
+{% block header %} <h3>Поиск</h3>{% endblock header %}
