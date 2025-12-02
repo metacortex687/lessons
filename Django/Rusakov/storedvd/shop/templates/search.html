@@ -10,3 +10,20 @@
 {% endblock keywords %}	
 
 {% block header %} <h3>Поиск</h3>{% endblock header %}
+
+{% block sort %}{% endblock sort %}
+
+{% block before_content %}
+<div id="search_result">
+	<h2>Результаты поиска: {{q}}</h2>
+    {% if not products %}
+    <p>Ничего не найдено</p>
+    {% endif %}
+</div>
+{% endblock before_content %}
+{% block main_header %}
+    {% if not products %}
+    {% else %}
+    {{block.super}}
+    {% endif %}
+{% endblock main_header %}
