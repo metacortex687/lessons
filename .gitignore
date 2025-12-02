@@ -16,6 +16,7 @@
 !*.png
 !*.sql
 !*.sql
+!Makefile
 
 __pycache__/
 .vscode/
