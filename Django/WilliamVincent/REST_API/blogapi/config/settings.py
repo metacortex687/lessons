@@ -130,6 +130,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
     'DEFAULT_AUTHENTICATION_CLASSE': [
         'rest_framework.autentication.SessionAuthentication',
-        'rest_framework.autentication.BasicAuthentication',
+        'rest_framework.autentication.TokenAuthentication',
     ],
 }
