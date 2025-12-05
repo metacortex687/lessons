@@ -23,7 +23,7 @@ from rest_framework import routers
 from women.views import WomenAPIList, WomenAPIUpdate, WomenAPIDetailView, WomenViewSet
 
 router =routers.DefaultRouter()
-router.register(r'women', WomenViewSet)
+router.register(r'women', WomenViewSet, basename='women')
 print(router.urls)
 
 urlpatterns = [

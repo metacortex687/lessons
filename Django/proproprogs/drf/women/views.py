@@ -5,9 +5,10 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 from .serializers import WomenSerializer
-from .models import Women
+from .models import Women, Category
 
 # class WomenAPIView(generics.ListAPIView):
 #     queryset = Women.objects.all()
@@ -60,5 +61,14 @@ class WomenAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = WomenSerializer       
 
 class WomenViewSet(viewsets.ModelViewSet):
-    queryset = Women.objects.all()
-    serializer_class = WomenSerializer        
+    # queryset = Women.objects.all()
+    serializer_class = WomenSerializer   
+
+    @action(methods=['get'], detail=True)
+    def category(self, request, pk=None):
+        cats = Category.objects.all()
+        return Response({'cats': [c.id for c in cats]})
+    
+    def get_queryset(self):
+        return Women.objects.all()[:3]
+
