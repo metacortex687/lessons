@@ -6,9 +6,11 @@ import io
 
 
 class WomenSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Women
-        fields = ('id', 'title', 'content', 'cat_id', 'cat')
+        fields = '__all__'
 
 
 # class WomenModel:
