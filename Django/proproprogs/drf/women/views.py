@@ -48,27 +48,35 @@ from .models import Women, Category
 
 #         return Response({'post': serializer.data})
 
+
 class WomenAPIList(generics.ListCreateAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
 
+
 class WomenAPIUpdate(generics.UpdateAPIView):
     queryset = Women.objects.all()
-    serializer_class = WomenSerializer    
+    serializer_class = WomenSerializer
+
 
 class WomenAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Women.objects.all()
-    serializer_class = WomenSerializer       
+    serializer_class = WomenSerializer
+
 
 class WomenViewSet(viewsets.ModelViewSet):
     # queryset = Women.objects.all()
-    serializer_class = WomenSerializer   
+    serializer_class = WomenSerializer
 
     @action(methods=['get'], detail=True)
     def category(self, request, pk=None):
         cats = Category.objects.all()
         return Response({'cats': [c.id for c in cats]})
-    
-    def get_queryset(self):
-        return Women.objects.all()[:3]
 
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+
+        if not pk:
+            return Women.objects.all()[:3]
+
+        return Women.objects.filter(pk=pk)
