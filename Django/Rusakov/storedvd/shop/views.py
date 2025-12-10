@@ -2,6 +2,7 @@ from typing import Any
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views import generic
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .models import Section, Product
 from .forms import SearchForm
@@ -60,6 +61,7 @@ class ProdactDetailView(generic.DetailView):
 
 def search(request):
     search_form = SearchForm(request.GET)
+
     if search_form.is_valid():
         q = search_form.cleaned_data['q']
         products = Product.objects.filter(
@@ -69,5 +71,14 @@ def search(request):
             | Q(cast__icontains=q)
             | Q(description__icontains=q)
         )
+        page = request.GET.get('page', 1)
+        paginator = Paginator(products, 2)
+        try:
+            products = paginator.page(page)
+        except PageNotAnInteger:
+            products = paginator.page(1)
+        except EmptyPage:
+            products = paginator.page(paginator.num_pages)
+        print(request)
 
     return render(request, 'search.html', {'products': products, 'q': q})

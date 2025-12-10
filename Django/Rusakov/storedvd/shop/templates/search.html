@@ -27,3 +27,23 @@
     {{block.super}}
     {% endif %}
 {% endblock main_header %}
+
+{% block pagination %}
+{% if products.has_other_pages %}
+<ul class="pagination">
+    {% if products.has_previous %}
+    <li><a href="{{request.path}}?q={{q}}&amp;page={{products.previous_page_number}}">Назад</a></li>
+    {% else %}
+    <li>Назад</li>
+    {% endif %}
+    {% for i in products.paginator.page_range  %}
+    {% if products.numder == i %}
+    <li cluss="current">{{i}}</li>
+    {% else %}
+    <a href="{{request.path}}?q={{q}}&amp;page={{i}}">{{i}}</a>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock pagination %}
+
