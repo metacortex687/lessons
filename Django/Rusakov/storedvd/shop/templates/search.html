@@ -43,6 +43,11 @@
     <a href="{{request.path}}?q={{q}}&amp;page={{i}}">{{i}}</a>
     {% endif %}
     {% endfor %}
+    {% if products.has_next %}
+    <li><a href="{{request.path}}?q={{q}}&amp;page={{products.next_page_number}}">Вперед</a></li>
+    {% else %}
+    <li>Вперед</li>
+    {% endif %}    
 </ul>
 {% endif %}
 {% endblock pagination %}
