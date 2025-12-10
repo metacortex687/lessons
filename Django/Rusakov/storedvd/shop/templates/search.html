@@ -37,8 +37,8 @@
     <li>Назад</li>
     {% endif %}
     {% for i in products.paginator.page_range  %}
-    {% if products.numder == i %}
-    <li cluss="current">{{i}}</li>
+    {% if products.number == i %}
+    <li class="current">{{i}}</li>
     {% else %}
     <a href="{{request.path}}?q={{q}}&amp;page={{i}}">{{i}}</a>
     {% endif %}
