@@ -58,6 +58,12 @@ class ProdactDetailView(generic.DetailView):
     model = Product
     template_name = 'product_detail.html'
 
+    def get(self, request, *args, **kwargs):
+        result = prerender(request)
+        if result:
+            return result
+        return super(ProdactDetailView, self).get(self, request, *args, **kwargs)
+
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['products'] = Product.objects.filter(
