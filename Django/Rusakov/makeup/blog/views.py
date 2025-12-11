@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.db.models import Count, Q
 from django.views import generic
 from django.http.response import HttpResponse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .models import Image, Comment, Article
 import datetime
@@ -108,6 +109,15 @@ def search(request):
             | Q(author__first_name__icontains=q)
             | Q(author__last_name__icontains=q)
         )
+
+        page = request.GET.get('page', 1)
+        paginator = Paginator(articles, 2)
+        try:
+            articles = paginator.page(page)
+        except PageNotAnInteger:
+            articles = paginator.page(1)
+        except EmptyPage:
+            articles = paginator.page(paginator.num_pages)
 
     return render(
         request,
