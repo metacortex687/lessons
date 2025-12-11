@@ -10,6 +10,9 @@ from django.db.models import Q
 
 
 def index(request):
+    result = prerender(request)
+    if result:
+        return result
     products = Product.objects.all().order_by(get_order_by_price(request))[:8]
     return render(request, 'index.html', context={'products': products})
 
@@ -38,6 +41,10 @@ def contacts(request):
 
 
 def section(request, id):
+    result = prerender(request)
+    if result:
+        return result
+    
     obj = get_object_or_404(Section, pk=id)
     products = Product.objects.filter(section__exact=obj).order_by(
         get_order_by_price(request)
