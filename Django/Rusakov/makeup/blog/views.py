@@ -111,7 +111,7 @@ def search(request):
         )
 
         page = request.GET.get('page', 1)
-        paginator = Paginator(articles, 2)
+        paginator = Paginator(articles, 5)
         try:
             articles = paginator.page(page)
         except PageNotAnInteger:
