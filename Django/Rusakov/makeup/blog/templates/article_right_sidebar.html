@@ -3,8 +3,8 @@
 			<div class="col-md-3 sidebar">
 				<h5>Поиск по блогу</h5>
 				<div class="search">
-				  <form>
-					<input type="text" value="Введите строку поиска..." onfocus="this.value='';" onblur="if (this.value == '') {this.value ='';}">
+				   <form action="{% url "search" %}">
+					{{search_form.q}}
 					<input type="submit" value="">
 				  </form>
 				</div>

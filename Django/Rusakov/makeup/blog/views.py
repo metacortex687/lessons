@@ -1,10 +1,12 @@
 from typing import Any
 from django.shortcuts import render
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.views import generic
+from django.http.response import HttpResponse
 
 from .models import Image, Comment, Article
 import datetime
+from .forms import SearchForm
 
 
 def index(request):
@@ -89,3 +91,30 @@ class SingleArticleView(generic.DetailView):
         context['archive_dates'] = sorted_list_archeve_dates(articles_all)
         context['images'] = Image.objects.all()[:9]
         return context
+
+
+def search(request):
+    images = Image.objects.all()[:9]
+
+    search_form = SearchForm(request.GET)
+
+    if search_form.is_valid():
+        q = search_form.cleaned_data['q']
+        articles = Article.objects.filter(
+            Q(title__icontains=q)
+            | Q(subtitle__icontains=q)
+            | Q(content__icontains=q)
+            | Q(author__username__icontains=q)
+            | Q(author__first_name__icontains=q)
+            | Q(author__last_name__icontains=q)
+        )
+
+    return render(
+        request,
+        'search.html',
+        context={
+            'articles': articles,
+            'images': images,
+            'q': q,
+        },
+    )

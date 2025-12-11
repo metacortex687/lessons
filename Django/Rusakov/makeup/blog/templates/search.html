@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+	<!-- blog -->
+	<div class="blog">
+		<!-- container -->
+		<div class="container">
+			{% include "articles_content.html" %}
+			{% include "article_right_sidebar.html" %}
+			<div class="clearfix"> </div>
+		</div>
+		<!-- //container -->
+	</div>
+	<!-- //blog -->
+{% endblock content %}
+
+{% block before_content %}
+<div id="search_result">
+	<h2>Результаты поиска: {{q}}</h2>
+    {% if not articles %}
+    <p>Ничего не найдено</p>
+    {% endif %}
+</div>
+{% endblock before_content %}
