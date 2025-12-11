@@ -79,6 +79,5 @@ def search(request):
             products = paginator.page(1)
         except EmptyPage:
             products = paginator.page(paginator.num_pages)
-        print(request)
 
     return render(request, 'search.html', {'products': products, 'q': q})
