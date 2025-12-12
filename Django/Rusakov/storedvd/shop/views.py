@@ -1,6 +1,6 @@
 from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views import generic
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -15,6 +15,18 @@ def index(request):
         return result
     products = Product.objects.all().order_by(get_order_by_price(request))[:8]
     return render(request, 'index.html', context={'products': products})
+
+
+def prerender(request):
+    product_id = request.GET.get('add_cart')
+    if product_id:
+        get_object_or_404(Product, pk=product_id)
+        cart_info = request.session.get('cart_info', {})
+        count = cart_info.get(product_id, 0)
+        count += 1
+        cart_info.update({product_id: count})
+        request.session['cart_info'] = cart_info
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'), '/')
 
 
 def get_order_by_price(request):
@@ -44,7 +56,7 @@ def section(request, id):
     result = prerender(request)
     if result:
         return result
-    
+
     obj = get_object_or_404(Section, pk=id)
     products = Product.objects.filter(section__exact=obj).order_by(
         get_order_by_price(request)
@@ -100,13 +112,16 @@ def search(request):
     return render(request, 'search.html', {'products': products, 'q': q})
 
 
-def prerender(request):
-    product_id = request.GET.get('add_cart')
-    if product_id:
-        get_object_or_404(Product, pk=product_id)
-        cart_info = request.session.get('cart_info', {})
-        count = cart_info.get(product_id, 0)
-        count += 1
-        cart_info.update({product_id: count})
-        request.session['cart_info'] = cart_info
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'), '/')
+def cart(request):
+    cart_info = request.session.get('cart_info')
+    products = []
+    if cart_info:
+        for product_id in cart_info:
+            try:
+                product = Product.objects.get(pk=product_id)
+                product.count = cart_info[product_id]
+                products.append(product)
+            except Product.DoesNotExist:
+                raise Http404()
+
+    return render(request, 'cart.html', {'products': products})
