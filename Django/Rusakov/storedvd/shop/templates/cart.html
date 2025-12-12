@@ -16,6 +16,7 @@
 	<h2>Корзина</h2>
 	{% if products %}
 		<form name="cart" action="{% url "cart" %}" method="post">
+			{% csrf_token %}
 			<table>
 				<tr>
 					<td colspan="8" id="cart_top"></td>
