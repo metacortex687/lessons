@@ -3,8 +3,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views import generic
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.urls import reverse
 
-from .models import Section, Product
+from .models import Section, Product, Discount
 from .forms import SearchForm
 from django.db.models import Q
 
@@ -113,6 +114,10 @@ def search(request):
 
 
 def cart(request):
+    result = update_cart_info(request)
+    if result:
+        return result
+
     cart_info = request.session.get('cart_info')
     products = []
     if cart_info:
@@ -125,3 +130,35 @@ def cart(request):
                 raise Http404()
 
     return render(request, 'cart.html', {'products': products})
+
+
+def update_cart_info(request):
+    if request.POST:
+        cart_info = {}
+        for param in request.POST:
+            value = request.POST.get(param)
+            print(param, value)
+            if param.startswith('count_') and value.isnumeric():
+                product_id = param.replace('count_', '')
+                get_object_or_404(Product, pk=product_id)
+                cart_info[product_id] = int(value)
+            if param == 'discount' and value:
+                try:
+                    Discount.objects.get(code__exact=value)
+                    request.session['discount'] = value
+                except Discount.DoesNotExist:
+                    request.session['discount'] = ''
+
+        request.session['cart_info'] = cart_info
+
+    if request.GET.get('delete_cart'):
+        product_id = request.GET.get('delete_cart')
+        get_object_or_404(Product, pk=product_id)
+        cart_info = request.session.get('cart_info')
+        current_count = cart_info.get(product_id, 0)
+        if current_count <= 1:
+            cart_info.pop(product_id)
+        else:
+            cart_info[product_id] -= 1
+        request.session['cart_info'] = cart_info
+        return HttpResponseRedirect(reverse('cart'))

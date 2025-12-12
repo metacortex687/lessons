@@ -73,7 +73,7 @@
 								<tr>
 									<td>Введите номер купона со скидкой<br /><span>(если есть)</span></td>
 									<td>
-										<input type="text" name="discount" value="" />
+										<input type="text" name="discount" value="{{discount}}" />
 									</td>
 									<td>
 										
@@ -87,7 +87,7 @@
 				<tr id="summa">
 					<td class="cart_left"></td>
 					<td colspan="6">
-						<p>Итого : <span>{{sum_in_cart}} руб.</span></p>
+						<p>Итого{% if discount %}(со скидкой){% endif %}: <span>{{sum_in_cart}} руб.</span></p>
 					</td>
 					<td class="cart_right"></td>
 				</tr>

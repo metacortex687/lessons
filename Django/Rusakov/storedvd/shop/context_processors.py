@@ -1,4 +1,4 @@
-from .models import Section, Product
+from .models import Section, Product, Discount
 from .forms import SearchForm
 
 
@@ -11,9 +11,18 @@ def add_default_data(request):
         sum_product = Product.objects.get(pk=key).price * cart_info[key]
         sum_in_cart += sum_product
 
+    try:
+        discount_code = request.session.get('discount', '')
+        discount = Discount.objects.get(code__exact=discount_code)
+        if discount:
+            sum_in_cart = float(sum_in_cart) * (1 - (discount.value) / 100)
+    except Discount.DoesNotExist:
+        pass
+
     return {
         'sections': Section.objects.all().order_by('title'),
         'search_form': SearchForm(),
         'count_in_cart': count_in_cart,
         'sum_in_cart': sum_in_cart,
+        'discount': discount_code,
     }
