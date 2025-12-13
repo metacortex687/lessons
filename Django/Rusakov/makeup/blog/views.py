@@ -92,7 +92,7 @@ def single(request, pk):
         comment = request.POST.get('comment','')
 
         if username and email and comment:
-            request.session.
+            
             Comment.objects.create(article=article, author = username, email = email, content = comment)
 
     return render(
