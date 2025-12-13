@@ -1,9 +1,10 @@
 from typing import Any
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Q
 from django.views import generic
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.urls import reverse
 
 from .models import Image, Comment, Article
 import datetime
@@ -80,18 +81,30 @@ def archive(request, year, month):
     )
 
 
-class SingleArticleView(generic.DetailView):
-    model = Article
-    template_name = 'single.html'
+def single(request, pk):
+    articles_all = Article.objects.all()
+    article = get_object_or_404(Article, pk = pk)
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        articles_all = Article.objects.all()
+    if request.POST:
+        
+        username = request.POST.get('username','')
+        email = request.POST.get('email','')
+        comment = request.POST.get('comment','')
 
-        context = super().get_context_data(**kwargs)
-        context['comments'] = self.get_object().comment_set.all()
-        context['archive_dates'] = sorted_list_archeve_dates(articles_all)
-        context['images'] = Image.objects.all()[:9]
-        return context
+        if username and email and comment:
+            request.session.
+            Comment.objects.create(article=article, author = username, email = email, content = comment)
+
+    return render(
+        request,
+        'single.html',
+        {
+            'comments': article.comment_set.all(),
+            'archive_dates': sorted_list_archeve_dates(articles_all),
+            'images': Image.objects.all()[:9],
+            'article': article,
+        },
+    )
 
 
 def search(request):

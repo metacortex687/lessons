@@ -24,6 +24,16 @@
                 </div>                
                 {% endfor %}  
             </div>
+            <div class="single-reply">
+                <h4>Написать комментарий</h4>
+                <form action="{% url "single" article.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" placeholder="Имя" required="" name="username">
+                    <input class="name" type="text" placeholder="E-mail" required="" name="email">
+                    <textarea placeholder="Комментарий" required="" name="comment"></textarea>
+                    <input type="submit" value="Отправить">
+                </form>
+            </div>        
         </div>
         {% include "article_right_sidebar.html" %}
     

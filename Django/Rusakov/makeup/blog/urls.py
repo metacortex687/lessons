@@ -8,6 +8,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('articles/', views.articles, name='articles'),
     path('archive/<int:year>/<int:month>', views.archive, name='archive'),
-    path('single/<int:pk>/', views.SingleArticleView.as_view(), name='single'),
+    path('single/<int:pk>/', views.single, name='single'),
     path('search/', views.search, name='search'),    
 ]
