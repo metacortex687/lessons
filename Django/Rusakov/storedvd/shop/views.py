@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import reverse
 
 from .models import Section, Product, Discount
-from .forms import SearchForm
+from .forms import SearchForm, OrderModelForm
 from django.db.models import Q
 
 
@@ -162,3 +162,12 @@ def update_cart_info(request):
             cart_info[product_id] -= 1
         request.session['cart_info'] = cart_info
         return HttpResponseRedirect(reverse('cart'))
+
+
+def order(request):
+    cart_info = request.session.get('cart_info')
+    if not cart_info:
+        raise Http404
+
+    form = OrderModelForm()
+    return render(request, 'order.html', {'form': form})
