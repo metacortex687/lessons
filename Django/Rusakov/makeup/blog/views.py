@@ -96,6 +96,7 @@ def single(request, pk):
             request.session['email'] = email
             
             Comment.objects.create(article=article, author = username, email = email, content = comment)
+            return HttpResponseRedirect(reverse('single', args=[pk]))
 
     return render(
         request,
