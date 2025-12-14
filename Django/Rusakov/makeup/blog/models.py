@@ -20,35 +20,34 @@ class Image(models.Model):
     description = models.CharField(
         validators=[MinLengthValidator(1)],
         max_length=150,
-        verbose_name="Описание",
-        help_text="Введите описание",
+        verbose_name='Описание',
+        help_text='Введите описание',
         blank=True,
-        default="",
+        default='',
     )
     date = models.TimeField(auto_now_add=True)
 
-    file = models.ImageField(upload_to="images", verbose_name="Изображения")
+    file = models.ImageField(upload_to='images', verbose_name='Изображения')
 
     def __str__(self):
-        return self.file.name.split("/")[1]
+        return self.file.name.split('/')[1]
 
 
 class Article(models.Model):
-
     title = models.CharField(
         validators=[MinLengthValidator(2)],
         max_length=70,
-        verbose_name="Заголовок",
-        help_text="Введите название статьи",
+        verbose_name='Заголовок',
+        help_text='Введите название статьи',
     )
 
     subtitle = models.CharField(
-        max_length=255, verbose_name="Подзаголовок", blank=True, default=""
+        max_length=255, verbose_name='Подзаголовок', blank=True, default=''
     )
 
     @property
     def preview(self):
-        return (self.content[:300] + "...") if len(self.content) > 300 else self.content
+        return (self.content[:300] + '...') if len(self.content) > 300 else self.content
 
     # preview = models.CharField(
     #     validators=[MinLengthValidator(5)],
@@ -56,31 +55,31 @@ class Article(models.Model):
     #     verbose_name="Превью",
     #     help_text="Отображается в списке статей",
     # )
-    content = models.TextField(verbose_name="Текст статьи")
+    content = models.TextField(verbose_name='Текст статьи')
 
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.RESTRICT
+        settings.AUTH_USER_MODEL, verbose_name='Автор', on_delete=models.RESTRICT
     )
 
     image = models.ForeignKey(
-        Image, on_delete=models.SET_NULL, null=True, verbose_name="Заглавная картинка"
+        Image, on_delete=models.SET_NULL, null=True, verbose_name='Заглавная картинка'
     )
 
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.id} {self.title}"
+        return f'{self.id} {self.title}'
 
     class Meta:
-        ordering = ["-date"]
-        verbose_name = "Статья"
-        verbose_name_plural = "Статьи"
+        ordering = ['-date']
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
 
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     author = models.CharField(
-        max_length=70, validators=[MinLengthValidator(1)], verbose_name="Имя"
+        max_length=70, validators=[MinLengthValidator(1)], verbose_name='Имя'
     )
     email = models.EmailField(null=True, blank=True)
 
@@ -88,29 +87,37 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.article.id} {self.author} {self.date.date()}: {self.content[0:20]} -> {self.article.title}"
+        return f'{self.article.id} {self.author} {self.date.date()}: {self.content[0:20]} -> {self.article.title}'
 
     class Meta:
-        ordering = ["-date"]
-        verbose_name = "Комментарий"
-        verbose_name_plural = "Комментарии"
+        ordering = ['-date']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
 
 class Feedback(models.Model):
     author = models.CharField(
-        max_length=70, validators=[MinLengthValidator(1)], verbose_name="Имя"
+        max_length=70, validators=[MinLengthValidator(1)], verbose_name='Имя'
     )
     email = models.EmailField()
     content = models.TextField()
+    title = models.CharField(
+        null=True,
+        validators=[MinLengthValidator(2)],
+        max_length=70,
+        verbose_name='Тема',
+        help_text='Тема',
+    )
+
     date = models.TimeField(auto_now_add=True)
 
-    STATUSES = [("NEW", "Новая обартная связь"), ("PCD", "Обработано")]
+    STATUSES = [('NEW', 'Новая обартная связь'), ('PCD', 'Обработано')]
 
     status_feed_back = models.CharField(
-        choices=STATUSES, max_length=3, verbose_name="Статус"
+        choices=STATUSES, max_length=3, verbose_name='Статус'
     )
 
     class Meta:
-        ordering = ["-date"]
-        verbose_name = "Обратная связь"
-        verbose_name_plural = "Обратная связь"
+        ordering = ['-date']
+        verbose_name = 'Обратная связь'
+        verbose_name_plural = 'Обратная связь'

@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from .models import Image, Comment, Article
 import datetime
-from .forms import SearchForm
+from .forms import SearchForm, FeedbackForm
 
 
 def index(request):
@@ -36,7 +36,7 @@ def about(request):
 
 
 def contact(request):
-    return render(request, 'contact.html')
+    return render(request, 'contact.html', {'form': FeedbackForm()})
 
 
 def articles(request):
@@ -83,19 +83,20 @@ def archive(request, year, month):
 
 def single(request, pk):
     articles_all = Article.objects.all()
-    article = get_object_or_404(Article, pk = pk)
+    article = get_object_or_404(Article, pk=pk)
 
     if request.POST:
-        
-        username = request.POST.get('username','')
-        email = request.POST.get('email','')
-        comment = request.POST.get('comment','')
+        username = request.POST.get('username', '')
+        email = request.POST.get('email', '')
+        comment = request.POST.get('comment', '')
 
         if username and email and comment:
             request.session['username'] = username
             request.session['email'] = email
-            
-            Comment.objects.create(article=article, author = username, email = email, content = comment)
+
+            Comment.objects.create(
+                article=article, author=username, email=email, content=comment
+            )
             return HttpResponseRedirect(reverse('single', args=[pk]))
 
     return render(

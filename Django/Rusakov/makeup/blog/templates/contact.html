@@ -96,11 +96,16 @@
 				</div>
 				<div class="contact-form">
 					<h3>Связаться с нами</h3>
-					<form>
-						<input type="text" placeholder="Имя" required="">
+					<form name="contact-form">
+						{% csrf_token %}
+						{{form.author}}
+						{{form.email}}
+						{{form.title}}
+						{{form.content}}
+						{% comment %} <input type="text" placeholder="Имя" required="">
 						<input type="text" placeholder="E-mail" required="">
 						<input type="text" placeholder="Тема" required="">
-						<textarea placeholder="Сообщение" required=""></textarea>
+						<textarea placeholder="Сообщение" required=""></textarea> {% endcomment %}
 						<input type="submit" value="Отправить">
 					</form>
 				</div>
