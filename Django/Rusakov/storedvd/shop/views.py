@@ -5,7 +5,7 @@ from django.views import generic
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import reverse
 
-from .models import Section, Product, Discount
+from .models import Section, Product, Discount, Order, OrderLine
 from .forms import SearchForm, OrderModelForm
 from django.db.models import Q
 
@@ -137,7 +137,6 @@ def update_cart_info(request):
         cart_info = {}
         for param in request.POST:
             value = request.POST.get(param)
-            print(param, value)
             if param.startswith('count_') and value.isnumeric():
                 product_id = param.replace('count_', '')
                 get_object_or_404(Product, pk=product_id)
@@ -169,5 +168,51 @@ def order(request):
     if not cart_info:
         raise Http404
 
-    form = OrderModelForm()
-    return render(request, 'order.html', {'form': form})
+    if request.method == 'POST':
+        form = OrderModelForm(request.POST)
+        if form.is_valid():
+            order_obj = Order()
+            order_obj.need_delivery = form.cleaned_data['delivery'] == 1
+            discount_code = request.session.get('discount')
+            if discount_code:
+                try:
+                    order_obj.discount = Discount.objects.get(code__exact=discount_code)
+                except Discount.DoesNotExist:
+                    pass
+            order_obj.name = form.cleaned_data['name']
+            order_obj.phone = form.cleaned_data['phone']
+            order_obj.email = form.cleaned_data['email']
+            order_obj.adress = form.cleaned_data['adress']
+            order_obj.notice = form.cleaned_data['notice']
+            order_obj.save()
+            add_order_lines(request, order_obj)
+            return HttpResponseRedirect(reverse('addorder'))
+
+        return render(request, 'order.html', {'form': form})
+
+    return render(request, 'order.html', {'form': OrderModelForm()})
+
+
+def add_order_lines(request, order_obj):
+    cart_info = request.session.get('cart_info', {})
+    for key in cart_info:
+        order_line = OrderLine()
+        order_line.order = order_obj
+        order_line.product = get_object_or_404(Product, pk=key)
+        order_line.price = order_line.product.price
+        order_line.count = cart_info[key]
+        order_line.save()
+    del request.session['cart_info']
+
+    products = []
+    if cart_info:
+        for product_id in cart_info:
+            try:
+                product = Product.objects.get(pk=product_id)
+                product.count = cart_info[product_id]
+                products.append(product)
+            except Product.DoesNotExist:
+                raise Http404()
+
+def addorder(request):
+    return render(request, 'addorder.html')
