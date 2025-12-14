@@ -19,6 +19,7 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_filter = ("status_feed_back",)
+    list_display = ("date", "author", "title")
 
 
 @admin.register(Article)

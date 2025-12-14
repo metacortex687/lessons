@@ -114,7 +114,7 @@ class Feedback(models.Model):
     STATUSES = [('NEW', 'Новая обартная связь'), ('PCD', 'Обработано')]
 
     status_feed_back = models.CharField(
-        choices=STATUSES, max_length=3, verbose_name='Статус'
+        choices=STATUSES, max_length=3, verbose_name='Статус', default='NEW'
     )
 
     class Meta:

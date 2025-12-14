@@ -6,7 +6,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import reverse
 
-from .models import Image, Comment, Article
+from .models import Image, Comment, Article, Feedback
 import datetime
 from .forms import SearchForm, FeedbackForm
 
@@ -36,6 +36,14 @@ def about(request):
 
 
 def contact(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('contact'))
+
+        return render(request, 'contact.html', {'form': FeedbackForm()})
+
     return render(request, 'contact.html', {'form': FeedbackForm()})
 
 
