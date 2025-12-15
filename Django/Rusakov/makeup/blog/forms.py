@@ -1,5 +1,6 @@
 from django import forms
 from .models import Feedback
+from django.contrib.auth.forms import UserCreationForm
 
 
 class SearchForm(forms.Form):
@@ -22,3 +23,8 @@ class FeedbackForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'placeholder': 'Тема'}),
             'content': forms.Textarea(attrs={'placeholder': 'Сообщение'}),
         }
+
+
+class RegistrationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        fields = ('username', 'email', 'password1', 'password2')

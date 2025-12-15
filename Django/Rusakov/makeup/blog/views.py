@@ -8,8 +8,9 @@ from django.urls import reverse
 
 from .models import Image, Comment, Article, Feedback
 import datetime
-from .forms import SearchForm, FeedbackForm
-
+from .forms import SearchForm, FeedbackForm, RegistrationForm
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
 
 def index(request):
     images = Image.objects.all()
@@ -153,3 +154,35 @@ def search(request):
             'q': q,
         },
     )
+
+
+def registration(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            send_mail(user.email,user.username,form.cleaned_data['password1'])
+
+            return HttpResponseRedirect(reverse('registration_success'))
+        return render(request, 'registration.html', {'form': form})
+
+    return render(request, 'registration.html', {'form': RegistrationForm()})
+
+
+def registration_success(request):
+    return render(request, 'registration_success.html')
+
+def send_mail(email, username, password):
+    text = get_template('registration/registration_email.html')
+    html = get_template('registration/registration_email.html')
+
+    context = {'username': username, 'password': password}
+    subject = 'Регистрация'
+    from_email = 'from@blog.ru'
+
+    text_content = text.render(context=context)
+    html_content = html.render(context=context)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
+
