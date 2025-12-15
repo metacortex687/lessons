@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-9ll)0joe(b=gr8n+&^2#1q1061n1(!1zwdwb%22-5b@9mf%+)(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','storedvd.ru','www.storedvd.ru']
+ALLOWED_HOSTS = ['127.0.0.1', 'storedvd.ru', 'www.storedvd.ru']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shop'
+    'shop',
 ]
 
 MIDDLEWARE = [
@@ -55,14 +55,14 @@ ROOT_URLCONF = 'storedvd.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'shop.context_processors.add_default_data'
+                'shop.context_processors.add_default_data',
             ],
         },
     },
@@ -123,3 +123,5 @@ MEDIA_URL = '/images/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

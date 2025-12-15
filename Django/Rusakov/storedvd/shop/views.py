@@ -8,6 +8,10 @@ from django.urls import reverse
 from .models import Section, Product, Discount, Order, OrderLine
 from .forms import SearchForm, OrderModelForm
 from django.db.models import Q
+from django.contrib.auth.models import User, Group
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
+from django.utils.crypto import get_random_string
 
 
 def index(request):
@@ -186,6 +190,7 @@ def order(request):
             order_obj.notice = form.cleaned_data['notice']
             order_obj.save()
             add_order_lines(request, order_obj)
+            add_user(form.cleaned_data['name'], form.cleaned_data['email'])
             return HttpResponseRedirect(reverse('addorder'))
 
         return render(request, 'order.html', {'form': form})
@@ -214,5 +219,32 @@ def add_order_lines(request, order_obj):
             except Product.DoesNotExist:
                 raise Http404()
 
+
 def addorder(request):
     return render(request, 'addorder.html')
+
+
+def add_user(name, email):
+    if (
+        User.objects.filter(email=email).exists()
+        or User.objects.filter(username=email).exists()
+    ):
+        return
+    password = get_random_string(5)
+    user = User.objects.create_user(email, email, password)
+    user.first_name = name
+    user.groups.add(Group.objects.get(name='Клиенты'))
+    user.save()
+
+    text = get_template('registration/registration_email.html')
+    html = get_template('registration/registration_email.html')
+
+    context = {'username': email, 'password': password}
+    subject = 'Регистрация'
+    from_email = 'from@storedvd.ru'
+
+    text_content = text.render(context=context)
+    html_content = html.render(context=context)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
