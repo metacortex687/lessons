@@ -33,7 +33,19 @@
 								<li><a href= {% url "about" %}>О нас</a></li>
 								<li><a href= {% url "articles" %}>Блог</a></li> 
 								<li><a href={% url "contact" %}>Контакты</a></li>   
-								<li><a href={% url "registration" %}>Регистрация</a></li>								
+								{% if user.is_authenticated %}
+								<li class="nav-logout">
+									<form action="{% url 'logout' %}" method="post" class="logout-form">
+									{% csrf_token %}
+									<input type="hidden" name="next" value="{{ request.path }}">
+									<button type="submit" class="menu-btn-link">Выход</button>
+									</form>
+								</li>
+								{% else %}
+								<li><a href="{% url "login" %}?next={{request.path}}">Вход</a></li>
+								<li><a href={% url "registration" %}>Регистрация</a></li>	
+								{% endif %}
+															
 							</ul>
 					</div>
 				</div>
