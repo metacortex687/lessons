@@ -98,8 +98,17 @@
 					<h3>Связаться с нами</h3>
 						<form name="contact-form" action="" method="post">
 						{% csrf_token %}
+						{% if request.user.is_authenticated %}
+							<input type="text"
+								value="{{ username }}"
+								readonly>
+							<input type="text"
+								value="{{ email }}"
+								readonly>
+						{% else %}
 						{{form.author}}
 						{{form.email}}
+						{% endif %}
 						{{form.title}}
 						{{form.content}}
 						<input type="submit" value="Отправить">

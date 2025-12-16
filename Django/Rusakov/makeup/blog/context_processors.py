@@ -9,6 +9,10 @@ def add_default_data(request):
     username = request.session.get('username', '')
     email = request.session.get('email', '')
 
+    if request.user.is_authenticated:
+        username = request.user.username
+        email = request.user.email
+
     return {
         'last_comments': last_comments,
         'last_articles': last_articles,
