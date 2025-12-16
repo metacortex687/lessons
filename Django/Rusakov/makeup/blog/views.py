@@ -43,7 +43,7 @@ def contact(request):
             form.save()
             return HttpResponseRedirect(reverse('contact'))
 
-        return render(request, 'contact.html', {'form': FeedbackForm()})
+        return render(request, 'contact.html', {'form': form})
 
     return render(request, 'contact.html', {'form': FeedbackForm()})
 
