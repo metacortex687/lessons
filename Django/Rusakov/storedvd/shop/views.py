@@ -9,7 +9,7 @@ from .models import Section, Product, Discount, Order, OrderLine
 from .forms import SearchForm, OrderModelForm
 from django.db.models import Q
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from django.utils.crypto import get_random_string
@@ -250,7 +250,18 @@ def add_user(name, email):
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
 
+
 @login_required
 def orders(request):
     user_orders = Order.objects.filter(email__exact=request.user.email)
-    return render(request,'orders.html', {'orders':user_orders})
+    return render(request, 'orders.html', {'orders': user_orders})
+
+
+@permission_required('shop.can_set_status')
+def cancelorder(request, id):
+    order_obj = get_object_or_404(Order, pk=id)
+    if order_obj.email == request.user.email and order_obj.status == 'NEW':
+        order_obj.status = 'CNL'
+        order_obj.save()
+
+    return HttpResponseRedirect(reverse('orders'))
