@@ -11,6 +11,8 @@ import datetime
 from .forms import SearchForm, FeedbackForm, RegistrationForm
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     images = Image.objects.all()
@@ -95,18 +97,7 @@ def single(request, pk):
     article = get_object_or_404(Article, pk=pk)
 
     if request.POST:
-        username = request.POST.get('username', '')
-        email = request.POST.get('email', '')
-        comment = request.POST.get('comment', '')
-
-        if username and email and comment:
-            request.session['username'] = username
-            request.session['email'] = email
-
-            Comment.objects.create(
-                article=article, author=username, email=email, content=comment
-            )
-            return HttpResponseRedirect(reverse('single', args=[pk]))
+        add_comment(request, article)
 
     return render(
         request,
@@ -118,6 +109,18 @@ def single(request, pk):
             'article': article,
         },
     )
+
+@login_required
+def add_comment(request, article):
+    comment = request.POST.get('comment', '')
+    if  comment:
+        request.session['username'] = request.user.username
+        request.session['email'] = request.user.email
+
+        Comment.objects.create(
+            article=article, author=request.user.username, email=request.user.email, content=comment
+        )
+        return HttpResponseRedirect(reverse('single', args=[pk]))
 
 
 def search(request):
@@ -161,7 +164,7 @@ def registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            send_mail(user.email,user.username,form.cleaned_data['password1'])
+            send_mail(user.email, user.username, form.cleaned_data['password1'])
 
             return HttpResponseRedirect(reverse('registration_success'))
         return render(request, 'registration.html', {'form': form})
@@ -171,6 +174,7 @@ def registration(request):
 
 def registration_success(request):
     return render(request, 'registration_success.html')
+
 
 def send_mail(email, username, password):
     text = get_template('registration/registration_email.html')
@@ -185,4 +189,3 @@ def send_mail(email, username, password):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
-
