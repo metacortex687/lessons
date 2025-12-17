@@ -17,7 +17,10 @@
                 {% for comment in comments %}
                 <div class="single-comment">
                     <div class="col-md-10 single-comment-right">
-                        <h6><b>{{comment.date}} / {{comment.author}}</b></h6>
+                        <h6><b>{{comment.date}} / {{comment.author}} {% if request.user.email ==  comment.email %}
+                        <a href="{% url "deletecomment" comment.id %}">удалить</a>
+                        {% endif %} </b></h6>
+                                               
                         {{comment.content|linebreaksbr}}
                     </div>
                     <div class="clearfix"> </div>

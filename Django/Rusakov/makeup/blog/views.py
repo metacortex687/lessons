@@ -110,17 +110,21 @@ def single(request, pk):
         },
     )
 
+
 @login_required
 def add_comment(request, article):
     comment = request.POST.get('comment', '')
-    if  comment:
+    if comment:
         request.session['username'] = request.user.username
         request.session['email'] = request.user.email
 
         Comment.objects.create(
-            article=article, author=request.user.username, email=request.user.email, content=comment
+            article=article,
+            author=request.user.username,
+            email=request.user.email,
+            content=comment,
         )
-        return HttpResponseRedirect(reverse('single', args=[pk]))
+        return HttpResponseRedirect(reverse('single', args=[article.id]))
 
 
 def search(request):
@@ -189,3 +193,15 @@ def send_mail(email, username, password):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
+
+
+@login_required
+def deletecomment(request, id):
+    obj_comment = get_object_or_404(Comment, pk=id)
+    print(obj_comment.email)
+    print(request.user.email)
+    if obj_comment.email == request.user.email:
+        obj_comment.delete()
+
+
+    return HttpResponseRedirect(reverse('single', args=[obj_comment.article.id]))
