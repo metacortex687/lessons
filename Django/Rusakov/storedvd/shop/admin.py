@@ -3,6 +3,8 @@ from shop.models import Section, Product, Discount, Order, OrderLine
 
 admin.site.register(Section)
 
+class SectionAdmin(admin.ModelAdmin):
+      list_display = ("title", "slug")
 
 class PriceFilter(admin.SimpleListFilter):
     title = "Цена"
@@ -42,7 +44,7 @@ class PriceFilter(admin.SimpleListFilter):
 
 
 class ProdactAdmin(admin.ModelAdmin):
-    list_display = ("title", "section", "imagr", "price", "date")
+    list_display = ("title", "slug", "section", "imagr", "price", "date")
     list_filter = ("section", PriceFilter)
     actions_on_bottom = True
     list_per_page = 10

@@ -14,8 +14,19 @@ from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from django.utils.crypto import get_random_string
 
+import transliterate
+
 
 def index(request):
+    # products = Product.objects.all()
+    # for product in products:
+    #     slug = transliterate.translit(product.title, reversed=True)
+    #     slug = slug.replace('\'','')
+    #     slug = slug.replace(' ','-')
+    #     slug = slug.lower()
+    #     product.slug = slug
+    #     product.save()
+
     result = prerender(request)
     if result:
         return result
@@ -58,12 +69,13 @@ def contacts(request):
     return render(request, 'contacts.html')
 
 
-def section(request, id):
+# def section(request, id):
+def section(request, slug):
     result = prerender(request)
     if result:
         return result
 
-    obj = get_object_or_404(Section, pk=id)
+    obj = get_object_or_404(Section, slug=slug)
     products = Product.objects.filter(section__exact=obj).order_by(
         get_order_by_price(request)
     )

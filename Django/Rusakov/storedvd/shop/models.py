@@ -17,11 +17,13 @@ class Section(models.Model):
         verbose_name = 'Раздел'
         verbose_name_plural = 'Разделы'
 
+    slug = models.SlugField(max_length=40, verbose_name='Псевдоним', default='')
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('section', args=[self.id])
+        return reverse('section', args=[self.slug])
 
 
 class Product(models.Model):
@@ -50,6 +52,8 @@ class Product(models.Model):
     cast = models.TextField(verbose_name='В ролях')
     description = models.TextField(verbose_name='Описание')
     date = models.DateField(auto_now_add=True, verbose_name='Дата добавления')
+
+    slug = models.SlugField(max_length=40, verbose_name='Псевдоним', default='')
 
     count = 1
 
@@ -125,7 +129,6 @@ class Order(models.Model):
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
         permissions = (('can_set_status', 'Возможность настройки статуса'),)
-
 
     def display_products(self):
         return ' '.join(
