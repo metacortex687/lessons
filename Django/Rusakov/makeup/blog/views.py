@@ -12,9 +12,21 @@ from .forms import SearchForm, FeedbackForm, RegistrationForm
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth.decorators import login_required
-
+# import transliterate
 
 def index(request):
+
+    # products = Article.objects.all()
+    # for product in products:
+    #     slug = transliterate.translit(product.title, reversed=True)
+    #     slug = slug.replace('\'','')
+    #     slug = slug.replace(' ','-')
+    #     slug = slug.replace(',','')
+    #     slug = slug.replace(':','-')   
+    #     slug = slug.lower()
+    #     product.slug = slug
+    #     product.save()
+
     images = Image.objects.all()
 
     return render(
@@ -92,9 +104,9 @@ def archive(request, year, month):
     )
 
 
-def single(request, pk):
+def single(request, slug):
     articles_all = Article.objects.all()
-    article = get_object_or_404(Article, pk=pk)
+    article = get_object_or_404(Article, slug=slug)
 
     if request.POST:
         add_comment(request, article)

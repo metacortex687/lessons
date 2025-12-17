@@ -67,6 +67,8 @@ class Article(models.Model):
 
     date = models.DateTimeField(auto_now_add=True)
 
+    slug = models.SlugField(max_length=40, verbose_name='Псевдоним', default='')
+
     def __str__(self):
         return f'{self.id} {self.title}'
 
