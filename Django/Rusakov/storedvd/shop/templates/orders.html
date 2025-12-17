@@ -1,0 +1,42 @@
+{% extends "main.html" %}
+{% load static %}
+
+	{% block title %}<title>Заказы</title>{% endblock title %}	
+
+	{% block description %}
+		<meta name="description" content="Заказы." />
+	{% endblock description %}
+	{% block keywords %}
+		<meta name="keywords" content="заказ, пользователя" />
+	{% endblock keywords %}	
+
+{% block content %}
+<div id="article">
+    <h2>Ваши заказы</h2>
+    <table border="1" id="orders">
+        <tr>
+            <td>ID закза</td>
+            <td>Дата закза</td>
+            <td>Состав закза</td>
+            <td>Сумма</td>
+            <td>Статус</td>
+            <td>Функции</td>
+        </tr>
+        {% for order in orders %}
+         <tr>
+            <td>{{order.id}}</td>
+            <td>{{order.date_order}}</td>
+            <td>{{order.display_products}}</td>
+            <td>{{order.display_amount}}</td>
+            <td>{{order.get_status_display}}</td>
+            <td></td>
+        </tr> 
+        {% endfor %}
+
+    </table>    
+
+</div>
+
+
+{% endblock content %}
+			

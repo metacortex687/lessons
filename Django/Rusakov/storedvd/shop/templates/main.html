@@ -83,6 +83,8 @@
 					</div>
 					<div class="items">
 						{% if user.is_authenticated %}
+						<p><a href="{% url "orders" %}">Заказы</a></p>	
+						
 						  <form action="{% url 'logout' %}" method="post" style="display:inline;">
 							{% csrf_token %}
 							<input type="hidden" name="next" value="{{ request.path }}">
