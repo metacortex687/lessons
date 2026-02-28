@@ -15,7 +15,7 @@
 !*.json
 !*.png
 !*.sql
-!*.sql
+!*.css
 !Makefile
 
 __pycache__/
