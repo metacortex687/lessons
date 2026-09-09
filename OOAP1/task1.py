@@ -112,7 +112,7 @@ class BoundedStack(Generic[T]):
 
     # установка и чтение опций
     # предусловие: число элементов меньше или равно допустимой максимальной вместимости стека 
-    # постусловие установлена опция - новая вместимость стека
+    # постусловие: установлена опция - новая вместимость стека
     def set_max_size(self, max_size: int) -> None:
         if max_size < self.size():
             self._set_max_size_status = BoundedStack.SET_MAX_SIZE_ERR
