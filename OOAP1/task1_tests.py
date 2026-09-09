@@ -34,6 +34,9 @@ class TestBoundedStack(unittest.TestCase):
         stack.push(1)
         self.assertEqual(stack.get_push_status(), BoundedStack.PUSH_ERR_TYPE)
 
+        stack.push('a')
+        self.assertEqual(stack.get_push_status(), BoundedStack.PUSH_OK)   
+
     # предусловие:
     # 1. В стеке уже находится элементов меньше чем максимальное колличество
     def test_push_sets_error_status_when_stack_is_full(self):
@@ -89,6 +92,10 @@ class TestBoundedStack(unittest.TestCase):
         stack.pop()
         self.assertEqual(stack.get_pop_status(), BoundedStack.POP_ERR)
 
+        stack.push('a')
+        stack.pop()
+        self.assertEqual(stack.get_pop_status(), BoundedStack.POP_OK)
+
 
     # peek
 
@@ -105,7 +112,13 @@ class TestBoundedStack(unittest.TestCase):
 
         self.assertEqual(stack.get_peek_status(), BoundedStack.PEEK_ERR)
 
-    #set_max_size - установка опции
+        stack.push('a')
+        stack.peek()
+
+        self.assertEqual(stack.get_peek_status(), BoundedStack.PEEK_OK)
+
+
+    #установка опции max_size
 
     # постусловие: установлена новая вместимость стека
     def test_set_max_size_updates_stack_capacity(self):
