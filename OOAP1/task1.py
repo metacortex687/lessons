@@ -58,7 +58,7 @@ class BoundedStack(Generic[T]):
     # 1. на верх стека добавлен элемент
     # 2~. Если добавление элемента заврешилось ошибкой, то размер стека не меняется
     # 3~. не меняет статусы команды pop и запроса peek 
-    def push(self, value: T):
+    def push(self, value: T) -> None:
         if not self._check_type_value(value):
             self._push_status = BoundedStack.PUSH_ERR_TYPE
         elif self.size() < self.max_size():
@@ -81,7 +81,7 @@ class BoundedStack(Generic[T]):
     # постуловие: 
     # 1. из стека удалены все элементы
     # 2~. не меняет статусы команд pop, push и запроса peek 
-    def clear(self):
+    def clear(self) -> None:
         self.reset_operation_statuses()
 
         self._stack = []
@@ -107,15 +107,15 @@ class BoundedStack(Generic[T]):
 
 
     # дополнительные запросы:
-    def get_push_status(self):
+    def get_push_status(self) -> int:
         return self._push_status
 
-    def get_pop_status(self):
+    def get_pop_status(self) -> int:
         return self._pop_status
 
-    def get_peek_status(self):
+    def get_peek_status(self) -> int:
         return self._peek_status
 
     # приватные методы класса
-    def _check_type_value(self, value):
+    def _check_type_value(self, value) -> bool:
         return isinstance(value, get_args(self.__orig_class__)[0])
