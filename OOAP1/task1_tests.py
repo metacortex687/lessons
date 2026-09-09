@@ -105,6 +105,31 @@ class TestBoundedStack(unittest.TestCase):
 
         self.assertEqual(stack.get_peek_status(), BoundedStack.PEEK_ERR)
 
+    #set_max_size - установка опции
+
+    # постусловие: установлена новая вместимость стека
+    def test_set_max_size_updates_stack_capacity(self):
+        stack = BoundedStack[str]()
+
+        self.assertNotEqual(stack.get_max_size(), 10)
+
+        stack.set_max_size(10)
+
+        self.assertEqual(stack.get_max_size(), 10)
+
+    def test_set_max_size_sets_error_status_when_capacity_is_less_than_current_size(self):
+        stack = BoundedStack[str]()
+        stack.push("a")
+        stack.push("b")
+        stack.push("c")
+
+        stack.set_max_size(2)
+        self.assertEqual(stack.get_set_max_size_status(), BoundedStack.SET_MAX_SIZE_ERR)
+
+        stack.set_max_size(3)
+        self.assertEqual(stack.get_set_max_size_status(), BoundedStack.SET_MAX_SIZE_OK)
+
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -14,6 +14,8 @@
 
 # г) Дополнительные предусловия и постусловия, которые формально можно не считать основными для АТД Стек, обозначены `~`. Тестируются выборочно.
 
+# д) Максимальную вместимость стека считаю опцией команд. При этом установка значения этой опции может вызывать ошибку. Ошибку обрабатываю через получение статуса.
+
 from typing import TypeVar, Generic, List, get_args
 
 T = TypeVar('T')
@@ -30,6 +32,9 @@ class BoundedStack(Generic[T]):
     PEEK_NIL = 0  # peek() ещё не вызывалась
     PEEK_OK = 1  # последняя peek() вернула корректное значение
     PEEK_ERR = 2  # стек пуст
+    SET_MAX_SIZE_OK = 1 # максимальный размер стека установлен
+    SET_MAX_SIZE_ERR = 2 # максимальный размер статуса меньше числа элементов в стеке
+
 
     # oбъявление приватных переменных класса
     _max_size: int
@@ -38,9 +43,10 @@ class BoundedStack(Generic[T]):
     _push_status: int
     _peek_status: int
     _pop_status: int
+    _set_max_size_status: int
 
     # конструктор
-    def __init__(self, max_size=32): # Постусловие создан новый пустой стек
+    def __init__(self, max_size: int = 32): # Постусловие создан новый пустой стек
         self._max_size = max_size
 
         self._stack = []
@@ -48,6 +54,7 @@ class BoundedStack(Generic[T]):
         self._push_status = BoundedStack.PUSH_NIL
         self._peek_status = BoundedStack.PEEK_NIL
         self._pop_status = BoundedStack.POP_NIL
+        self._set_max_size_status = BoundedStack.SET_MAX_SIZE_OK
 
     # Команды:
 
@@ -61,7 +68,7 @@ class BoundedStack(Generic[T]):
     def push(self, value: T) -> None:
         if not self._check_type_value(value):
             self._push_status = BoundedStack.PUSH_ERR_TYPE
-        elif self.size() < self.max_size():
+        elif self.size() < self.get_max_size():
             self._stack.append(value)
             self._push_status = BoundedStack.PUSH_OK
         else:
@@ -102,8 +109,20 @@ class BoundedStack(Generic[T]):
     def size(self) -> int:
         return len(self._stack)
 
-    def max_size(self) -> int:
-        return self._max_size
+
+    # установка и чтение опций
+    # предусловие: число элементов меньше или равно допустимой максимальной вместимости стека 
+    # постусловие установлена опция - новая вместимость стека
+    def set_max_size(self, max_size: int) -> None:
+        if max_size < self.size():
+            self._set_max_size_status = BoundedStack.SET_MAX_SIZE_ERR
+        else:
+            self._max_size = max_size
+            self._set_max_size_status = BoundedStack.SET_MAX_SIZE_OK
+
+
+    def get_max_size(self) -> int:
+        return self._max_size  
 
 
     # дополнительные запросы:
@@ -115,6 +134,9 @@ class BoundedStack(Generic[T]):
 
     def get_peek_status(self) -> int:
         return self._peek_status
+
+    def get_set_max_size_status(self) -> int:
+        return self._set_max_size_status
 
     # приватные методы класса
     def _check_type_value(self, value) -> bool:
