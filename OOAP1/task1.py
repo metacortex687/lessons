@@ -40,7 +40,7 @@ class BoundedStack(Generic[T]):
     _pop_status: int
 
     # конструктор
-    def __init__(self, max_size=32):
+    def __init__(self, max_size=32): # Постусловие создан новый пустой стек
         self._max_size = max_size
 
         self._stack = []
