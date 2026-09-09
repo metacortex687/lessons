@@ -110,7 +110,9 @@ class BoundedStack(Generic[T]):
         return len(self._stack)
 
 
-    # установка и чтение опций
+    # Установка и чтение опций
+
+    # опция: максимальная вместимость стека
     # предусловие: число элементов меньше или равно допустимой максимальной вместимости стека 
     # постусловие: установлена опция - новая вместимость стека
     def set_max_size(self, max_size: int) -> None:
@@ -125,7 +127,7 @@ class BoundedStack(Generic[T]):
         return self._max_size  
 
 
-    # дополнительные запросы:
+    # Дополнительные запросы:
     def get_push_status(self) -> int:
         return self._push_status
 
@@ -138,6 +140,6 @@ class BoundedStack(Generic[T]):
     def get_set_max_size_status(self) -> int:
         return self._set_max_size_status
 
-    # приватные методы класса
+    # Приватные методы класса
     def _check_type_value(self, value) -> bool:
         return isinstance(value, get_args(self.__orig_class__)[0])
