@@ -86,7 +86,7 @@ class BoundedStack(Generic[T]):
 
         self._stack = []
 
-    # запросы:
+    # Запросы:
 
     # предусловие:
     # стек не пустой
