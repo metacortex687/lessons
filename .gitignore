@@ -20,6 +20,7 @@
 !go.mod
 !go.sum
 !*.go
+!*.rs
 
 __pycache__/
 .vscode/
