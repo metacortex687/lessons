@@ -17,6 +17,9 @@
 !*.sql
 !*.css
 !Makefile
+!go.mod
+!go.sum
+!*.go
 
 __pycache__/
 .vscode/
