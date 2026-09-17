@@ -150,8 +150,8 @@ class CapacityController {
 }
 ```
 
-А далее классы AdditiveCapacityCalculator, MultiplicativeCapacityCalculator, BankersMethodCapacityCalculator наследуются от CapacityController и используют метод resize динамического массива для изменения вместимости.
+А далее классы AdditiveCapacityController, MultiplicativeCapacityController, BankersMethodCapacityController наследуются от CapacityController и используют метод resize динамического массива для изменения вместимости.
 
 В частично реализованном классе CapacityController будет реализован подсчет размера массива и его вместимости, что смогут использовать дочерние классы.
 
-Методы CapacityController вида `on_*`, например `on_append`, должны вызываться вначале соответствующих методов динамического массива, например `append`.
+Методы класса CapacityController вида `on_*`, например `on_append`, должны вызываться вначале соответствующих методов динамического массива, например `append`.
