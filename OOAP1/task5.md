@@ -7,6 +7,7 @@ abstract class Queue<T>
 public constructor();
 
 //Команды:
+
 //постусловие: в хвост очереди добавлен элемент
 public enqueue(value: T): void;
 
@@ -15,7 +16,7 @@ public enqueue(value: T): void;
 public pop(): void;
 
 //постусловие: 
-// n элементов из головы очереди перемещены в хвост
+//n элементов из головы очереди перемещены в хвост
 //если очередь пустая, то без изменений
 public rotate(n: uint): void;
 
