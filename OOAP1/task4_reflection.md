@@ -15,7 +15,7 @@
 А для большей интеграции, чтобы ошибки были замечены раньше, в CapacityController рассчитываю не только capacity(), но и size(), из которых и получают данные одноименные запросы DynArray.
 
 CapacityController меняет размер массива, вызывая метод `resize` у `DynArray`, который для этого сделан публичным и выведен в интерфейс DynArray.
-А в CapacityController добавлен метод `bind`, который "связывает", помещает ссылку на DynArray в CapacityController.
+А в CapacityController добавлена команда `bind`, которая "связывает", помещает ссылку на DynArray в CapacityController.
 
 
 #### АТД DynArray
