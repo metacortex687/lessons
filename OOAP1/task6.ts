@@ -1,65 +1,3 @@
-class Stack<T> {
-    private _items: T[] = [];
-
-    private _pop_status: "NIL" | "OK" | "ERR_EMPTY" = "NIL";
-    private _peek_status: "NIL" | "OK" | "ERR_EMPTY" = "NIL";
-
-    // Конструктор (по умолчанию):
-    // постусловие: создана пустая очередь
-    
-
-    // Команды:
-
-    // постусловие: добавлен элемент на вершину стека
-    push(value: T): void {
-        this._items.push(value);
-    }
-
-    // предусловие: стек не пустой
-    // постусловие: удален элемент с вершины стека
-    pop(): void {
-        if(this.is_empty()) {
-            this._pop_status = "ERR_EMPTY";
-            return
-        }
-
-        this._pop_status = "OK";
-        this._items.pop();
-    }
-
-    // Запросы:
-    // предусловие: стек не пустой
-    peek(): T | undefined {
-
-        if(this.is_empty()) {
-            this._peek_status = "ERR_EMPTY";
-            return undefined;
-        }
-
-        this._pop_status = "OK";
-        return this._items[this._items.length-1]
-    }
-
-    size(): number {
-        return this._items.length;
-    }
-
-    is_empty(): boolean {
-        return this.size() === 0;
-    }
-
-    // Запросы статусов
-
-    get_pop_status() {
-        return this._pop_status
-    }
-
-    get_peek_status() {
-        return this._peek_status
-    }
-
-}
-
 
 abstract class ParentQueue<T> {
 
@@ -211,5 +149,68 @@ class Deque<T> extends ParentQueue<T> {
 
              
 } 
+
+// Вспомогательный класс нужный для реализации очередей
+class Stack<T> {
+    private _items: T[] = [];
+
+    private _pop_status: "NIL" | "OK" | "ERR_EMPTY" = "NIL";
+    private _peek_status: "NIL" | "OK" | "ERR_EMPTY" = "NIL";
+
+    // Конструктор (по умолчанию):
+    // постусловие: создана пустая очередь
+    
+
+    // Команды:
+
+    // постусловие: добавлен элемент на вершину стека
+    push(value: T): void {
+        this._items.push(value);
+    }
+
+    // предусловие: стек не пустой
+    // постусловие: удален элемент с вершины стека
+    pop(): void {
+        if(this.is_empty()) {
+            this._pop_status = "ERR_EMPTY";
+            return
+        }
+
+        this._pop_status = "OK";
+        this._items.pop();
+    }
+
+    // Запросы:
+    // предусловие: стек не пустой
+    peek(): T | undefined {
+
+        if(this.is_empty()) {
+            this._peek_status = "ERR_EMPTY";
+            return undefined;
+        }
+
+        this._pop_status = "OK";
+        return this._items[this._items.length-1]
+    }
+
+    size(): number {
+        return this._items.length;
+    }
+
+    is_empty(): boolean {
+        return this.size() === 0;
+    }
+
+    // Запросы статусов
+
+    get_pop_status() {
+        return this._pop_status
+    }
+
+    get_peek_status() {
+        return this._peek_status
+    }
+
+}
 
 export {Queue, Deque}
