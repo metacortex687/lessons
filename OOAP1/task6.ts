@@ -4,10 +4,9 @@ class Stack<T> {
     private _pop_status: "NIL" | "OK" | "ERR_EMPTY" = "NIL";
     private _peek_status: "NIL" | "OK" | "ERR_EMPTY" = "NIL";
 
-
-    // Конструктор:
-    // Создает пустой объект.
-
+    // Конструктор (по умолчанию):
+    // постусловие: создана пустая очередь
+    
 
     // Команды:
 
