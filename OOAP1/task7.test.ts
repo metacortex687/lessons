@@ -66,7 +66,7 @@ describe("HashTable вспомогательные тесты", () => {
 
         expect(ht.find(o2)).toBe(false);
 
-        expect(ht.find(o1)).toBe(true);        
+        expect(ht.find(o3)).toBe(true);        
 
 
     });
