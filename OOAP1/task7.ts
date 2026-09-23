@@ -3,9 +3,9 @@ type PutStatus = "NIL" | "OK" | "ERR_TABLE_FULL";
 type RemoveStatus = "NIL" | "OK" | "ERR_NO_ELEMENT";
 
 // Здесь хранится ключ значение
-class StringHashTable<T extends string | Hashable> {
+class StringHashTable<T extends string | number| Hashable > {
 
-    private _array:Array<T | undefined>;
+    private _array:Array<T | undefined | null>;
     private _count: number;
 
     private _put_status: PutStatus = "NIL";
@@ -14,7 +14,7 @@ class StringHashTable<T extends string | Hashable> {
     // Конструктор:
     // постусловие: создана пустая хэш-таблица
     constructor(size: number) {
-        this._array = new Array<T | undefined>(size); 
+        this._array = new Array<T | undefined | null>(size); 
         this._count = 0; 
     }
 
@@ -52,29 +52,39 @@ class StringHashTable<T extends string | Hashable> {
 
         this._count--;
         this._remove_status = "OK";    
-        this._array[index] = undefined;        
+        this._array[index] = null;        
     }
 
     // постусловие: таблица пуста
     public clear() {
         this._count = 0;
-        this._array = new Array<T | undefined>(this.capacity());;
+        this._array = new Array<T | undefined | null>(this.capacity());;
     }
 
     // Запросы:
 
     public find(key: string, value: T): boolean {
-        const index = this._seek_slot(key, value);
+        let start_index = this._key_to_number(key) % this.capacity();
 
-        if(index === undefined) {
-            return false
+        for (let i = 0; i < this.capacity(); i++)
+        {
+            const index = (start_index+i) % this.capacity();
+
+            if(this._array[index] === undefined) {
+                return false;
+            } 
+
+            if(this._array[index] === null) {
+                continue;
+            } 
+
+            if(this._equals(this._array[index],value)) {
+                return true;
+            }
         }
 
-        if(this._array[index] === undefined) {
-            return false
-        }
+        return false;
 
-        return true;
     }
 
 
@@ -90,6 +100,14 @@ class StringHashTable<T extends string | Hashable> {
         return this._array.length;
     }
 
+    *[Symbol.iterator](): IterableIterator<T> {
+        for (const value of this._array) {
+            if( value === undefined || value === null) {
+                continue;
+            }
+            yield value;
+        }
+    }
 
     // Дополнительные запросы статусов
 
@@ -123,7 +141,8 @@ class StringHashTable<T extends string | Hashable> {
         for (let i = 0; i < this.capacity(); i++)
         {
             const index = (start_index+i) % this.capacity();
-            if(this._array[index] === undefined || this._equals(this._array[index],value)) {
+
+            if(this._array[index] === undefined || this._array[index] === null || this._equals(this._array[index],value)) {
                 return index
             }
         }
@@ -133,6 +152,10 @@ class StringHashTable<T extends string | Hashable> {
 
     private _equals(a: T, b: T): boolean {
         if(typeof a === "string" || typeof b === "string") {
+            return a === b
+        }
+
+        if(typeof a === "number" || typeof b === "number") {
             return a === b
         }
 
@@ -147,7 +170,7 @@ abstract class Hashable {
     abstract equals(other: Hashable): boolean;
 }
 
-class HashTable<T extends string | Hashable> {
+class HashTable<T extends string | number | Hashable> {
     private  _hash_table: StringHashTable<T>;
 
     // Конструктор:
@@ -165,6 +188,9 @@ class HashTable<T extends string | Hashable> {
         if (typeof value === "string") {
             this._hash_table.put(value, value);
         }
+        else if (typeof value === "number") {
+            this._hash_table.put(String(value), value);
+        }
         else {
             this._hash_table.put(value.hash(), value);
         }
@@ -175,6 +201,9 @@ class HashTable<T extends string | Hashable> {
     public remove(value: T): void {
         if (typeof value === "string") {
             return this._hash_table.remove(value, value);
+        }
+        else if (typeof value === "number") {
+            this._hash_table.remove(String(value), value);
         }
         else {
             return this._hash_table.remove(value.hash(), value);
@@ -193,6 +222,9 @@ class HashTable<T extends string | Hashable> {
         if (typeof value === "string") {
             return this._hash_table.find(value, value);
         }
+        else if (typeof value === "number") {
+            return this._hash_table.find(String(value), value);
+        }
         else {
             return this._hash_table.find(value.hash(), value);
         }
@@ -208,6 +240,12 @@ class HashTable<T extends string | Hashable> {
 
     public capacity(): number {
         return this._hash_table.capacity();
+    }
+
+    *[Symbol.iterator](): IterableIterator<T> {
+        for (const value of this._hash_table) {
+            yield value;
+        }
     }
 
 
