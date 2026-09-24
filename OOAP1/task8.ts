@@ -85,14 +85,22 @@ class NativeDictionary<T> {
     }    
     
     is_key(key: string): boolean {
-        const index = this._seek_slot(key);
+        let start_index = this._key_to_number(key) % this.capacity();
 
-        if(index === undefined) {
-            return false;
+        for (let i = 0; i < this.capacity(); i++)
+        {
+            const index = (start_index+i) % this.capacity();
+
+            if(this._array_keys[index] === undefined) {
+                return false;
+            }
+
+            if(this._array_keys[index] === key) {
+                return true
+            }
         }
-
-        return true;
-
+        
+        return false;
     }
 
     can_set(key: string): boolean {
@@ -138,7 +146,7 @@ class NativeDictionary<T> {
         for (let i = 0; i < this.capacity(); i++)
         {
             const index = (start_index+i) % this.capacity();
-            if(this._array_keys[index] === undefined || this._array_keys[index] === key) {
+            if(this._array_keys[index] === undefined || this._array_keys[index] === null || this._array_keys[index] === key) {
                 return index
             }
         }

@@ -1,5 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { NativeDictionary } from "./task8";
+import { Random } from "random";
+
 
 // Запуск тестов: 
 // cd OOAP1
@@ -34,6 +36,40 @@ describe("NativeDictionary вспомогательные тесты", () => {
         expect(d.count()).toBe(3);
 
     });
+
+    test("Воспроизведение ошибки, когда не освобождается слот для записи", () => {
+
+        const d = new NativeDictionary<string>(200);
+
+        const chars: string[] = []
+        for(let i = 27; i <= 122; i ++) {
+            chars.push(String.fromCodePoint(i));
+        }
+
+        for(const ch of chars) {
+            d.set(ch, `${ch}!`);
+            expect(d.is_key(ch)).toBe(true);
+        }
+
+        const shuffle_chars = new Random(15).shuffle(chars);
+
+        for(let i = 0; i < 15; i ++) {
+            const ch = shuffle_chars.pop()!;
+            expect(d.is_key(ch)).toBe(true); 
+            d.remove(ch);  
+            expect(d.is_key(ch)).toBe(false);          
+        }
+
+        for(const ch of shuffle_chars) {
+            expect(d.is_key(ch), `символ ${ch}`).toBe(true);
+        }
+
+
+    });
+
+
+
+
 
 });
 
