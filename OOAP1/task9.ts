@@ -3,21 +3,33 @@ import { HashTable, Hashable } from "./task7";
 class PowerSet<T extends string | number | Hashable> {
     private _hash_table: HashTable<T>;
 
+    // Конструктор:
+    // инициализировано пустое множество указанной вместимости
     constructor(capacity: number) {
         this._hash_table = new HashTable<T>(capacity);
     }
 
+    // Команды:
+    // предусловие: в словаре есть меcто для ключа 
+    // постусловие: добавлен или обновлен элемент
     put(value: T) {
         this._hash_table.put(value)
     }
 
-    get(value: T): boolean {
-        return this._hash_table.find(value);
-    }
 
+
+    // предусловие: в словаре есть значение с этим ключом
+    // постусловие: значение с указанным ключом удалено
     remove(value: T) {
         this._hash_table.remove(value);
     } 
+
+
+    // Запросы:
+
+    get(value: T): boolean {
+        return this._hash_table.find(value);
+    }
 
 
     intersection(other: PowerSet<T>): PowerSet<T> {
@@ -114,6 +126,16 @@ class PowerSet<T extends string | number | Hashable> {
         }
     }
 
+
+    // Вспомогательные методы получения статусов команд:
+
+    get_put_status() {
+        return this._hash_table.get_put_status();
+    }
+
+    get_remove_status() {
+        return this._hash_table.get_remove_status();
+    }
 
 }
 
