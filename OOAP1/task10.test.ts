@@ -21,5 +21,27 @@ describe("BloomFilter  тесты", () => {
 
     });
 
+    test("оценка доли ложно положительных", () => {
+        // тест может ломаться, тогда надо увеличивать размер выборки no_input_values
+        const filter = new BloomFilter(32);
+
+        const input_values = ["1-a","2-b","3-c","4-d","5-e","6-f","7-g","8-h","9-j","10-k"];
+        const no_input_values = ["1-a*","2-b*","3-c*","4-d*","5-e*","6-f*","7-g*","8-h*","9-j*","10-k*"];
+
+        for(const value of input_values) {
+            filter.put(value);
+        }
+
+        let count_true = 0;
+        for(const value of no_input_values) {
+            if(filter.get(value)) {
+                count_true++;
+            }       
+        }  
+        const percent = count_true/no_input_values.length;
+        expect(percent).lessThan(0.7);                        
+
+    });
+
 
 });
