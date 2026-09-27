@@ -24,8 +24,11 @@ class BloomFilter<T extends string | Hashable> {
     // постусловие: значение отмечено в фильтре
     put(value: T): void {
         const hash_of_value = this._hash(value);
-        this._set_bit_on(this._hash_to_bit_index(hash_of_value,this.HASH_BASE_1))
-        this._set_bit_on(this._hash_to_bit_index(hash_of_value,this.HASH_BASE_2))
+        const bit_index_1 = this._hash_to_bit_index(hash_of_value,this.HASH_BASE_1);
+        const bit_index_2 = this._hash_to_bit_index(hash_of_value,this.HASH_BASE_2);
+        
+        this._set_bit_on(bit_index_1);
+        this._set_bit_on(bit_index_2);
     }
 
     // постусловие: фильтр очищен
@@ -37,8 +40,10 @@ class BloomFilter<T extends string | Hashable> {
 
     get(value: T): boolean {
         const hash_of_value = this._hash(value);
-        return this._get_bit(this._hash_to_bit_index(hash_of_value,this.HASH_BASE_1)) 
-            && this._get_bit(this._hash_to_bit_index(hash_of_value,this.HASH_BASE_2)); 
+        const bit_index_1 = this._hash_to_bit_index(hash_of_value,this.HASH_BASE_1)
+        const bit_index_2 = this._hash_to_bit_index(hash_of_value,this.HASH_BASE_2)
+
+        return this._get_bit(bit_index_1) && this._get_bit(bit_index_2); 
     }
 
 
