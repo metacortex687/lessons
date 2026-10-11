@@ -65,6 +65,7 @@ def complex_arithmetic():
         imag = (nums[1] * nums[2] - nums[0] * nums[3]) / (nums[2] ** 2 + nums[3] ** 2)
         return f"{real}+ i{imag}"
 ```
+
 ###### Код после
 ```python
 class ComplexNumber():
@@ -135,7 +136,7 @@ class ComplexCalculator():
 
         nums = list(map(int, input(message).split()))
         len_nums = len(nums)
-        pairs = zip(nums[0:len_nums-1],nums[1:len_nums])
+        pairs = zip(nums[0:len_nums-1:2],nums[1:len_nums:2])
 
         return list(map(lambda real, complex: ComplexNumber(real, complex), pairs))
         
