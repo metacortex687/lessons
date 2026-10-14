@@ -260,7 +260,7 @@ class ResultGame(Enum):
             ResultGame.WIN: ResultGame.LOOSE,
             ResultGame.TIE: ResultGame.TIE,
             ResultGame.LOOSE: ResultGame.WIN,
-        }[value]    
+        }[self]    
 
 
 class Turn(Enum):
