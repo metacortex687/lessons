@@ -3,22 +3,23 @@ import json
 from typing import Self
 
 class General(object):
+
     def copy(self)  -> Self:
         return copy(self)
 
     def deep_copy(self)  -> Self:
         return deepcopy(self)
 
-    def eq(self, other):
-        return self == other
+    def __eq__(self, other: Self):
+        return self.__dict__ == other.__dict__
 
 
     def serialize(self) -> str:
-        return json.dump(self)
+        return json.dumps(self.__dict__, ensure_ascii=True)
 
     @classmethod
     def deserialize(cls: type[Self], data: str) -> Self:
-        fields = json.load(data)
+        fields = json.loads(data)
         return cls(**fields)
 
 
@@ -35,6 +36,12 @@ class General(object):
 
 class Any(General):
     pass
+
+
+
+class A(Any):
+    def __init__(self, nested_dict: dict):
+        self.__dict__ = nested_dict.copy()
 
 
 
