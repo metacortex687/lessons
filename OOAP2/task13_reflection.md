@@ -9,15 +9,15 @@
    Переопределить метод, вызывая исключение `NotImplementedError`. Ответил, что нельзя понизить видимость, хотя можно понимать под скрыт, то, что он недоступен к использованию. Проверка корректности типов с помощью `mypy`, `ty`, `Pyrefly`, не обработает корректно этот вариант с `raise NotImplementedError`, считая метод доступным к использованию. А например `CrossHair`  обработает.
    
 ```python
-  class A:
-    def method(self) -> int:
-        return 42
-
+class A:
+   def method(self) -> int:
+      return 42
+   
 class B(A):
-    def method(self) -> int:
-        raise NotImplementedError
+   def method(self) -> int:
+      raise NotImplementedError
 
-B().method()  # mypy, Pyrefly, ty принимает, CrossHair нет; при выполнении всегда исключение 
+B().method()  # mypy, Pyrefly, ty принимают проверку типов, CrossHair нет
 ```
     
 3. Метод скрыт в родительском классе А и публичен в его потомке B. 
