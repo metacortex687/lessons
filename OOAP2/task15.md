@@ -28,7 +28,6 @@ class ORMSaver():
 Этот же пример, когда вместо предопределённых значений применяется наследование.
 
 ```python
-from typing import Literal
 
 class EDBase:
     pass
