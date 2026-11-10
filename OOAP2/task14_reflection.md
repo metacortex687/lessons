@@ -1,0 +1,86 @@
+В условии задания тип `T` в `Vector<T>` должен наследоваться от `General`, но тогда, если `Vector<T>` может быть элементом массива, в этом случае необходимо, чтобы и он наследовался от `General`, а не от `Any`.
+
+```python
+T = TypeVar("T", bount=General, covariant=True)
+class Vector(Generic[T],General):
+	...
+```
+
+Изначально рассматривал конструкции вида:
+```python
+T1 = TypeVar("T1", bount=General, covariant=True)
+T2 = TypeVar("T2", bount=General, covariant=True)
+type VectorItem = Union[T1, Vector[T2]]
+
+class Vector(Generic[T1],General):
+	__init__(self, list[VectorItem])
+		...
+```
+
+Но в случае наследования от базового типа код получается компактнее и менее запутанным.
+
+Варианты типов значений `String` и `Integer` унаследовал от `Any`, определив в них магический метод сложения. Плюс приватные методы `__value()`, которые возвращают значения базовых типов python, сделал с двумя подчеркиваниями. Для того чтобы в типе Void проходила проверка типов, так как методы с двумя подчеркиваниями не участвуют в наследовании, и при множественном наследовании не возникает коллизии определения возвращаемого типа.
+
+Стал лучше понимать идею типа Void. Убрал код автоматического переопределения базовых методов (закомментирован в коде ниже).
+```python
+@final
+class Void(Integer, String):
+    def __init__(self):
+        pass
+
+        # Временно закоментировал, для корректной работы проверки типов методы надо явно переопределять
+
+        # def return_void(self, *args, **kwargs):
+        #     return Void()
+
+        # cls = type(self)
+
+        # for base in cls.__mro__[1:]:
+        #     for name, value in vars(base).items():
+        #         if isfunction(value) and not name.startswith("__"):
+        #             setattr(cls, name, return_void)
+
+    def __add__(self, other: General) -> 'Void':
+        return Void()
+
+    def __radd__(self, other: General) -> 'Void':
+        return Void()
+
+    def __len__(self):
+        return 0
+```
+
+Это сделано для возможности работы проверки типов.
+Методы переопределяю явно и проверка типов работает. Но есть риск пропустить переопределение некоторых методов.
+
+Что делать с равенством пока не знаю, надо ли считать `Void() == Void()`, в случае SQL  в этом случае True не возвращается.
+
+```python
+@final
+class Void(Integer, String):
+    def __init__(self):
+        pass
+
+        # Временно закоментировал, для корректной работы проверки типов методы надо явно переопределять
+
+        # def return_void(self, *args, **kwargs):
+        #     return Void()
+
+        # cls = type(self)
+
+        # for base in cls.__mro__[1:]:
+        #     for name, value in vars(base).items():
+        #         if isfunction(value) and not name.startswith("__"):
+        #             setattr(cls, name, return_void)
+
+    def __add__(self, other: General) -> 'Void':
+        return Void()
+
+    def __radd__(self, other: General) -> 'Void':
+        return Void()
+
+    def __len__(self):
+        return 0
+```
+
+Думаю попробовать использовать таблицы `void` в своем проекте. Идея в том, чтобы создать минимальный набор таблиц и создавать их только по мере поступления данных. Но рекурсивно может тогда развернуться очень много таблиц. Если для внешних ссылок, где нет данных, использовать таблицу `void`, то это позволит этого избежать. Создать такую таблицу возможно, так как в загружаемых данных поля с одним именем имеют обычно один тип.
