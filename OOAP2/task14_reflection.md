@@ -55,32 +55,5 @@ class Void(Integer, String):
 
 Что делать с равенством пока не знаю, надо ли считать `Void() == Void()`, в случае SQL  в этом случае True не возвращается.
 
-```python
-@final
-class Void(Integer, String):
-    def __init__(self):
-        pass
-
-        # Временно закоментировал, для корректной работы проверки типов методы надо явно переопределять
-
-        # def return_void(self, *args, **kwargs):
-        #     return Void()
-
-        # cls = type(self)
-
-        # for base in cls.__mro__[1:]:
-        #     for name, value in vars(base).items():
-        #         if isfunction(value) and not name.startswith("__"):
-        #             setattr(cls, name, return_void)
-
-    def __add__(self, other: General) -> 'Void':
-        return Void()
-
-    def __radd__(self, other: General) -> 'Void':
-        return Void()
-
-    def __len__(self):
-        return 0
-```
 
 Думаю попробовать использовать таблицы `void` в своем проекте. Идея в том, чтобы создать минимальный набор таблиц и создавать их только по мере поступления данных. Но рекурсивно может тогда развернуться очень много таблиц. Если для внешних ссылок, где нет данных, использовать таблицу `void`, то это позволит этого избежать. Создать такую таблицу возможно, так как в загружаемых данных поля с одним именем имеют обычно один тип.
