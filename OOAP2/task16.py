@@ -21,7 +21,7 @@ def print_doc_pdf(doc: DocPdf):
 # uv run OOAP2\task16.py
 if __name__ == "__main__":
 
-# Полиморфное присваивание
+    # Полиморфное присваивание
 
     # doc: DocPdf = Doc() #Ошибка типов, контравариантное присваивание недоступно
 
@@ -29,8 +29,8 @@ if __name__ == "__main__":
     doc.print() #Печать DocPdf
 
 
-# Контравариантное присваивание
-#     
+    # Контравариантное присваивание
+    #     
     # print_fn: Callable[[Doc], None] = print_doc_pdf #Ошибка так как доступно только контравариантное присваивание по типам Doc -> DocPdf
 
     print_fn: Callable[[DocPdf], None] = print_doc
