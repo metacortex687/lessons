@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
 
     # Контравариантное присваивание
-    #     
+   
     # print_fn: Callable[[Doc], None] = print_doc_pdf #Ошибка так как доступно только контравариантное присваивание по типам Doc -> DocPdf
 
     print_fn: Callable[[DocPdf], None] = print_doc
