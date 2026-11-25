@@ -26,12 +26,12 @@ class Transport:
 		
 class Ship(Transport):
     def move(self):
-    print("Корабль движется")
+        print("Корабль движется")
 		
 
 class Car(Transport):
     def move(self):
-    print("Атомобиль движется")
+        print("Атомобиль движется")
 	
 ```
 
